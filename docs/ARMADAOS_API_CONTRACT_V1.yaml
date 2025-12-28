@@ -848,6 +848,310 @@ paths:
               schema:
                 $ref: '#/components/schemas/SuccessResponse'
 
+  # GOD MODE: BATCHES
+  /v1/god/batches:
+    get:
+      tags:
+        - GOD Mode
+      summary: List all batches
+      description: Returns list of all BATCHes and their current status for the Battlefield view
+      operationId: listBatches
+      parameters:
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [queued, in_progress, completed, blocked]
+      responses:
+        '200':
+          description: Batch list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BatchListResponse'
+
+  /v1/god/batches/{batch_id}:
+    get:
+      tags:
+        - GOD Mode
+      summary: Get batch details
+      description: Returns detailed information about a specific BATCH including checklist and activity
+      operationId: getBatch
+      parameters:
+        - name: batch_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Batch details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BatchDetailResponse'
+
+  # GOD MODE: COMPONENTS (Architecture Lens)
+  /v1/god/components:
+    get:
+      tags:
+        - GOD Mode
+      summary: List all 42 components
+      description: Returns list of all 42 components grouped by tier with health status
+      operationId: listComponents
+      parameters:
+        - name: tier
+          in: query
+          schema:
+            type: string
+            enum: [core_substrate, core_services, infrastructure]
+      responses:
+        '200':
+          description: Component list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ComponentListResponse'
+
+  /v1/god/components/{component_id}:
+    get:
+      tags:
+        - GOD Mode
+      summary: Get component details
+      description: Returns detailed information about a specific component
+      operationId: getComponent
+      parameters:
+        - name: component_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Component details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ComponentDetailResponse'
+
+  /v1/god/components/{component_id}/metrics:
+    get:
+      tags:
+        - GOD Mode
+      summary: Get component metrics
+      description: Returns real-time metrics for a specific component
+      operationId: getComponentMetrics
+      parameters:
+        - name: component_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Component metrics
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ComponentMetricsResponse'
+
+  /v1/god/components/{component_id}/restart:
+    post:
+      tags:
+        - GOD Mode
+      summary: Restart component
+      description: Triggers a restart of the specified component
+      operationId: restartComponent
+      parameters:
+        - name: component_id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RestartRequest'
+      responses:
+        '200':
+          description: Component restart initiated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+
+  # GOD MODE: THREATS (Battlefield Lens)
+  /v1/god/threats:
+    get:
+      tags:
+        - GOD Mode
+      summary: Get threat feed
+      description: Returns alerts from red-team-agent and drift-monitor
+      operationId: getThreats
+      parameters:
+        - name: severity
+          in: query
+          schema:
+            type: string
+            enum: [critical, high, medium, low]
+        - name: acknowledged
+          in: query
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: Threat feed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ThreatListResponse'
+
+  # GOD MODE: LOOPS (Open items requiring attention)
+  /v1/god/loops:
+    get:
+      tags:
+        - GOD Mode
+      summary: Get open loops
+      description: Returns count and list of unresolved tasks/decisions requiring attention
+      operationId: getOpenLoops
+      responses:
+        '200':
+          description: Open loops
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OpenLoopsResponse'
+
+  # =============================================================================
+  # NEXUS AGENT (Cognitive Interface)
+  # =============================================================================
+  /v1/nexus/query:
+    post:
+      tags:
+        - Nexus
+      summary: Query Nexus
+      description: Send a natural language query to Nexus and receive an intelligent response
+      operationId: queryNexus
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NexusQueryRequest'
+            example:
+              query: "Why did the Context Injector fail?"
+              context:
+                current_view: "architecture"
+                selected_component: "context-injector"
+      responses:
+        '200':
+          description: Nexus response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NexusQueryResponse'
+
+  /v1/nexus/interpret:
+    get:
+      tags:
+        - Nexus
+      summary: Interpret event (Causal Chain Analysis)
+      description: Nexus analyzes an event and provides a causal chain explanation
+      operationId: interpretEvent
+      parameters:
+        - name: event_id
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Causal chain analysis
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NexusInterpretResponse'
+
+  /v1/nexus/challenge:
+    get:
+      tags:
+        - Nexus
+      summary: Pre-mortem analysis
+      description: Nexus provides adversarial questions for a specific BATCH
+      operationId: challengeBatch
+      parameters:
+        - name: batch_id
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Pre-mortem analysis
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NexusChallengeResponse'
+
+  /v1/nexus/explain:
+    get:
+      tags:
+        - Nexus
+      summary: Explain Constitution article
+      description: Nexus explains a specific Constitution article with history and rationale
+      operationId: explainArticle
+      parameters:
+        - name: article_id
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Article explanation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NexusExplainResponse'
+
+  /v1/nexus/attention:
+    get:
+      tags:
+        - Nexus
+      summary: Get attention queue
+      description: Returns prioritized list of items needing Chairman review
+      operationId: getAttentionQueue
+      responses:
+        '200':
+          description: Attention queue
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NexusAttentionResponse'
+
+  /v1/nexus/alerts:
+    get:
+      tags:
+        - Nexus
+      summary: Get Nexus alerts
+      description: Returns unread alerts from Nexus
+      operationId: getNexusAlerts
+      parameters:
+        - name: unread_only
+          in: query
+          schema:
+            type: boolean
+            default: true
+      responses:
+        '200':
+          description: Nexus alerts
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NexusAlertsResponse'
+
   # =============================================================================
   # CONSTITUTION ENFORCER (Component 3)
   # =============================================================================
