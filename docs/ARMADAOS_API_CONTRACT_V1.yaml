@@ -39,16 +39,101 @@ servers:
     description: Development
 
 tags:
+  # =============================================================================
+  # TIER 1: CORE INTELLIGENCE (Components 1-10)
+  # =============================================================================
   - name: Health
     description: System health endpoints
+  - name: Gateway
+    description: The One Gateway - Single entry point for all API requests
+  - name: Constitution
+    description: Constitution Enforcer - Validates all actions against the Constitution
+  - name: EventStore
+    description: Event Store - Immutable audit log of all system events
+  - name: Validator
+    description: Validator - Validates agent outputs before execution
+  - name: RedTeam
+    description: Red Team Agent - Adversarial testing of agent actions
+  - name: Shadow
+    description: System-Level Shadow - Monitors system health and compliance
+  - name: AgentRuntime
+    description: Agent Runtime - Executes agent logic
+  - name: Orchestrator
+    description: Orchestrator - Coordinates multi-agent workflows
+  - name: ActionQueue
+    description: Action Queue - Manages pending actions
+  
+  # =============================================================================
+  # TIER 2: OPERATIONAL SERVICES (Components 11-25)
+  # =============================================================================
   - name: Context
     description: Context Engine - Agent memory and context assembly
   - name: Sandbox
     description: Sandbox Bridge - Agent execution environment
   - name: Architect
     description: Master Architect - Document indexing and search
+  - name: Treasury
+    description: Treasury - Cost tracking and budget enforcement
+  - name: StateManager
+    description: State Manager - Tracks current state of all systems
+  - name: ContextInjector
+    description: Context Injector - Injects context into agent prompts
+  - name: Weaviate
+    description: Weaviate - Vector database for semantic search
+  - name: ApprovalEngine
+    description: Approval Engine - Manages Chairman approval workflows
+  - name: CostModel
+    description: Cost Model - Estimates cost of actions before execution
+  - name: MemoryController
+    description: Memory Controller - Manages agent working memory
+  - name: RAMAgent
+    description: RAM Agent - In-memory cache for frequently accessed data
   - name: GOD Mode
-    description: Chairman control and oversight
+    description: Chairman control and oversight (API + Console)
+  - name: ServiceAdapters
+    description: Service Adapters - Connect to external APIs
+  - name: Backup
+    description: Backup Service - Backup and restore for critical data
+  
+  # =============================================================================
+  # TIER 3: INFRASTRUCTURE & OBSERVABILITY (Components 26-41)
+  # =============================================================================
+  - name: Mesh
+    description: Linkerd Service Mesh - mTLS, circuit breaking, retries
+  - name: Observability
+    description: OpenTelemetry - Distributed tracing and observability
+  - name: Secrets
+    description: AWS Secrets Manager - Secure secret storage and rotation
+  - name: LoadBalancer
+    description: AWS ALB/NLB - Load balancing
+  - name: Orchestration
+    description: ECS/Kubernetes - Container orchestration
+  - name: HealthMonitor
+    description: Health Monitor - Individual service health checks
+  - name: HealthAggregator
+    description: Health Aggregator - Holistic system health view
+  - name: Rollback
+    description: Rollback Mechanism - Automated rollback of failed deployments
+  - name: DeadManSwitch
+    description: Dead Man's Switch - Fail-safe if smart systems fail
+  - name: DependencyGraph
+    description: Dependency Graph - Machine-readable build order
+  - name: ConfigManagement
+    description: Configuration Management - Manages environment configuration
+  - name: ServiceDiscovery
+    description: Service Discovery - How services find each other
+  - name: DisasterRecovery
+    description: Disaster Recovery - Cross-region backup and recovery
+  - name: ShadowOfShadow
+    description: Shadow of Shadow - Backup monitor for System-Level Shadow
+  - name: CICD
+    description: CI/CD Pipelines - Automated build, test, deploy
+  - name: Canary
+    description: Canary Deployment Service - Progressive rollouts
+  
+  # =============================================================================
+  # TIER 4: UI & GENERATIVE (Component 42 + Extensions)
+  # =============================================================================
   - name: Generative UI
     description: AI-powered dynamic interface generation (PLANNED - BATCH-180)
 
@@ -759,6 +844,1441 @@ paths:
               schema:
                 $ref: '#/components/schemas/SuccessResponse'
 
+  # =============================================================================
+  # CONSTITUTION ENFORCER (Component 3)
+  # =============================================================================
+  /v1/constitution/validate:
+    post:
+      tags:
+        - Constitution
+      summary: Validate action against Constitution
+      description: Checks if a proposed action violates the Constitution
+      operationId: validateAction
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConstitutionValidateRequest'
+      responses:
+        '200':
+          description: Validation result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConstitutionValidateResponse'
+
+  /v1/constitution/articles:
+    get:
+      tags:
+        - Constitution
+      summary: Get all Constitution articles
+      description: Returns the full Constitution for reference
+      operationId: getConstitution
+      responses:
+        '200':
+          description: Constitution articles
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConstitutionArticlesResponse'
+
+  /v1/constitution/violations:
+    get:
+      tags:
+        - Constitution
+      summary: Get recent violations
+      description: Returns recent Constitution violations for audit
+      operationId: getViolations
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 100
+        - name: agent_id
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List of violations
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ViolationListResponse'
+
+  # =============================================================================
+  # EVENT STORE (Component 4)
+  # =============================================================================
+  /v1/events:
+    get:
+      tags:
+        - EventStore
+      summary: Query events
+      description: Query the immutable event log with filters
+      operationId: queryEvents
+      parameters:
+        - name: agent_id
+          in: query
+          schema:
+            type: string
+        - name: event_type
+          in: query
+          schema:
+            type: string
+        - name: start_time
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: end_time
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 100
+      responses:
+        '200':
+          description: Event list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventQueryResponse'
+
+  /v1/events/{event_id}:
+    get:
+      tags:
+        - EventStore
+      summary: Get event by ID
+      description: Retrieve a specific event by its ID
+      operationId: getEvent
+      parameters:
+        - name: event_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Event details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventDetail'
+
+  /v1/events/stream:
+    get:
+      tags:
+        - EventStore
+      summary: Stream events (SSE)
+      description: Server-sent events stream for real-time event monitoring
+      operationId: streamEvents
+      parameters:
+        - name: agent_id
+          in: query
+          schema:
+            type: string
+        - name: event_type
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Event stream
+          content:
+            text/event-stream:
+              schema:
+                type: string
+
+  # =============================================================================
+  # VALIDATOR (Component 5)
+  # =============================================================================
+  /v1/validator/validate:
+    post:
+      tags:
+        - Validator
+      summary: Validate agent output
+      description: Validates agent output before execution
+      operationId: validateOutput
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ValidatorRequest'
+      responses:
+        '200':
+          description: Validation result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidatorResponse'
+
+  /v1/validator/rules:
+    get:
+      tags:
+        - Validator
+      summary: Get validation rules
+      description: Returns all active validation rules
+      operationId: getValidationRules
+      responses:
+        '200':
+          description: Validation rules
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationRulesResponse'
+
+  # =============================================================================
+  # RED TEAM AGENT (Component 6)
+  # =============================================================================
+  /v1/redteam/analyze:
+    post:
+      tags:
+        - RedTeam
+      summary: Adversarial analysis
+      description: Red team analyzes proposed action for vulnerabilities
+      operationId: redteamAnalyze
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RedTeamRequest'
+      responses:
+        '200':
+          description: Analysis result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RedTeamResponse'
+
+  /v1/redteam/reports:
+    get:
+      tags:
+        - RedTeam
+      summary: Get red team reports
+      description: Returns historical red team analysis reports
+      operationId: getRedTeamReports
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 50
+      responses:
+        '200':
+          description: Report list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RedTeamReportsResponse'
+
+  # =============================================================================
+  # SYSTEM-LEVEL SHADOW (Component 7)
+  # =============================================================================
+  /v1/shadow/status:
+    get:
+      tags:
+        - Shadow
+      summary: Get Shadow status
+      description: Returns current Shadow monitoring status
+      operationId: getShadowStatus
+      responses:
+        '200':
+          description: Shadow status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ShadowStatusResponse'
+
+  /v1/shadow/alerts:
+    get:
+      tags:
+        - Shadow
+      summary: Get Shadow alerts
+      description: Returns active and recent Shadow alerts
+      operationId: getShadowAlerts
+      parameters:
+        - name: severity
+          in: query
+          schema:
+            type: string
+            enum: [critical, warning, info]
+        - name: acknowledged
+          in: query
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: Alert list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ShadowAlertsResponse'
+
+  /v1/shadow/alerts/{alert_id}/acknowledge:
+    post:
+      tags:
+        - Shadow
+      summary: Acknowledge alert
+      description: Mark an alert as acknowledged
+      operationId: acknowledgeAlert
+      parameters:
+        - name: alert_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Alert acknowledged
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+
+  # =============================================================================
+  # AGENT RUNTIME (Component 8)
+  # =============================================================================
+  /v1/runtime/agents:
+    get:
+      tags:
+        - AgentRuntime
+      summary: List running agents
+      description: Returns all currently running agent instances
+      operationId: listAgents
+      responses:
+        '200':
+          description: Agent list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentListResponse'
+
+  /v1/runtime/agents/{agent_id}:
+    get:
+      tags:
+        - AgentRuntime
+      summary: Get agent details
+      description: Returns details of a specific agent instance
+      operationId: getAgentDetails
+      parameters:
+        - name: agent_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Agent details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentDetailResponse'
+
+  /v1/runtime/agents/{agent_id}/terminate:
+    post:
+      tags:
+        - AgentRuntime
+      summary: Terminate agent
+      description: Forcefully terminate an agent instance
+      operationId: terminateAgent
+      parameters:
+        - name: agent_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Agent terminated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+
+  # =============================================================================
+  # ORCHESTRATOR (Component 9)
+  # =============================================================================
+  /v1/orchestrator/workflows:
+    get:
+      tags:
+        - Orchestrator
+      summary: List workflows
+      description: Returns all active and recent workflows
+      operationId: listWorkflows
+      parameters:
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [active, completed, failed]
+      responses:
+        '200':
+          description: Workflow list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkflowListResponse'
+
+  /v1/orchestrator/workflows/{workflow_id}:
+    get:
+      tags:
+        - Orchestrator
+      summary: Get workflow details
+      description: Returns details of a specific workflow
+      operationId: getWorkflow
+      parameters:
+        - name: workflow_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Workflow details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkflowDetailResponse'
+
+  /v1/orchestrator/workflows/{workflow_id}/cancel:
+    post:
+      tags:
+        - Orchestrator
+      summary: Cancel workflow
+      description: Cancel an active workflow
+      operationId: cancelWorkflow
+      parameters:
+        - name: workflow_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Workflow cancelled
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+
+  # =============================================================================
+  # ACTION QUEUE (Component 10)
+  # =============================================================================
+  /v1/queue/actions:
+    get:
+      tags:
+        - ActionQueue
+      summary: List queued actions
+      description: Returns all pending actions in the queue
+      operationId: listQueuedActions
+      parameters:
+        - name: agent_id
+          in: query
+          schema:
+            type: string
+        - name: priority
+          in: query
+          schema:
+            type: string
+            enum: [high, medium, low]
+      responses:
+        '200':
+          description: Action queue
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ActionQueueResponse'
+
+  /v1/queue/actions/{action_id}:
+    get:
+      tags:
+        - ActionQueue
+      summary: Get action details
+      description: Returns details of a specific queued action
+      operationId: getQueuedAction
+      parameters:
+        - name: action_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Action details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ActionDetailResponse'
+
+  /v1/queue/actions/{action_id}/cancel:
+    post:
+      tags:
+        - ActionQueue
+      summary: Cancel queued action
+      description: Cancel a pending action
+      operationId: cancelQueuedAction
+      parameters:
+        - name: action_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Action cancelled
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+
+  # =============================================================================
+  # TREASURY (Component 14)
+  # =============================================================================
+  /v1/treasury/balance:
+    get:
+      tags:
+        - Treasury
+      summary: Get current balance
+      description: Returns current budget balance and spending
+      operationId: getTreasuryBalance
+      responses:
+        '200':
+          description: Balance info
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TreasuryBalanceResponse'
+
+  /v1/treasury/transactions:
+    get:
+      tags:
+        - Treasury
+      summary: Get transactions
+      description: Returns transaction history
+      operationId: getTreasuryTransactions
+      parameters:
+        - name: start_date
+          in: query
+          schema:
+            type: string
+            format: date
+        - name: end_date
+          in: query
+          schema:
+            type: string
+            format: date
+        - name: agent_id
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Transaction list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TreasuryTransactionsResponse'
+
+  /v1/treasury/budget:
+    get:
+      tags:
+        - Treasury
+      summary: Get budget configuration
+      description: Returns budget limits and alerts
+      operationId: getTreasuryBudget
+      responses:
+        '200':
+          description: Budget config
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TreasuryBudgetResponse'
+    put:
+      tags:
+        - Treasury
+      summary: Update budget
+      description: Update budget limits (Chairman only)
+      operationId: updateTreasuryBudget
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TreasuryBudgetUpdateRequest'
+      responses:
+        '200':
+          description: Budget updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+
+  # =============================================================================
+  # STATE MANAGER (Component 15)
+  # =============================================================================
+  /v1/state:
+    get:
+      tags:
+        - StateManager
+      summary: Get system state
+      description: Returns current state of all systems
+      operationId: getSystemState
+      responses:
+        '200':
+          description: System state
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SystemStateResponse'
+
+  /v1/state/agents/{agent_id}:
+    get:
+      tags:
+        - StateManager
+      summary: Get agent state
+      description: Returns current state of a specific agent
+      operationId: getAgentState
+      parameters:
+        - name: agent_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Agent state
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentStateResponse'
+
+  /v1/state/history:
+    get:
+      tags:
+        - StateManager
+      summary: Get state history
+      description: Returns historical state snapshots
+      operationId: getStateHistory
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 100
+      responses:
+        '200':
+          description: State history
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StateHistoryResponse'
+
+  # =============================================================================
+  # APPROVAL ENGINE (Component 18)
+  # =============================================================================
+  /v1/approvals:
+    get:
+      tags:
+        - ApprovalEngine
+      summary: List pending approvals
+      description: Returns all pending approval requests
+      operationId: listApprovals
+      parameters:
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [pending, approved, rejected, expired]
+      responses:
+        '200':
+          description: Approval list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApprovalListResponse'
+
+  /v1/approvals/{approval_id}:
+    get:
+      tags:
+        - ApprovalEngine
+      summary: Get approval details
+      description: Returns details of a specific approval request
+      operationId: getApprovalDetails
+      parameters:
+        - name: approval_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Approval details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApprovalDetailResponse'
+
+  /v1/approvals/{approval_id}/decide:
+    post:
+      tags:
+        - ApprovalEngine
+      summary: Decide on approval
+      description: Approve or reject a pending request
+      operationId: decideApproval
+      parameters:
+        - name: approval_id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApprovalDecisionRequest'
+      responses:
+        '200':
+          description: Decision recorded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+
+  # =============================================================================
+  # COST MODEL (Component 19)
+  # =============================================================================
+  /v1/cost/estimate:
+    post:
+      tags:
+        - CostModel
+      summary: Estimate action cost
+      description: Estimates the cost of a proposed action before execution
+      operationId: estimateCost
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CostEstimateRequest'
+      responses:
+        '200':
+          description: Cost estimate
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CostEstimateResponse'
+
+  /v1/cost/models:
+    get:
+      tags:
+        - CostModel
+      summary: Get cost models
+      description: Returns available cost models and their parameters
+      operationId: getCostModels
+      responses:
+        '200':
+          description: Cost models
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CostModelsResponse'
+
+  # =============================================================================
+  # MEMORY CONTROLLER (Component 20)
+  # =============================================================================
+  /v1/memory/{agent_id}:
+    get:
+      tags:
+        - MemoryController
+      summary: Get agent memory
+      description: Returns working memory for an agent
+      operationId: getAgentMemory
+      parameters:
+        - name: agent_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Agent memory
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentMemoryResponse'
+
+  /v1/memory/{agent_id}/clear:
+    post:
+      tags:
+        - MemoryController
+      summary: Clear agent memory
+      description: Clears working memory for an agent
+      operationId: clearAgentMemory
+      parameters:
+        - name: agent_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Memory cleared
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+
+  # =============================================================================
+  # RAM AGENT (Component 21)
+  # =============================================================================
+  /v1/cache/stats:
+    get:
+      tags:
+        - RAMAgent
+      summary: Get cache statistics
+      description: Returns cache hit/miss statistics
+      operationId: getCacheStats
+      responses:
+        '200':
+          description: Cache stats
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CacheStatsResponse'
+
+  /v1/cache/invalidate:
+    post:
+      tags:
+        - RAMAgent
+      summary: Invalidate cache
+      description: Invalidate cache entries
+      operationId: invalidateCache
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CacheInvalidateRequest'
+      responses:
+        '200':
+          description: Cache invalidated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+
+  # =============================================================================
+  # SERVICE ADAPTERS (Component 24)
+  # =============================================================================
+  /v1/adapters:
+    get:
+      tags:
+        - ServiceAdapters
+      summary: List service adapters
+      description: Returns all configured external service adapters
+      operationId: listAdapters
+      responses:
+        '200':
+          description: Adapter list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdapterListResponse'
+
+  /v1/adapters/{adapter_id}/status:
+    get:
+      tags:
+        - ServiceAdapters
+      summary: Get adapter status
+      description: Returns status of a specific adapter
+      operationId: getAdapterStatus
+      parameters:
+        - name: adapter_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Adapter status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdapterStatusResponse'
+
+  # =============================================================================
+  # BACKUP SERVICE (Component 25)
+  # =============================================================================
+  /v1/backup/snapshots:
+    get:
+      tags:
+        - Backup
+      summary: List backups
+      description: Returns all available backup snapshots
+      operationId: listBackups
+      responses:
+        '200':
+          description: Backup list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackupListResponse'
+    post:
+      tags:
+        - Backup
+      summary: Create backup
+      description: Creates a new backup snapshot
+      operationId: createBackup
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BackupCreateRequest'
+      responses:
+        '202':
+          description: Backup started
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackupCreateResponse'
+
+  /v1/backup/snapshots/{snapshot_id}:
+    get:
+      tags:
+        - Backup
+      summary: Get backup details
+      description: Returns details of a specific backup
+      operationId: getBackupDetails
+      parameters:
+        - name: snapshot_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Backup details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackupDetailResponse'
+
+  /v1/backup/restore:
+    post:
+      tags:
+        - Backup
+      summary: Restore from backup
+      description: Initiates restore from a backup snapshot
+      operationId: restoreBackup
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BackupRestoreRequest'
+      responses:
+        '202':
+          description: Restore started
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackupRestoreResponse'
+
+  # =============================================================================
+  # HEALTH MONITOR (Component 31)
+  # =============================================================================
+  /v1/health/services:
+    get:
+      tags:
+        - HealthMonitor
+      summary: Get all service health
+      description: Returns health status of all individual services
+      operationId: getAllServiceHealth
+      responses:
+        '200':
+          description: Service health list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceHealthListResponse'
+
+  /v1/health/services/{service_id}:
+    get:
+      tags:
+        - HealthMonitor
+      summary: Get service health
+      description: Returns health status of a specific service
+      operationId: getServiceHealth
+      parameters:
+        - name: service_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Service health
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceHealthResponse'
+
+  # =============================================================================
+  # HEALTH AGGREGATOR (Component 32)
+  # =============================================================================
+  /v1/health/aggregate:
+    get:
+      tags:
+        - HealthAggregator
+      summary: Get aggregated health
+      description: Returns holistic system health view with trends
+      operationId: getAggregatedHealth
+      responses:
+        '200':
+          description: Aggregated health
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AggregatedHealthResponse'
+
+  /v1/health/trends:
+    get:
+      tags:
+        - HealthAggregator
+      summary: Get health trends
+      description: Returns health trends over time for predictive analysis
+      operationId: getHealthTrends
+      parameters:
+        - name: period
+          in: query
+          schema:
+            type: string
+            enum: [hour, day, week]
+            default: day
+      responses:
+        '200':
+          description: Health trends
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthTrendsResponse'
+
+  # =============================================================================
+  # ROLLBACK MECHANISM (Component 33)
+  # =============================================================================
+  /v1/rollback/deployments:
+    get:
+      tags:
+        - Rollback
+      summary: List deployments
+      description: Returns recent deployments available for rollback
+      operationId: listDeployments
+      responses:
+        '200':
+          description: Deployment list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeploymentListResponse'
+
+  /v1/rollback/execute:
+    post:
+      tags:
+        - Rollback
+      summary: Execute rollback
+      description: Rollback to a previous deployment
+      operationId: executeRollback
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RollbackRequest'
+      responses:
+        '202':
+          description: Rollback started
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RollbackResponse'
+
+  # =============================================================================
+  # DEAD MAN'S SWITCH (Component 34)
+  # =============================================================================
+  /v1/deadman/status:
+    get:
+      tags:
+        - DeadManSwitch
+      summary: Get dead man's switch status
+      description: Returns status of the fail-safe mechanism
+      operationId: getDeadManStatus
+      responses:
+        '200':
+          description: Dead man's switch status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeadManStatusResponse'
+
+  /v1/deadman/heartbeat:
+    post:
+      tags:
+        - DeadManSwitch
+      summary: Send heartbeat
+      description: Sends heartbeat to reset the dead man's switch timer
+      operationId: sendHeartbeat
+      responses:
+        '200':
+          description: Heartbeat received
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+
+  # =============================================================================
+  # DEPENDENCY GRAPH (Component 35)
+  # =============================================================================
+  /v1/dependencies/graph:
+    get:
+      tags:
+        - DependencyGraph
+      summary: Get dependency graph
+      description: Returns the machine-readable dependency graph
+      operationId: getDependencyGraph
+      responses:
+        '200':
+          description: Dependency graph
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DependencyGraphResponse'
+
+  /v1/dependencies/build-order:
+    get:
+      tags:
+        - DependencyGraph
+      summary: Get build order
+      description: Returns the correct build order based on dependencies
+      operationId: getBuildOrder
+      responses:
+        '200':
+          description: Build order
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BuildOrderResponse'
+
+  # =============================================================================
+  # CONFIGURATION MANAGEMENT (Component 36)
+  # =============================================================================
+  /v1/config:
+    get:
+      tags:
+        - ConfigManagement
+      summary: Get configuration
+      description: Returns current system configuration
+      operationId: getConfig
+      responses:
+        '200':
+          description: Configuration
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConfigResponse'
+
+  /v1/config/{key}:
+    get:
+      tags:
+        - ConfigManagement
+      summary: Get config value
+      description: Returns a specific configuration value
+      operationId: getConfigValue
+      parameters:
+        - name: key
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Config value
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConfigValueResponse'
+    put:
+      tags:
+        - ConfigManagement
+      summary: Update config value
+      description: Updates a configuration value (Chairman only)
+      operationId: updateConfigValue
+      parameters:
+        - name: key
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConfigUpdateRequest'
+      responses:
+        '200':
+          description: Config updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+
+  # =============================================================================
+  # SERVICE DISCOVERY (Component 37)
+  # =============================================================================
+  /v1/discovery/services:
+    get:
+      tags:
+        - ServiceDiscovery
+      summary: List registered services
+      description: Returns all registered services and their endpoints
+      operationId: listRegisteredServices
+      responses:
+        '200':
+          description: Service list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegisteredServicesResponse'
+
+  /v1/discovery/services/{service_name}:
+    get:
+      tags:
+        - ServiceDiscovery
+      summary: Get service endpoints
+      description: Returns endpoints for a specific service
+      operationId: getServiceEndpoints
+      parameters:
+        - name: service_name
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Service endpoints
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceEndpointsResponse'
+
+  # =============================================================================
+  # DISASTER RECOVERY (Component 38)
+  # =============================================================================
+  /v1/dr/status:
+    get:
+      tags:
+        - DisasterRecovery
+      summary: Get DR status
+      description: Returns disaster recovery readiness status
+      operationId: getDRStatus
+      responses:
+        '200':
+          description: DR status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DRStatusResponse'
+
+  /v1/dr/failover:
+    post:
+      tags:
+        - DisasterRecovery
+      summary: Initiate failover
+      description: Initiates failover to DR region (Chairman only)
+      operationId: initiateFailover
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FailoverRequest'
+      responses:
+        '202':
+          description: Failover initiated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FailoverResponse'
+
+  # =============================================================================
+  # SHADOW OF SHADOW (Component 39)
+  # =============================================================================
+  /v1/shadow-of-shadow/status:
+    get:
+      tags:
+        - ShadowOfShadow
+      summary: Get Shadow of Shadow status
+      description: Returns status of the backup monitor
+      operationId: getShadowOfShadowStatus
+      responses:
+        '200':
+          description: Shadow of Shadow status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ShadowOfShadowStatusResponse'
+
+  # =============================================================================
+  # CI/CD PIPELINES (Component 40)
+  # =============================================================================
+  /v1/cicd/pipelines:
+    get:
+      tags:
+        - CICD
+      summary: List pipelines
+      description: Returns all CI/CD pipelines and their status
+      operationId: listPipelines
+      responses:
+        '200':
+          description: Pipeline list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PipelineListResponse'
+
+  /v1/cicd/pipelines/{pipeline_id}/runs:
+    get:
+      tags:
+        - CICD
+      summary: Get pipeline runs
+      description: Returns recent runs for a pipeline
+      operationId: getPipelineRuns
+      parameters:
+        - name: pipeline_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Pipeline runs
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PipelineRunsResponse'
+
+  /v1/cicd/pipelines/{pipeline_id}/trigger:
+    post:
+      tags:
+        - CICD
+      summary: Trigger pipeline
+      description: Manually trigger a pipeline run
+      operationId: triggerPipeline
+      parameters:
+        - name: pipeline_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '202':
+          description: Pipeline triggered
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PipelineTriggerResponse'
+
+  # =============================================================================
+  # CANARY DEPLOYMENT (Component 41)
+  # =============================================================================
+  /v1/canary/deployments:
+    get:
+      tags:
+        - Canary
+      summary: List canary deployments
+      description: Returns all active canary deployments
+      operationId: listCanaryDeployments
+      responses:
+        '200':
+          description: Canary deployment list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CanaryListResponse'
+
+  /v1/canary/deployments/{deployment_id}:
+    get:
+      tags:
+        - Canary
+      summary: Get canary status
+      description: Returns status of a canary deployment
+      operationId: getCanaryStatus
+      parameters:
+        - name: deployment_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Canary status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CanaryStatusResponse'
+
+  /v1/canary/deployments/{deployment_id}/promote:
+    post:
+      tags:
+        - Canary
+      summary: Promote canary
+      description: Promote canary to full deployment
+      operationId: promoteCanary
+      parameters:
+        - name: deployment_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '202':
+          description: Promotion started
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+
+  /v1/canary/deployments/{deployment_id}/rollback:
+    post:
+      tags:
+        - Canary
+      summary: Rollback canary
+      description: Rollback a canary deployment
+      operationId: rollbackCanary
+      parameters:
+        - name: deployment_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '202':
+          description: Rollback started
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+
 components:
   securitySchemes:
     BearerAuth:
@@ -1425,6 +2945,1234 @@ components:
           enum: [approve, reject]
         reason:
           type: string
+
+    # =========================================================================
+    # CONSTITUTION ENFORCER SCHEMAS
+    # =========================================================================
+    ConstitutionValidateRequest:
+      type: object
+      required:
+        - action_type
+        - action_data
+      properties:
+        action_type:
+          type: string
+          description: Type of action being validated
+        action_data:
+          type: object
+          description: The action payload to validate
+        agent_id:
+          type: string
+          description: Agent requesting validation
+
+    ConstitutionValidateResponse:
+      type: object
+      required:
+        - valid
+      properties:
+        valid:
+          type: boolean
+        violations:
+          type: array
+          items:
+            $ref: '#/components/schemas/ConstitutionViolation'
+
+    ConstitutionViolation:
+      type: object
+      properties:
+        article:
+          type: string
+        section:
+          type: string
+        description:
+          type: string
+        severity:
+          type: string
+          enum: [critical, warning, info]
+
+    ConstitutionArticlesResponse:
+      type: object
+      properties:
+        articles:
+          type: array
+          items:
+            $ref: '#/components/schemas/ConstitutionArticle'
+        version:
+          type: string
+        last_updated:
+          type: string
+          format: date-time
+
+    ConstitutionArticle:
+      type: object
+      properties:
+        number:
+          type: string
+        title:
+          type: string
+        content:
+          type: string
+        sections:
+          type: array
+          items:
+            type: object
+
+    ViolationListResponse:
+      type: object
+      properties:
+        violations:
+          type: array
+          items:
+            $ref: '#/components/schemas/ViolationRecord'
+        total:
+          type: integer
+
+    ViolationRecord:
+      type: object
+      properties:
+        violation_id:
+          type: string
+        agent_id:
+          type: string
+        article:
+          type: string
+        description:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+        action_blocked:
+          type: boolean
+
+    # =========================================================================
+    # EVENT STORE SCHEMAS
+    # =========================================================================
+    EventQueryResponse:
+      type: object
+      properties:
+        events:
+          type: array
+          items:
+            $ref: '#/components/schemas/EventDetail'
+        total:
+          type: integer
+        has_more:
+          type: boolean
+
+    EventDetail:
+      type: object
+      properties:
+        event_id:
+          type: string
+        event_type:
+          type: string
+        agent_id:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+        data:
+          type: object
+        metadata:
+          type: object
+
+    # =========================================================================
+    # VALIDATOR SCHEMAS
+    # =========================================================================
+    ValidatorRequest:
+      type: object
+      required:
+        - output_type
+        - output_data
+      properties:
+        output_type:
+          type: string
+        output_data:
+          type: object
+        agent_id:
+          type: string
+
+    ValidatorResponse:
+      type: object
+      properties:
+        valid:
+          type: boolean
+        errors:
+          type: array
+          items:
+            type: string
+        warnings:
+          type: array
+          items:
+            type: string
+
+    ValidationRulesResponse:
+      type: object
+      properties:
+        rules:
+          type: array
+          items:
+            type: object
+            properties:
+              rule_id:
+                type: string
+              name:
+                type: string
+              description:
+                type: string
+              enabled:
+                type: boolean
+
+    # =========================================================================
+    # RED TEAM SCHEMAS
+    # =========================================================================
+    RedTeamRequest:
+      type: object
+      required:
+        - action_type
+        - action_data
+      properties:
+        action_type:
+          type: string
+        action_data:
+          type: object
+        context:
+          type: object
+
+    RedTeamResponse:
+      type: object
+      properties:
+        risk_score:
+          type: number
+          minimum: 0
+          maximum: 100
+        vulnerabilities:
+          type: array
+          items:
+            type: object
+            properties:
+              type:
+                type: string
+              severity:
+                type: string
+              description:
+                type: string
+        recommendation:
+          type: string
+          enum: [proceed, caution, block]
+
+    RedTeamReportsResponse:
+      type: object
+      properties:
+        reports:
+          type: array
+          items:
+            type: object
+            properties:
+              report_id:
+                type: string
+              timestamp:
+                type: string
+                format: date-time
+              risk_score:
+                type: number
+              summary:
+                type: string
+
+    # =========================================================================
+    # SHADOW SCHEMAS
+    # =========================================================================
+    ShadowStatusResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [active, degraded, offline]
+        last_check:
+          type: string
+          format: date-time
+        monitored_services:
+          type: integer
+        active_alerts:
+          type: integer
+
+    ShadowAlertsResponse:
+      type: object
+      properties:
+        alerts:
+          type: array
+          items:
+            $ref: '#/components/schemas/ShadowAlert'
+
+    ShadowAlert:
+      type: object
+      properties:
+        alert_id:
+          type: string
+        severity:
+          type: string
+          enum: [critical, warning, info]
+        service:
+          type: string
+        message:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+        acknowledged:
+          type: boolean
+
+    # =========================================================================
+    # AGENT RUNTIME SCHEMAS
+    # =========================================================================
+    AgentListResponse:
+      type: object
+      properties:
+        agents:
+          type: array
+          items:
+            $ref: '#/components/schemas/AgentSummary'
+
+    AgentSummary:
+      type: object
+      properties:
+        agent_id:
+          type: string
+        agent_type:
+          type: string
+        status:
+          type: string
+          enum: [running, idle, terminated]
+        started_at:
+          type: string
+          format: date-time
+
+    AgentDetailResponse:
+      type: object
+      properties:
+        agent_id:
+          type: string
+        agent_type:
+          type: string
+        status:
+          type: string
+        started_at:
+          type: string
+          format: date-time
+        current_task:
+          type: string
+        memory_usage:
+          type: integer
+        actions_executed:
+          type: integer
+
+    # =========================================================================
+    # ORCHESTRATOR SCHEMAS
+    # =========================================================================
+    WorkflowListResponse:
+      type: object
+      properties:
+        workflows:
+          type: array
+          items:
+            $ref: '#/components/schemas/WorkflowSummary'
+
+    WorkflowSummary:
+      type: object
+      properties:
+        workflow_id:
+          type: string
+        name:
+          type: string
+        status:
+          type: string
+          enum: [active, completed, failed, cancelled]
+        started_at:
+          type: string
+          format: date-time
+        progress:
+          type: number
+
+    WorkflowDetailResponse:
+      type: object
+      properties:
+        workflow_id:
+          type: string
+        name:
+          type: string
+        status:
+          type: string
+        started_at:
+          type: string
+          format: date-time
+        completed_at:
+          type: string
+          format: date-time
+        steps:
+          type: array
+          items:
+            type: object
+            properties:
+              step_id:
+                type: string
+              name:
+                type: string
+              status:
+                type: string
+              agent_id:
+                type: string
+
+    # =========================================================================
+    # ACTION QUEUE SCHEMAS
+    # =========================================================================
+    ActionQueueResponse:
+      type: object
+      properties:
+        actions:
+          type: array
+          items:
+            $ref: '#/components/schemas/QueuedAction'
+        total:
+          type: integer
+
+    QueuedAction:
+      type: object
+      properties:
+        action_id:
+          type: string
+        agent_id:
+          type: string
+        action_type:
+          type: string
+        priority:
+          type: string
+          enum: [high, medium, low]
+        queued_at:
+          type: string
+          format: date-time
+        status:
+          type: string
+          enum: [pending, processing, completed, failed]
+
+    ActionDetailResponse:
+      type: object
+      properties:
+        action_id:
+          type: string
+        agent_id:
+          type: string
+        action_type:
+          type: string
+        priority:
+          type: string
+        queued_at:
+          type: string
+          format: date-time
+        status:
+          type: string
+        data:
+          type: object
+        result:
+          type: object
+
+    # =========================================================================
+    # TREASURY SCHEMAS
+    # =========================================================================
+    TreasuryBalanceResponse:
+      type: object
+      properties:
+        balance:
+          type: number
+        budget:
+          type: number
+        spent_today:
+          type: number
+        spent_this_month:
+          type: number
+        currency:
+          type: string
+          default: USD
+
+    TreasuryTransactionsResponse:
+      type: object
+      properties:
+        transactions:
+          type: array
+          items:
+            $ref: '#/components/schemas/TreasuryTransaction'
+        total:
+          type: integer
+
+    TreasuryTransaction:
+      type: object
+      properties:
+        transaction_id:
+          type: string
+        agent_id:
+          type: string
+        amount:
+          type: number
+        description:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+        category:
+          type: string
+
+    TreasuryBudgetResponse:
+      type: object
+      properties:
+        daily_limit:
+          type: number
+        monthly_limit:
+          type: number
+        alert_threshold:
+          type: number
+        auto_pause_threshold:
+          type: number
+
+    TreasuryBudgetUpdateRequest:
+      type: object
+      properties:
+        daily_limit:
+          type: number
+        monthly_limit:
+          type: number
+        alert_threshold:
+          type: number
+        auto_pause_threshold:
+          type: number
+
+    # =========================================================================
+    # STATE MANAGER SCHEMAS
+    # =========================================================================
+    SystemStateResponse:
+      type: object
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+        services:
+          type: object
+          additionalProperties:
+            type: object
+        agents:
+          type: object
+          additionalProperties:
+            type: object
+        system:
+          type: object
+
+    AgentStateResponse:
+      type: object
+      properties:
+        agent_id:
+          type: string
+        status:
+          type: string
+        current_task:
+          type: string
+        memory:
+          type: object
+        last_action:
+          type: string
+          format: date-time
+
+    StateHistoryResponse:
+      type: object
+      properties:
+        snapshots:
+          type: array
+          items:
+            type: object
+            properties:
+              snapshot_id:
+                type: string
+              timestamp:
+                type: string
+                format: date-time
+              summary:
+                type: object
+
+    # =========================================================================
+    # APPROVAL ENGINE SCHEMAS
+    # =========================================================================
+    ApprovalDetailResponse:
+      type: object
+      properties:
+        approval_id:
+          type: string
+        agent_id:
+          type: string
+        action_type:
+          type: string
+        description:
+          type: string
+        status:
+          type: string
+          enum: [pending, approved, rejected, expired]
+        requested_at:
+          type: string
+          format: date-time
+        decided_at:
+          type: string
+          format: date-time
+        decided_by:
+          type: string
+        reason:
+          type: string
+        data:
+          type: object
+
+    # =========================================================================
+    # COST MODEL SCHEMAS
+    # =========================================================================
+    CostEstimateRequest:
+      type: object
+      required:
+        - action_type
+      properties:
+        action_type:
+          type: string
+        parameters:
+          type: object
+        agent_id:
+          type: string
+
+    CostEstimateResponse:
+      type: object
+      properties:
+        estimated_cost:
+          type: number
+        currency:
+          type: string
+          default: USD
+        breakdown:
+          type: array
+          items:
+            type: object
+            properties:
+              component:
+                type: string
+              cost:
+                type: number
+        confidence:
+          type: number
+          minimum: 0
+          maximum: 1
+
+    CostModelsResponse:
+      type: object
+      properties:
+        models:
+          type: array
+          items:
+            type: object
+            properties:
+              model_id:
+                type: string
+              name:
+                type: string
+              description:
+                type: string
+              parameters:
+                type: object
+
+    # =========================================================================
+    # MEMORY CONTROLLER SCHEMAS
+    # =========================================================================
+    AgentMemoryResponse:
+      type: object
+      properties:
+        agent_id:
+          type: string
+        working_memory:
+          type: object
+        memory_size:
+          type: integer
+        last_updated:
+          type: string
+          format: date-time
+
+    # =========================================================================
+    # RAM AGENT SCHEMAS
+    # =========================================================================
+    CacheStatsResponse:
+      type: object
+      properties:
+        hits:
+          type: integer
+        misses:
+          type: integer
+        hit_rate:
+          type: number
+        size:
+          type: integer
+        max_size:
+          type: integer
+        evictions:
+          type: integer
+
+    CacheInvalidateRequest:
+      type: object
+      properties:
+        keys:
+          type: array
+          items:
+            type: string
+        pattern:
+          type: string
+        all:
+          type: boolean
+          default: false
+
+    # =========================================================================
+    # SERVICE ADAPTERS SCHEMAS
+    # =========================================================================
+    AdapterListResponse:
+      type: object
+      properties:
+        adapters:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdapterSummary'
+
+    AdapterSummary:
+      type: object
+      properties:
+        adapter_id:
+          type: string
+        name:
+          type: string
+        type:
+          type: string
+        status:
+          type: string
+          enum: [connected, disconnected, error]
+
+    AdapterStatusResponse:
+      type: object
+      properties:
+        adapter_id:
+          type: string
+        name:
+          type: string
+        status:
+          type: string
+        last_used:
+          type: string
+          format: date-time
+        requests_today:
+          type: integer
+        errors_today:
+          type: integer
+
+    # =========================================================================
+    # BACKUP SERVICE SCHEMAS
+    # =========================================================================
+    BackupListResponse:
+      type: object
+      properties:
+        snapshots:
+          type: array
+          items:
+            $ref: '#/components/schemas/BackupSummary'
+
+    BackupSummary:
+      type: object
+      properties:
+        snapshot_id:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        size:
+          type: integer
+        type:
+          type: string
+          enum: [full, incremental]
+        status:
+          type: string
+          enum: [completed, in_progress, failed]
+
+    BackupCreateRequest:
+      type: object
+      properties:
+        type:
+          type: string
+          enum: [full, incremental]
+          default: incremental
+        description:
+          type: string
+
+    BackupCreateResponse:
+      type: object
+      properties:
+        snapshot_id:
+          type: string
+        status:
+          type: string
+        estimated_completion:
+          type: string
+          format: date-time
+
+    BackupDetailResponse:
+      type: object
+      properties:
+        snapshot_id:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        completed_at:
+          type: string
+          format: date-time
+        size:
+          type: integer
+        type:
+          type: string
+        status:
+          type: string
+        components:
+          type: array
+          items:
+            type: string
+
+    BackupRestoreRequest:
+      type: object
+      required:
+        - snapshot_id
+      properties:
+        snapshot_id:
+          type: string
+        components:
+          type: array
+          items:
+            type: string
+          description: Specific components to restore (empty = all)
+
+    BackupRestoreResponse:
+      type: object
+      properties:
+        restore_id:
+          type: string
+        status:
+          type: string
+        estimated_completion:
+          type: string
+          format: date-time
+
+    # =========================================================================
+    # HEALTH MONITOR SCHEMAS
+    # =========================================================================
+    ServiceHealthListResponse:
+      type: object
+      properties:
+        services:
+          type: array
+          items:
+            $ref: '#/components/schemas/ServiceHealthResponse'
+
+    ServiceHealthResponse:
+      type: object
+      properties:
+        service_id:
+          type: string
+        name:
+          type: string
+        status:
+          type: string
+          enum: [healthy, degraded, unhealthy]
+        last_check:
+          type: string
+          format: date-time
+        latency_ms:
+          type: integer
+        uptime_percent:
+          type: number
+
+    # =========================================================================
+    # HEALTH AGGREGATOR SCHEMAS
+    # =========================================================================
+    AggregatedHealthResponse:
+      type: object
+      properties:
+        overall_status:
+          type: string
+          enum: [healthy, degraded, unhealthy]
+        healthy_services:
+          type: integer
+        total_services:
+          type: integer
+        degraded_services:
+          type: array
+          items:
+            type: string
+        unhealthy_services:
+          type: array
+          items:
+            type: string
+        trend:
+          type: string
+          enum: [improving, stable, degrading]
+
+    HealthTrendsResponse:
+      type: object
+      properties:
+        period:
+          type: string
+        data_points:
+          type: array
+          items:
+            type: object
+            properties:
+              timestamp:
+                type: string
+                format: date-time
+              healthy_count:
+                type: integer
+              degraded_count:
+                type: integer
+              unhealthy_count:
+                type: integer
+
+    # =========================================================================
+    # ROLLBACK SCHEMAS
+    # =========================================================================
+    DeploymentListResponse:
+      type: object
+      properties:
+        deployments:
+          type: array
+          items:
+            type: object
+            properties:
+              deployment_id:
+                type: string
+              version:
+                type: string
+              deployed_at:
+                type: string
+                format: date-time
+              status:
+                type: string
+              can_rollback:
+                type: boolean
+
+    RollbackRequest:
+      type: object
+      required:
+        - deployment_id
+      properties:
+        deployment_id:
+          type: string
+        reason:
+          type: string
+
+    RollbackResponse:
+      type: object
+      properties:
+        rollback_id:
+          type: string
+        status:
+          type: string
+        target_version:
+          type: string
+        estimated_completion:
+          type: string
+          format: date-time
+
+    # =========================================================================
+    # DEAD MAN'S SWITCH SCHEMAS
+    # =========================================================================
+    DeadManStatusResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [armed, disarmed, triggered]
+        last_heartbeat:
+          type: string
+          format: date-time
+        timeout_seconds:
+          type: integer
+        time_remaining:
+          type: integer
+
+    # =========================================================================
+    # DEPENDENCY GRAPH SCHEMAS
+    # =========================================================================
+    DependencyGraphResponse:
+      type: object
+      properties:
+        nodes:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+              name:
+                type: string
+              type:
+                type: string
+        edges:
+          type: array
+          items:
+            type: object
+            properties:
+              from:
+                type: string
+              to:
+                type: string
+              type:
+                type: string
+
+    BuildOrderResponse:
+      type: object
+      properties:
+        order:
+          type: array
+          items:
+            type: object
+            properties:
+              phase:
+                type: integer
+              components:
+                type: array
+                items:
+                  type: string
+
+    # =========================================================================
+    # CONFIGURATION MANAGEMENT SCHEMAS
+    # =========================================================================
+    ConfigResponse:
+      type: object
+      properties:
+        config:
+          type: object
+          additionalProperties: true
+        version:
+          type: string
+        last_updated:
+          type: string
+          format: date-time
+
+    ConfigValueResponse:
+      type: object
+      properties:
+        key:
+          type: string
+        value:
+          type: object
+        type:
+          type: string
+        last_updated:
+          type: string
+          format: date-time
+
+    ConfigUpdateRequest:
+      type: object
+      required:
+        - value
+      properties:
+        value:
+          type: object
+        reason:
+          type: string
+
+    # =========================================================================
+    # SERVICE DISCOVERY SCHEMAS
+    # =========================================================================
+    RegisteredServicesResponse:
+      type: object
+      properties:
+        services:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+              instances:
+                type: integer
+              healthy_instances:
+                type: integer
+
+    ServiceEndpointsResponse:
+      type: object
+      properties:
+        service_name:
+          type: string
+        endpoints:
+          type: array
+          items:
+            type: object
+            properties:
+              address:
+                type: string
+              port:
+                type: integer
+              healthy:
+                type: boolean
+              metadata:
+                type: object
+
+    # =========================================================================
+    # DISASTER RECOVERY SCHEMAS
+    # =========================================================================
+    DRStatusResponse:
+      type: object
+      properties:
+        primary_region:
+          type: string
+        dr_region:
+          type: string
+        replication_lag_seconds:
+          type: integer
+        last_sync:
+          type: string
+          format: date-time
+        ready_for_failover:
+          type: boolean
+        rto_minutes:
+          type: integer
+        rpo_minutes:
+          type: integer
+
+    FailoverRequest:
+      type: object
+      properties:
+        target_region:
+          type: string
+        reason:
+          type: string
+        force:
+          type: boolean
+          default: false
+
+    FailoverResponse:
+      type: object
+      properties:
+        failover_id:
+          type: string
+        status:
+          type: string
+        target_region:
+          type: string
+        estimated_completion:
+          type: string
+          format: date-time
+
+    # =========================================================================
+    # SHADOW OF SHADOW SCHEMAS
+    # =========================================================================
+    ShadowOfShadowStatusResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [active, standby, offline]
+        shadow_status:
+          type: string
+          enum: [healthy, degraded, unhealthy]
+        last_check:
+          type: string
+          format: date-time
+        takeover_ready:
+          type: boolean
+
+    # =========================================================================
+    # CI/CD SCHEMAS
+    # =========================================================================
+    PipelineListResponse:
+      type: object
+      properties:
+        pipelines:
+          type: array
+          items:
+            type: object
+            properties:
+              pipeline_id:
+                type: string
+              name:
+                type: string
+              status:
+                type: string
+              last_run:
+                type: string
+                format: date-time
+
+    PipelineRunsResponse:
+      type: object
+      properties:
+        runs:
+          type: array
+          items:
+            type: object
+            properties:
+              run_id:
+                type: string
+              status:
+                type: string
+                enum: [pending, running, success, failed, cancelled]
+              started_at:
+                type: string
+                format: date-time
+              completed_at:
+                type: string
+                format: date-time
+              commit:
+                type: string
+
+    PipelineTriggerResponse:
+      type: object
+      properties:
+        run_id:
+          type: string
+        status:
+          type: string
+        pipeline_id:
+          type: string
+
+    # =========================================================================
+    # CANARY DEPLOYMENT SCHEMAS
+    # =========================================================================
+    CanaryListResponse:
+      type: object
+      properties:
+        deployments:
+          type: array
+          items:
+            $ref: '#/components/schemas/CanaryStatusResponse'
+
+    CanaryStatusResponse:
+      type: object
+      properties:
+        deployment_id:
+          type: string
+        service:
+          type: string
+        version:
+          type: string
+        traffic_percent:
+          type: integer
+        status:
+          type: string
+          enum: [active, promoting, rolling_back, completed]
+        started_at:
+          type: string
+          format: date-time
+        metrics:
+          type: object
+          properties:
+            error_rate:
+              type: number
+            latency_p99:
+              type: number
+            success_rate:
+              type: number
 
 security:
   - BearerAuth: []
