@@ -1,0 +1,1101 @@
+openapi: 3.0.3
+info:
+  title: ArmadaOS API Contract
+  description: |
+    # ArmadaOS API Contract v1.0
+    
+    This contract defines the interface between the ArmadaOS Frontend (armadaos-ui) 
+    and the ArmadaOS Backend (armadaos-genesis).
+    
+    ## Contract Guarantees
+    
+    - **Immutable**: Once published, endpoints do not change
+    - **Versioned**: Breaking changes require new version
+    - **Complete**: Every request/response fully specified
+    - **Testable**: Can be validated automatically
+    
+    ## Authentication
+    
+    All endpoints (except /health) require Bearer token authentication.
+    
+    ```
+    Authorization: Bearer <token>
+    ```
+    
+    ## Base URL
+    
+    Production: `https://api.armadaos.com`
+    Development: `http://localhost:8080`
+    
+  version: "1.0.0"
+  contact:
+    name: ArmadaOS
+    url: https://github.com/kam-ship-it/ArmadaOS
+
+servers:
+  - url: https://api.armadaos.com
+    description: Production
+  - url: http://localhost:8080
+    description: Development
+
+tags:
+  - name: Health
+    description: System health endpoints
+  - name: Context
+    description: Context Engine - Agent memory and context assembly
+  - name: Sandbox
+    description: Sandbox Bridge - Agent execution environment
+  - name: Architect
+    description: Master Architect - Document indexing and search
+  - name: GOD Mode
+    description: Chairman control and oversight
+
+paths:
+  # =============================================================================
+  # HEALTH
+  # =============================================================================
+  /health:
+    get:
+      tags:
+        - Health
+      summary: Gateway health check
+      description: Returns health status of the API gateway and all connected services
+      operationId: getHealth
+      security: []
+      responses:
+        '200':
+          description: System healthy
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+              example:
+                status: healthy
+                version: "1.0.0"
+                services:
+                  context_engine: connected
+                  sandbox_bridge: connected
+                  master_architect: connected
+                  constitution_enforcer: connected
+                  event_store: connected
+
+  # =============================================================================
+  # CONTEXT ENGINE
+  # =============================================================================
+  /v1/context/assemble:
+    post:
+      tags:
+        - Context
+      summary: Assemble context for agent
+      description: |
+        Assembles a complete context package for an agent, including:
+        - Tier 1: Always-loaded constitutional documents (30,000 tokens)
+        - Tier 2: Predictive context based on task (40,000 tokens)
+        - Tier 3: RAG search results (30,000 tokens)
+        
+        Total: 100,000 tokens of guaranteed context.
+      operationId: assembleContext
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ContextAssembleRequest'
+            example:
+              agent_id: "atlas-001"
+              task_type: "batch_execution"
+              query: "BATCH-177 Infrastructure Wiring"
+              topics:
+                - infrastructure
+                - ecs
+                - deployment
+      responses:
+        '200':
+          description: Context assembled successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContextAssembleResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /v1/context/invalidate:
+    post:
+      tags:
+        - Context
+      summary: Invalidate context cache
+      description: Invalidates cached context for a specific agent or all agents
+      operationId: invalidateContext
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ContextInvalidateRequest'
+            example:
+              agent_id: "atlas-001"
+      responses:
+        '200':
+          description: Cache invalidated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  # =============================================================================
+  # SANDBOX BRIDGE
+  # =============================================================================
+  /v1/sandbox/execute:
+    post:
+      tags:
+        - Sandbox
+      summary: Execute shell command
+      description: |
+        Executes a shell command in the agent's sandbox environment.
+        
+        **Constitution Enforcement**: Commands are validated against the constitution
+        before execution. Blocked commands will return 403.
+      operationId: executeCommand
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExecuteRequest'
+            example:
+              agent_id: "atlas-001"
+              command: "ls -la /workspace"
+              timeout: 30
+      responses:
+        '200':
+          description: Command executed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExecuteResponse'
+        '403':
+          description: Command blocked by constitution
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConstitutionBlockResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /v1/sandbox/file/write:
+    post:
+      tags:
+        - Sandbox
+      summary: Write file
+      description: Writes content to a file in the agent's workspace
+      operationId: writeFile
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FileWriteRequest'
+            example:
+              agent_id: "atlas-001"
+              path: "/workspace/output.txt"
+              content: "Hello, World!"
+              mode: "overwrite"
+      responses:
+        '200':
+          description: File written
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '403':
+          description: Path blocked by constitution
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConstitutionBlockResponse'
+
+  /v1/sandbox/file/read:
+    get:
+      tags:
+        - Sandbox
+      summary: Read file
+      description: Reads content from a file in the agent's workspace
+      operationId: readFile
+      parameters:
+        - name: agent_id
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: path
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: File content
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileReadResponse'
+        '404':
+          description: File not found
+
+  /v1/sandbox/git/clone:
+    post:
+      tags:
+        - Sandbox
+      summary: Clone repository
+      description: Clones a Git repository into the agent's workspace
+      operationId: gitClone
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GitCloneRequest'
+            example:
+              agent_id: "atlas-001"
+              repo_url: "https://github.com/kam-ship-it/ArmadaOS.git"
+              destination: "/workspace/ArmadaOS"
+      responses:
+        '200':
+          description: Repository cloned
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+
+  /v1/sandbox/git/commit:
+    post:
+      tags:
+        - Sandbox
+      summary: Commit changes
+      description: Commits staged changes in a repository
+      operationId: gitCommit
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GitCommitRequest'
+            example:
+              agent_id: "atlas-001"
+              repo_path: "/workspace/ArmadaOS"
+              message: "BATCH-177: Infrastructure wiring complete"
+              files:
+                - "."
+      responses:
+        '200':
+          description: Changes committed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GitCommitResponse'
+
+  /v1/sandbox/git/push:
+    post:
+      tags:
+        - Sandbox
+      summary: Push to remote
+      description: Pushes committed changes to the remote repository
+      operationId: gitPush
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GitPushRequest'
+            example:
+              agent_id: "atlas-001"
+              repo_path: "/workspace/ArmadaOS"
+              branch: "main"
+      responses:
+        '200':
+          description: Changes pushed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+
+  # =============================================================================
+  # MASTER ARCHITECT
+  # =============================================================================
+  /v1/architect/index:
+    post:
+      tags:
+        - Architect
+      summary: Index document
+      description: Indexes a document into the vector database for semantic search
+      operationId: indexDocument
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IndexRequest'
+            example:
+              path: "/ArmadaOS/protocols/AOSP-117.md"
+              content: "# AOSP-117: Autonomous Troubleshooting Protocol..."
+              metadata:
+                type: "protocol"
+                tier: 1
+      responses:
+        '200':
+          description: Document indexed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IndexResponse'
+
+  /v1/architect/search:
+    post:
+      tags:
+        - Architect
+      summary: Search indexed documents
+      description: Performs semantic search across indexed documents
+      operationId: searchDocuments
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SearchRequest'
+            example:
+              query: "How to deploy to ECS"
+              limit: 10
+              filters:
+                type: "protocol"
+      responses:
+        '200':
+          description: Search results
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchResponse'
+
+  /v1/architect/webhook:
+    post:
+      tags:
+        - Architect
+      summary: GitHub webhook receiver
+      description: Receives GitHub webhook events to trigger automatic indexing
+      operationId: githubWebhook
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        '200':
+          description: Webhook processed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+
+  # =============================================================================
+  # GOD MODE
+  # =============================================================================
+  /v1/god/status:
+    get:
+      tags:
+        - GOD Mode
+      summary: System status overview
+      description: |
+        Returns comprehensive system status including:
+        - All service health
+        - Active agents
+        - Pending approvals
+        - Recent events
+        - Resource utilization
+      operationId: getSystemStatus
+      responses:
+        '200':
+          description: System status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SystemStatusResponse'
+
+  /v1/god/agents:
+    get:
+      tags:
+        - GOD Mode
+      summary: List all agents
+      description: Returns list of all registered agents and their current status
+      operationId: listAgents
+      responses:
+        '200':
+          description: Agent list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentListResponse'
+
+  /v1/god/agents/{agent_id}:
+    get:
+      tags:
+        - GOD Mode
+      summary: Get agent details
+      description: Returns detailed information about a specific agent
+      operationId: getAgent
+      parameters:
+        - name: agent_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Agent details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentDetailResponse'
+
+  /v1/god/pause:
+    post:
+      tags:
+        - GOD Mode
+      summary: Pause all agent activity
+      description: |
+        **KILL SWITCH**: Immediately pauses all agent activity.
+        Agents will complete their current action and then wait.
+      operationId: pauseAllAgents
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PauseRequest'
+            example:
+              reason: "Chairman review required"
+      responses:
+        '200':
+          description: All agents paused
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+
+  /v1/god/resume:
+    post:
+      tags:
+        - GOD Mode
+      summary: Resume agent activity
+      description: Resumes agent activity after a pause
+      operationId: resumeAllAgents
+      responses:
+        '200':
+          description: All agents resumed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+
+  /v1/god/override:
+    post:
+      tags:
+        - GOD Mode
+      summary: Override agent decision
+      description: |
+        Allows the Chairman to override a pending agent decision.
+        The override is logged to the event store.
+      operationId: overrideDecision
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OverrideRequest'
+            example:
+              decision_id: "dec-12345"
+              action: "approve"
+              reason: "Chairman approved manually"
+      responses:
+        '200':
+          description: Decision overridden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+
+  /v1/god/events:
+    get:
+      tags:
+        - GOD Mode
+      summary: Get recent events
+      description: Returns recent system events from the event store
+      operationId: getEvents
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 100
+        - name: agent_id
+          in: query
+          schema:
+            type: string
+        - name: event_type
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Event list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventListResponse'
+
+  /v1/god/approvals:
+    get:
+      tags:
+        - GOD Mode
+      summary: Get pending approvals
+      description: Returns list of actions awaiting Chairman approval
+      operationId: getPendingApprovals
+      responses:
+        '200':
+          description: Pending approvals
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApprovalListResponse'
+
+  /v1/god/approvals/{approval_id}:
+    post:
+      tags:
+        - GOD Mode
+      summary: Approve or reject action
+      description: Chairman approves or rejects a pending action
+      operationId: processApproval
+      parameters:
+        - name: approval_id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApprovalDecisionRequest'
+            example:
+              decision: "approve"
+              reason: "Looks good"
+      responses:
+        '200':
+          description: Approval processed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  responses:
+    BadRequest:
+      description: Invalid request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Unauthorized:
+      description: Authentication required
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    InternalError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+
+  schemas:
+    # Common
+    SuccessResponse:
+      type: object
+      required:
+        - success
+      properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: "Operation completed successfully"
+
+    ErrorResponse:
+      type: object
+      required:
+        - error
+        - message
+      properties:
+        error:
+          type: string
+          example: "invalid_request"
+        message:
+          type: string
+          example: "Missing required field: agent_id"
+
+    ConstitutionBlockResponse:
+      type: object
+      required:
+        - blocked
+        - reason
+        - article
+      properties:
+        blocked:
+          type: boolean
+          example: true
+        reason:
+          type: string
+          example: "Command violates Article 3.2: No access to system files"
+        article:
+          type: string
+          example: "3.2"
+
+    # Health
+    HealthResponse:
+      type: object
+      required:
+        - status
+        - version
+      properties:
+        status:
+          type: string
+          enum: [healthy, degraded, unhealthy]
+        version:
+          type: string
+        services:
+          type: object
+          additionalProperties:
+            type: string
+            enum: [connected, disconnected]
+
+    # Context
+    ContextAssembleRequest:
+      type: object
+      required:
+        - agent_id
+      properties:
+        agent_id:
+          type: string
+        task_type:
+          type: string
+        query:
+          type: string
+        topics:
+          type: array
+          items:
+            type: string
+
+    ContextAssembleResponse:
+      type: object
+      required:
+        - tier1_tokens
+        - tier2_tokens
+        - tier3_tokens
+        - total_tokens
+      properties:
+        tier1_tokens:
+          type: integer
+          example: 29679
+        tier2_tokens:
+          type: integer
+          example: 39789
+        tier3_tokens:
+          type: integer
+          example: 27264
+        total_tokens:
+          type: integer
+          example: 96732
+        tier1_docs:
+          type: integer
+        tier2_docs:
+          type: integer
+        tier3_docs:
+          type: integer
+        cache_hit:
+          type: boolean
+        assembly_time_ms:
+          type: integer
+
+    ContextInvalidateRequest:
+      type: object
+      properties:
+        agent_id:
+          type: string
+          description: If omitted, invalidates all caches
+
+    # Sandbox
+    ExecuteRequest:
+      type: object
+      required:
+        - agent_id
+        - command
+      properties:
+        agent_id:
+          type: string
+        command:
+          type: string
+        timeout:
+          type: integer
+          default: 30
+        working_dir:
+          type: string
+
+    ExecuteResponse:
+      type: object
+      required:
+        - exit_code
+        - stdout
+        - stderr
+      properties:
+        exit_code:
+          type: integer
+        stdout:
+          type: string
+        stderr:
+          type: string
+        duration_ms:
+          type: integer
+
+    FileWriteRequest:
+      type: object
+      required:
+        - agent_id
+        - path
+        - content
+      properties:
+        agent_id:
+          type: string
+        path:
+          type: string
+        content:
+          type: string
+        mode:
+          type: string
+          enum: [overwrite, append]
+          default: overwrite
+
+    FileReadResponse:
+      type: object
+      required:
+        - content
+      properties:
+        content:
+          type: string
+        size:
+          type: integer
+        modified:
+          type: string
+          format: date-time
+
+    GitCloneRequest:
+      type: object
+      required:
+        - agent_id
+        - repo_url
+      properties:
+        agent_id:
+          type: string
+        repo_url:
+          type: string
+        destination:
+          type: string
+        branch:
+          type: string
+          default: main
+
+    GitCommitRequest:
+      type: object
+      required:
+        - agent_id
+        - repo_path
+        - message
+      properties:
+        agent_id:
+          type: string
+        repo_path:
+          type: string
+        message:
+          type: string
+        files:
+          type: array
+          items:
+            type: string
+          default: ["."]
+
+    GitCommitResponse:
+      type: object
+      required:
+        - commit_hash
+      properties:
+        commit_hash:
+          type: string
+          example: "abc1234"
+
+    GitPushRequest:
+      type: object
+      required:
+        - agent_id
+        - repo_path
+      properties:
+        agent_id:
+          type: string
+        repo_path:
+          type: string
+        branch:
+          type: string
+          default: main
+
+    # Architect
+    IndexRequest:
+      type: object
+      required:
+        - path
+        - content
+      properties:
+        path:
+          type: string
+        content:
+          type: string
+        metadata:
+          type: object
+          additionalProperties: true
+
+    IndexResponse:
+      type: object
+      required:
+        - indexed
+        - document_id
+      properties:
+        indexed:
+          type: boolean
+        document_id:
+          type: string
+        chunks:
+          type: integer
+
+    SearchRequest:
+      type: object
+      required:
+        - query
+      properties:
+        query:
+          type: string
+        limit:
+          type: integer
+          default: 10
+        filters:
+          type: object
+          additionalProperties: true
+
+    SearchResponse:
+      type: object
+      required:
+        - results
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/SearchResult'
+        total:
+          type: integer
+
+    SearchResult:
+      type: object
+      properties:
+        document_id:
+          type: string
+        path:
+          type: string
+        content:
+          type: string
+        score:
+          type: number
+        metadata:
+          type: object
+
+    # GOD Mode
+    SystemStatusResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [operational, degraded, critical]
+        services:
+          type: object
+          additionalProperties:
+            type: string
+        active_agents:
+          type: integer
+        pending_approvals:
+          type: integer
+        events_last_hour:
+          type: integer
+        uptime_seconds:
+          type: integer
+
+    AgentListResponse:
+      type: object
+      properties:
+        agents:
+          type: array
+          items:
+            $ref: '#/components/schemas/AgentSummary'
+
+    AgentSummary:
+      type: object
+      properties:
+        agent_id:
+          type: string
+        name:
+          type: string
+        status:
+          type: string
+          enum: [active, idle, paused, error]
+        current_task:
+          type: string
+        last_activity:
+          type: string
+          format: date-time
+
+    AgentDetailResponse:
+      type: object
+      properties:
+        agent_id:
+          type: string
+        name:
+          type: string
+        status:
+          type: string
+        current_task:
+          type: string
+        tasks_completed:
+          type: integer
+        errors:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+        last_activity:
+          type: string
+          format: date-time
+        recent_events:
+          type: array
+          items:
+            $ref: '#/components/schemas/Event'
+
+    PauseRequest:
+      type: object
+      properties:
+        reason:
+          type: string
+        agent_id:
+          type: string
+          description: If omitted, pauses all agents
+
+    OverrideRequest:
+      type: object
+      required:
+        - decision_id
+        - action
+      properties:
+        decision_id:
+          type: string
+        action:
+          type: string
+          enum: [approve, reject, modify]
+        reason:
+          type: string
+        modified_value:
+          type: object
+
+    EventListResponse:
+      type: object
+      properties:
+        events:
+          type: array
+          items:
+            $ref: '#/components/schemas/Event'
+        total:
+          type: integer
+
+    Event:
+      type: object
+      properties:
+        event_id:
+          type: string
+        event_type:
+          type: string
+        agent_id:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+        data:
+          type: object
+
+    ApprovalListResponse:
+      type: object
+      properties:
+        approvals:
+          type: array
+          items:
+            $ref: '#/components/schemas/PendingApproval'
+
+    PendingApproval:
+      type: object
+      properties:
+        approval_id:
+          type: string
+        agent_id:
+          type: string
+        action_type:
+          type: string
+        description:
+          type: string
+        requested_at:
+          type: string
+          format: date-time
+        expires_at:
+          type: string
+          format: date-time
+        data:
+          type: object
+
+    ApprovalDecisionRequest:
+      type: object
+      required:
+        - decision
+      properties:
+        decision:
+          type: string
+          enum: [approve, reject]
+        reason:
+          type: string
+
+security:
+  - BearerAuth: []
