@@ -49,6 +49,8 @@ tags:
     description: Master Architect - Document indexing and search
   - name: GOD Mode
     description: Chairman control and oversight
+  - name: Generative UI
+    description: AI-powered dynamic interface generation (PLANNED - BATCH-180)
 
 paths:
   # =============================================================================
@@ -402,6 +404,159 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/SuccessResponse'
+
+  # =============================================================================
+  # GENERATIVE UI (PLANNED - Implementation in BATCH-180)
+  # =============================================================================
+  # NOTE: These endpoints are PLANNED. They define the contract for the
+  # Generative UI feature. Backend implementation will be in BATCH-180.
+  # Frontend components will be built in BATCH-135.
+  
+  /v1/ui/generate:
+    post:
+      tags:
+        - Generative UI
+      summary: Generate UI from user intent (PLANNED)
+      description: |
+        Analyzes user input and generates a custom UI specification.
+        Uses LLM to determine optimal layout, components, and interactions.
+        
+        **Status: PLANNED** - Endpoint will be implemented in BATCH-180.
+        
+        The response contains:
+        - Layout definition (single-column, two-column, dashboard)
+        - Component specifications with props and positions
+        - Animation definitions
+        - COS companion context
+      operationId: generateUI
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GenerateUIRequest'
+            example:
+              user_input: "I want to learn Spanish"
+              user_context:
+                user_id: "user-001"
+                preferences:
+                  theme: "dark"
+              session_history: []
+      responses:
+        '200':
+          description: UI specification generated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenerateUIResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /v1/ui/components:
+    get:
+      tags:
+        - Generative UI
+      summary: List available UI components (PLANNED)
+      description: |
+        Returns the component library available for UI generation.
+        
+        **Status: PLANNED** - Endpoint will be implemented in BATCH-180.
+        
+        Components include:
+        - Navigation: roadmap, timeline, stepper
+        - Input: form, multiChoice, slider
+        - Display: card, grid, list
+        - Interactive: button, modal, tooltip
+        - Data: chart, table, metric
+        - AI: cosCompanion, suggestion, insight
+      operationId: listUIComponents
+      responses:
+        '200':
+          description: Component library
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ComponentListResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /v1/ui/layouts:
+    get:
+      tags:
+        - Generative UI
+      summary: List available layouts (PLANNED)
+      description: |
+        Returns available layout templates for UI generation.
+        
+        **Status: PLANNED** - Endpoint will be implemented in BATCH-180.
+      operationId: listUILayouts
+      responses:
+        '200':
+          description: Layout templates
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LayoutListResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /v1/ui/render:
+    post:
+      tags:
+        - Generative UI
+      summary: Render UI specification (PLANNED)
+      description: |
+        Takes a UI specification and returns rendered HTML/React components.
+        
+        **Status: PLANNED** - Endpoint will be implemented in BATCH-180.
+      operationId: renderUI
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RenderUIRequest'
+      responses:
+        '200':
+          description: Rendered UI
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RenderUIResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /v1/ui/templates:
+    get:
+      tags:
+        - Generative UI
+      summary: List pre-built UI templates (PLANNED)
+      description: |
+        Returns pre-built UI templates for common use cases.
+        
+        **Status: PLANNED** - Endpoint will be implemented in BATCH-180.
+        
+        Templates include:
+        - Learning journey
+        - Business launch
+        - Health tracker
+        - Project planner
+      operationId: listUITemplates
+      responses:
+        '200':
+          description: Template library
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TemplateListResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
 
   # =============================================================================
   # GOD MODE
@@ -937,6 +1092,180 @@ components:
           type: number
         metadata:
           type: object
+
+    # Generative UI (PLANNED - BATCH-180)
+    GenerateUIRequest:
+      type: object
+      required:
+        - user_input
+      properties:
+        user_input:
+          type: string
+          description: Natural language description of desired UI
+          example: "I want to learn Spanish"
+        user_context:
+          type: object
+          properties:
+            user_id:
+              type: string
+            preferences:
+              type: object
+              additionalProperties: true
+        session_history:
+          type: array
+          items:
+            type: object
+
+    GenerateUIResponse:
+      type: object
+      required:
+        - layout
+        - components
+      properties:
+        title:
+          type: string
+          example: "Your Spanish Learning Journey"
+        layout:
+          type: string
+          enum: [single-column, two-column, dashboard]
+        components:
+          type: array
+          items:
+            $ref: '#/components/schemas/UIComponent'
+        animations:
+          type: array
+          items:
+            $ref: '#/components/schemas/AnimationDefinition'
+        cos_context:
+          type: object
+          properties:
+            message:
+              type: string
+            suggestions:
+              type: array
+              items:
+                type: string
+        primary_action:
+          type: object
+          properties:
+            label:
+              type: string
+            action:
+              type: string
+
+    UIComponent:
+      type: object
+      required:
+        - type
+        - props
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+          enum: [roadmap, timeline, stepper, form, multiChoice, slider, card, grid, list, button, modal, tooltip, chart, table, metric, cosCompanion, suggestion, insight]
+        props:
+          type: object
+          additionalProperties: true
+        position:
+          type: object
+          properties:
+            x:
+              type: number
+            y:
+              type: number
+            width:
+              type: string
+            height:
+              type: string
+
+    AnimationDefinition:
+      type: object
+      properties:
+        target:
+          type: string
+        type:
+          type: string
+          enum: [fade-in, slide-up, scale, bounce]
+        duration:
+          type: number
+        delay:
+          type: number
+
+    ComponentListResponse:
+      type: object
+      properties:
+        components:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+              category:
+                type: string
+              description:
+                type: string
+              props_schema:
+                type: object
+
+    LayoutListResponse:
+      type: object
+      properties:
+        layouts:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+              description:
+                type: string
+              preview_url:
+                type: string
+
+    RenderUIRequest:
+      type: object
+      required:
+        - ui_spec
+      properties:
+        ui_spec:
+          $ref: '#/components/schemas/GenerateUIResponse'
+        format:
+          type: string
+          enum: [html, react, json]
+          default: react
+
+    RenderUIResponse:
+      type: object
+      properties:
+        rendered:
+          type: string
+          description: Rendered UI code in requested format
+        assets:
+          type: array
+          items:
+            type: string
+            description: URLs to required assets
+
+    TemplateListResponse:
+      type: object
+      properties:
+        templates:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+              name:
+                type: string
+              description:
+                type: string
+              category:
+                type: string
+              preview_url:
+                type: string
 
     # GOD Mode
     SystemStatusResponse:
