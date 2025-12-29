@@ -2,6 +2,10 @@ import { NavLink } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { LayoutGrid, ScrollText, Swords } from 'lucide-react';
 
+interface LeftNavProps {
+  activeLens?: 'architecture' | 'constitution' | 'battlefield';
+}
+
 const navItems = [
   { 
     id: 'architecture', 
@@ -23,7 +27,7 @@ const navItems = [
   },
 ];
 
-export function LeftNav() {
+export function LeftNav({ activeLens }: LeftNavProps) {
   return (
     <nav className="w-16 border-r border-[var(--gm-slate)] flex flex-col items-center py-6 bg-[var(--gm-surface)] z-20">
       <div className="mb-8">
@@ -39,7 +43,7 @@ export function LeftNav() {
             to={item.path}
             className={({ isActive }) => cn(
               "w-10 h-10 flex items-center justify-center rounded-lg transition-all duration-200",
-              isActive 
+              isActive || activeLens === item.id
                 ? "bg-[var(--gm-slate)] text-[var(--gm-snow)] shadow-[0_0_10px_rgba(255,255,255,0.1)]" 
                 : "text-[var(--gm-silver)] hover:text-[var(--gm-snow)] hover:bg-[var(--gm-slate)]/50"
             )}
