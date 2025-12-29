@@ -28,8 +28,10 @@ This batch implements comprehensive testing for the God Mode Console after all U
 | AC-02 | Unit tests for utility functions | Jest test pass |
 | AC-03 | Integration tests for API calls | MSW mock tests pass |
 | AC-04 | E2E tests for critical flows | Playwright tests pass |
-| AC-05 | Test coverage > 70% for hooks and utilities | Coverage report |
-| AC-06 | All tests pass in CI/CD | GitHub Actions green |
+| AC-05 | Unit test coverage ≥ 80% for hooks and utilities | Coverage report |
+| AC-06 | Integration test coverage ≥ 95% for API calls | Coverage report |
+| AC-07 | All tests pass in CI/CD | GitHub Actions green |
+| AC-08 | Zero flaky tests (3 consecutive passes) | CI logs |
 
 ---
 
@@ -359,7 +361,8 @@ Before marking complete:
 - [ ] All unit tests pass
 - [ ] All integration tests pass
 - [ ] All E2E tests pass
-- [ ] Coverage > 70% for hooks and utilities
+- [ ] Unit test coverage ≥ 80% for hooks and utilities
+- [ ] Integration test coverage ≥ 95% for API calls
 - [ ] CI/CD workflow configured and passing
 - [ ] No flaky tests (run 3x to confirm)
 - [ ] Mock server covers all API endpoints
