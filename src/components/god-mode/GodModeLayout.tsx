@@ -2,20 +2,33 @@ import { useState } from 'react';
 import { Outlet } from 'react-router-dom';
 import { PulseBar } from './PulseBar';
 import { LeftNav } from './LeftNav';
-import { NexusPanel } from './NexusPanel';
+import { NexusChat } from './nexus/NexusChat';
+import { Onboarding } from './onboarding/Onboarding';
 import { BootSequence } from './BootSequence';
 
 export function GodModeLayout() {
-  const [isNexusOpen, setIsNexusOpen] = useState(true);
+
   const [isBooting, setIsBooting] = useState(true);
+  const [showOnboarding, setShowOnboarding] = useState(false);
 
   const handleBootComplete = () => {
     setIsBooting(false);
+    // Check for onboarding after boot
+    const hasOnboarded = localStorage.getItem('gm_onboarding_complete');
+    if (!hasOnboarded) {
+      setShowOnboarding(true);
+    }
+  };
+
+  const handleOnboardingComplete = () => {
+    localStorage.setItem('gm_onboarding_complete', 'true');
+    setShowOnboarding(false);
   };
 
   return (
     <>
       {isBooting && <BootSequence onComplete={handleBootComplete} />}
+      {showOnboarding && <Onboarding onComplete={handleOnboardingComplete} />}
       
       <div className="h-screen w-screen bg-gm-bg text-gm-text flex flex-col overflow-hidden font-sans">
         {/* Top: Pulse Bar */}
@@ -39,10 +52,9 @@ export function GodModeLayout() {
           </main>
 
           {/* Right: Nexus Panel */}
-          <NexusPanel 
-            isOpen={isNexusOpen} 
-            onToggle={() => setIsNexusOpen(!isNexusOpen)} 
-          />
+          <div className="w-80 border-l border-gm-border bg-gm-surface/30 backdrop-blur-sm flex flex-col">
+            <NexusChat />
+          </div>
         </div>
       </div>
     </>
