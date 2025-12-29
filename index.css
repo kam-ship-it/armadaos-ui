@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@source "./src/**/*.{js,ts,jsx,tsx}";
 
 @theme {
   /* God Mode Design Tokens (BATCH-GM-01-FIX-1) */
