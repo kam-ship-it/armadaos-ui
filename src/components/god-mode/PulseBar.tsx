@@ -17,6 +17,7 @@ export function PulseBar() {
       {/* Left: Brand */}
       <div className="flex items-center">
         <span className="text-gm-purple font-semibold tracking-wider">ARMADA</span>
+        <span className="text-gm-green text-xs ml-2 px-1 bg-gm-green/20 rounded">✓ PIPELINE OK</span>
         <span className="text-gm-secondary ml-2 text-sm hidden sm:inline-block">GOD MODE</span>
       </div>
 
