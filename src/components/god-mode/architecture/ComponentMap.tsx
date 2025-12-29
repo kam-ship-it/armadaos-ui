@@ -1,10 +1,11 @@
-import { Server, Network, Layers } from 'lucide-react';
+import { Server, Network, Layers, Monitor } from 'lucide-react';
 
-export type ComponentStatus = 'healthy' | 'degraded' | 'unhealthy';
+export type ComponentStatus = 'healthy' | 'degraded' | 'unhealthy' | 'planned';
 
 export interface ComponentMetric {
   label: string;
   value: string | number;
+  unit?: string;
 }
 
 export interface Component {
@@ -42,16 +43,38 @@ export const mockComponents: Record<string, Component[]> = {
     { id: 'master-architect', name: 'Master Architect', status: 'healthy', metric: { label: 'Files', value: '1.2K' } },
     { id: 'treasury', name: 'Treasury', status: 'healthy', metric: { label: 'Balance', value: '$12,450' } },
     { id: 'state-manager', name: 'State Manager', status: 'healthy', metric: { label: 'States', value: 89 } },
+    { id: 'context-injector', name: 'Context Injector', status: 'healthy', metric: { label: 'Injections', value: 450 } },
     { id: 'weaviate', name: 'Weaviate', status: 'healthy', metric: { label: 'Vectors', value: '45K' } },
     { id: 'approval-engine', name: 'Approval Engine', status: 'healthy', metric: { label: 'Pending', value: 0 } },
-    { id: 'nats', name: 'NATS', status: 'healthy', metric: { label: 'Msgs/s', value: 234 } },
+    { id: 'cost-model', name: 'Cost Model', status: 'healthy', metric: { label: 'Est. Cost', value: '$0.05/hr' } },
+    { id: 'memory-controller', name: 'Memory Controller', status: 'healthy', metric: { label: 'Usage', value: '45%' } },
+    { id: 'ram-agent', name: 'RAM Agent', status: 'healthy', metric: { label: 'Cache Hit', value: '98%' } },
+    { id: 'god-mode-api', name: 'God Mode API', status: 'healthy', metric: { label: 'Uptime', value: '99.99%' } },
+    { id: 'god-mode-console', name: 'God Mode Console', status: 'healthy', metric: { label: 'Users', value: 1 } },
+    { id: 'service-adapters', name: 'Service Adapters', status: 'healthy', metric: { label: 'Active', value: 5 } },
+    { id: 'backup-service', name: 'Backup Service', status: 'healthy', metric: { label: 'Last Backup', value: '1h ago' } },
   ],
   infrastructure: [
     { id: 'linkerd', name: 'Linkerd', status: 'healthy', metric: { label: 'mTLS', value: '100%' } },
-    { id: 'eks', name: 'EKS Cluster', status: 'healthy', metric: { label: 'Pods', value: 24 } },
-    { id: 'alb', name: 'AWS ALB', status: 'healthy', metric: { label: 'Req/s', value: 1234 } },
+    { id: 'opentelemetry', name: 'OpenTelemetry', status: 'healthy', metric: { label: 'Traces/s', value: 500 } },
+    { id: 'aws-secrets', name: 'AWS Secrets Manager', status: 'healthy', metric: { label: 'Secrets', value: 12 } },
+    { id: 'aws-alb', name: 'AWS ALB/NLB', status: 'healthy', metric: { label: 'Req/s', value: 1234 } },
+    { id: 'ecs-k8s', name: 'ECS/Kubernetes', status: 'healthy', metric: { label: 'Pods', value: 24 } },
     { id: 'health-monitor', name: 'Health Monitor', status: 'healthy', metric: { label: 'Checks', value: 42 } },
+    { id: 'health-aggregator', name: 'Health Aggregator', status: 'healthy', metric: { label: 'Score', value: 98 } },
+    { id: 'rollback', name: 'Rollback Mechanism', status: 'healthy', metric: { label: 'Ready', value: 'Yes' } },
+    { id: 'dead-mans-switch', name: 'Dead Man\'s Switch', status: 'healthy', metric: { label: 'Armed', value: 'Yes' } },
+    { id: 'dependency-graph', name: 'Dependency Graph', status: 'healthy', metric: { label: 'Nodes', value: 150 } },
+    { id: 'config-mgmt', name: 'Configuration Management', status: 'healthy', metric: { label: 'Synced', value: 'Yes' } },
+    { id: 'service-discovery', name: 'Service Discovery', status: 'healthy', metric: { label: 'Services', value: 42 } },
+    { id: 'disaster-recovery', name: 'Disaster Recovery', status: 'healthy', metric: { label: 'RPO', value: '5m' } },
+    { id: 'shadow-of-shadow', name: 'Shadow of Shadow', status: 'healthy', metric: { label: 'Watching', value: 'Yes' } },
+    { id: 'ci-cd', name: 'CI/CD Pipelines', status: 'healthy', metric: { label: 'Builds', value: 12 } },
+    { id: 'canary', name: 'Canary Deployment', status: 'planned', metric: { label: 'Status', value: 'Pending' } },
   ],
+  ui_generative: [
+    { id: 'generative-ui', name: 'Generative UI', status: 'healthy', metric: { label: 'Render Time', value: '50ms' } },
+  ]
 };
 
 export const tiers: Tier[] = [
@@ -76,4 +99,11 @@ export const tiers: Tier[] = [
     icon: Network,
     components: mockComponents.infrastructure,
   },
+  {
+    id: 'ui_generative',
+    name: 'UI & GENERATIVE',
+    description: 'AI-powered interface layer.',
+    icon: Monitor,
+    components: mockComponents.ui_generative,
+  }
 ];

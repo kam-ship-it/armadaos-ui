@@ -51,7 +51,7 @@ export function ArchitectureLens() {
       
       {/* VIEW SWITCHER */}
       {view === 'overview' && (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 animate-in fade-in duration-500">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 animate-in fade-in duration-500">
           {tiers.map((tier) => (
             <TierCard 
               key={tier.id} 
