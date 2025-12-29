@@ -1,6 +1,45 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@theme {
+  /* God Mode Design Tokens (BATCH-GM-01-FIX-1) */
+  --color-gm-bg: #0A0A0B;
+  --color-gm-surface: #111113;
+  --color-gm-elevated: #18181B;
+  --color-gm-border: #27272A;
+  --color-gm-text: #FAFAFA;
+  --color-gm-secondary: #A1A1AA;
+  --color-gm-muted: #52525B;
+  --color-gm-purple: #8B5CF6;
+  --color-gm-red: #EF4444;
+  --color-gm-green: #10B981;
+  --color-gm-yellow: #F59E0B;
+
+  /* Legacy mapping */
+  --color-armada-bg: #0A0A0B;
+  --color-armada-surface: #111113;
+  --color-armada-border: #27272A;
+  --color-armada-text: #FAFAFA;
+  --color-armada-text-muted: #A1A1AA;
+  --color-armada-purple: #8B5CF6;
+  --color-armada-purple-light: #A78BFA;
+  --color-armada-purple-dark: #7C3AED;
+  --color-armada-green: #10B981;
+  --color-armada-yellow: #F59E0B;
+  --color-armada-red: #EF4444;
+
+  /* Fonts */
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  /* Animations */
+  --animate-pulse-slow: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  --animate-fade-in: fadeIn 0.5s ease-out;
+
+  @keyframes fadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+  }
+}
 
 /* Base styles */
 * {
@@ -15,11 +54,11 @@ html, body, #root {
 }
 
 body {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #0A0A0B; /* gm-bg */
-  color: #FAFAFA; /* gm-text */
+  background-color: var(--color-gm-bg);
+  color: var(--color-gm-text);
 }
 
 /* Scrollbar styling */
@@ -29,15 +68,14 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: #0A0A0B; /* gm-bg */
+  background: var(--color-gm-bg);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #27272A; /* gm-border */
+  background: var(--color-gm-border);
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #52525B; /* gm-muted */
+  background: var(--color-gm-muted);
 }
-/* Pipeline verified - connection working */
