@@ -2,17 +2,13 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { GodModeLayout } from './components/god-mode/GodModeLayout';
 import { ArchitectureLens } from './components/god-mode/ArchitectureLens';
+import { ConstitutionLens } from './components/god-mode/ConstitutionLens';
 
 const queryClient = new QueryClient();
 
 // Placeholder components for lenses (will be implemented in future batches)
 
-const ConstitutionLens = () => (
-  <div className="p-8 border border-gm-border rounded-lg bg-gm-surface">
-    <h1 className="text-2xl font-mono mb-4 text-gm-text">Constitution Lens</h1>
-    <p className="text-gm-secondary">Governance protocols dashboard coming in BATCH-GM-03.</p>
-  </div>
-);
+// ConstitutionLens imported from component
 
 const BattlefieldLens = () => (
   <div className="p-8 border border-gm-border rounded-lg bg-gm-surface">
