@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { GodModeLayout } from '@/components/god-mode/GodModeLayout';
 import { ArchitectureLens } from '@/components/god-mode/ArchitectureLens';
 import { ConstitutionLens } from '@/components/god-mode/lenses/ConstitutionLens';
+import { BattlefieldLens } from '@/components/god-mode/lenses/BattlefieldLens';
 
 function App() {
   return (
@@ -14,7 +15,7 @@ function App() {
               <Routes>
                 <Route path="architecture" element={<ArchitectureLens />} />
                 <Route path="constitution" element={<ConstitutionLens />} />
-                <Route path="battlefield" element={<div className="text-[var(--gm-snow)]">Battlefield Lens - Coming Soon</div>} />
+                <Route path="battlefield" element={<BattlefieldLens />} />
               </Routes>
             </GodModeLayout>
           } />
