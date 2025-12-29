@@ -15,6 +15,27 @@
   --color-gm-green: #10B981;
   --color-gm-yellow: #F59E0B;
 
+  /* Semantic Mapping (Shadcn/Standard Compatibility) */
+  --color-background: var(--color-gm-bg);
+  --color-foreground: var(--color-gm-text);
+  --color-card: var(--color-gm-surface);
+  --color-card-foreground: var(--color-gm-text);
+  --color-popover: var(--color-gm-surface);
+  --color-popover-foreground: var(--color-gm-text);
+  --color-primary: var(--color-gm-text);
+  --color-primary-foreground: var(--color-gm-bg);
+  --color-secondary: var(--color-gm-elevated);
+  --color-secondary-foreground: var(--color-gm-text);
+  --color-muted: var(--color-gm-elevated);
+  --color-muted-foreground: var(--color-gm-secondary);
+  --color-accent: var(--color-gm-elevated);
+  --color-accent-foreground: var(--color-gm-text);
+  --color-destructive: var(--color-gm-red);
+  --color-destructive-foreground: var(--color-gm-text);
+  --color-border: var(--color-gm-border);
+  --color-input: var(--color-gm-border);
+  --color-ring: var(--color-gm-purple);
+
   /* Legacy mapping */
   --color-armada-bg: #0A0A0B;
   --color-armada-surface: #111113;
