@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { cn } from '@/lib/utils';
+
 import { ReactNode } from 'react';
 
 interface OnboardingStepProps {
