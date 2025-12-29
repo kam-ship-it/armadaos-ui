@@ -44,7 +44,7 @@ export function LeftNav() {
   ];
 
   return (
-    <nav className="w-[60px] h-full bg-armada-surface border-r border-armada-border flex flex-col items-center py-4 gap-6 z-20">
+    <nav className="w-[60px] h-full bg-gm-surface border-r border-gm-border flex flex-col items-center py-4 gap-6 z-20">
       {navItems.map((item) => (
         <NavLink
           key={item.name}
@@ -52,8 +52,8 @@ export function LeftNav() {
           className={({ isActive }) => cn(
             "w-10 h-10 flex items-center justify-center rounded-lg transition-all duration-200 group relative",
             isActive 
-              ? "bg-armada-purple/10 text-armada-purple shadow-[0_0_10px_rgba(139,92,246,0.3)]" 
-              : "text-armada-text-muted hover:text-armada-text hover:bg-white/5"
+              ? "bg-gm-purple/10 text-gm-purple shadow-[0_0_10px_rgba(139,92,246,0.3)]" 
+              : "text-gm-secondary hover:text-gm-text hover:bg-gm-elevated"
           )}
         >
           {({ isActive }) => (
@@ -61,13 +61,13 @@ export function LeftNav() {
               <item.icon />
               
               {/* Tooltip */}
-              <div className="absolute left-14 px-2 py-1 bg-armada-surface border border-armada-border rounded text-xs font-mono text-armada-text opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-50">
+              <div className="absolute left-14 px-2 py-1 bg-gm-surface border border-gm-border rounded text-xs font-mono text-gm-text opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-50 shadow-lg">
                 {item.name}
               </div>
 
               {/* Active Indicator */}
               {isActive && (
-                <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-armada-purple rounded-r-full" />
+                <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-gm-purple rounded-r-full" />
               )}
             </>
           )}

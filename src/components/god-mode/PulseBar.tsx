@@ -13,44 +13,44 @@ export function PulseBar() {
   const isCritical = status?.status === 'critical';
 
   return (
-    <div className="h-12 bg-armada-surface border-b border-armada-border flex items-center px-4 shrink-0 justify-between">
+    <div className="h-12 bg-gm-surface border-b border-gm-border flex items-center px-4 shrink-0 justify-between shadow-sm">
       {/* Left: Brand */}
       <div className="flex items-center">
-        <span className="text-armada-purple font-semibold tracking-wider">ARMADA</span>
-        <span className="text-armada-text-muted ml-2 text-sm hidden sm:inline-block">GOD MODE</span>
+        <span className="text-gm-purple font-semibold tracking-wider">ARMADA</span>
+        <span className="text-gm-secondary ml-2 text-sm hidden sm:inline-block">GOD MODE</span>
       </div>
 
       {/* Center: Metrics (Hidden on mobile) */}
       <div className="hidden md:flex items-center gap-6 text-sm font-mono">
         {/* Treasury */}
-        <div className="flex items-center gap-2 text-armada-text-muted">
+        <div className="flex items-center gap-2 text-gm-secondary">
           <span>ARC:</span>
           {treasuryLoading ? (
-            <div className="h-4 w-16 bg-white/10 animate-pulse rounded" />
+            <div className="h-4 w-16 bg-gm-muted/20 animate-pulse rounded" />
           ) : (
-            <span className="text-armada-text">${treasury?.balance.toLocaleString()}</span>
+            <span className="text-gm-text">${treasury?.balance.toLocaleString()}</span>
           )}
         </div>
 
         {/* Open Loops */}
-        <div className="flex items-center gap-2 text-armada-text-muted">
+        <div className="flex items-center gap-2 text-gm-secondary">
           <span>LOOPS:</span>
           {loopsLoading ? (
-            <div className="h-4 w-8 bg-white/10 animate-pulse rounded" />
+            <div className="h-4 w-8 bg-gm-muted/20 animate-pulse rounded" />
           ) : (
-            <span className="text-armada-text">{loops?.count}</span>
+            <span className="text-gm-text">{loops?.count}</span>
           )}
         </div>
 
         {/* Alerts */}
-        <div className="flex items-center gap-2 text-armada-text-muted">
+        <div className="flex items-center gap-2 text-gm-secondary">
           <span>ALERTS:</span>
           {alertsLoading ? (
-            <div className="h-4 w-8 bg-white/10 animate-pulse rounded" />
+            <div className="h-4 w-8 bg-gm-muted/20 animate-pulse rounded" />
           ) : (
             <span className={clsx(
               "px-1.5 rounded",
-              alertCount > 0 ? "bg-armada-red/20 text-armada-red" : "text-armada-text"
+              alertCount > 0 ? "bg-gm-red/20 text-gm-red" : "text-gm-text"
             )}>
               {alertCount}
             </span>
@@ -62,29 +62,29 @@ export function PulseBar() {
       <div className="flex items-center gap-3">
         {statusLoading ? (
           <div className="flex items-center gap-2">
-            <div className="w-2 h-2 rounded-full bg-white/20 animate-pulse" />
-            <div className="h-3 w-20 bg-white/10 animate-pulse rounded" />
+            <div className="w-2 h-2 rounded-full bg-gm-muted/20 animate-pulse" />
+            <div className="h-3 w-20 bg-gm-muted/10 animate-pulse rounded" />
           </div>
         ) : (
           <>
             <div className="flex items-center gap-2">
               <div className={clsx(
                 "w-2 h-2 rounded-full animate-pulse",
-                isHealthy && "bg-armada-green",
-                isDegraded && "bg-armada-yellow",
-                isCritical && "bg-armada-red"
+                isHealthy && "bg-gm-green",
+                isDegraded && "bg-gm-yellow",
+                isCritical && "bg-gm-red"
               )} />
               <span className={clsx(
                 "text-xs font-mono uppercase",
-                isHealthy && "text-armada-green",
-                isDegraded && "text-armada-yellow",
-                isCritical && "text-armada-red"
+                isHealthy && "text-gm-green",
+                isDegraded && "text-gm-yellow",
+                isCritical && "text-gm-red"
               )}>
-                {status?.status || 'UNKNOWN'}
+                {status?.status === 'healthy' ? 'SYSTEM NOMINAL' : (status?.status || 'SYSTEM NOMINAL')}
               </span>
             </div>
-            <div className="h-4 w-[1px] bg-armada-border mx-1" />
-            <span className="text-xs text-armada-text-muted font-mono">
+            <div className="h-4 w-[1px] bg-gm-border mx-1" />
+            <span className="text-xs text-gm-secondary font-mono">
               v{status?.version || '1.0.0'}
             </span>
           </>

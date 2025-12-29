@@ -18,8 +18,8 @@ body {
   font-family: 'Inter', system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #0A0A0A;
-  color: #FFFFFF;
+  background-color: #0A0A0B; /* gm-bg */
+  color: #FAFAFA; /* gm-text */
 }
 
 /* Scrollbar styling */
@@ -29,14 +29,14 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: #111111;
+  background: #0A0A0B; /* gm-bg */
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #333333;
+  background: #27272A; /* gm-border */
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #444444;
+  background: #52525B; /* gm-muted */
 }

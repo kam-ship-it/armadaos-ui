@@ -7,21 +7,35 @@ export default {
   theme: {
     extend: {
       colors: {
-        // ArmadaOS Design Tokens
-        'armada': {
-          'bg': '#0A0A0A',
-          'surface': '#111111',
-          'border': '#1F1F1F',
-          'text': '#FFFFFF',
-          'text-muted': '#A0A0A0',
-          'purple': {
+        // God Mode Design Tokens (BATCH-GM-01-FIX-1)
+        gm: {
+          bg: '#0A0A0B',
+          surface: '#111113',
+          elevated: '#18181B',
+          border: '#27272A',
+          text: '#FAFAFA',
+          secondary: '#A1A1AA',
+          muted: '#52525B',
+          purple: '#8B5CF6',
+          red: '#EF4444',
+          green: '#10B981',
+          yellow: '#F59E0B',
+        },
+        // Legacy mapping for backward compatibility
+        armada: {
+          bg: '#0A0A0B',
+          surface: '#111113',
+          border: '#27272A',
+          text: '#FAFAFA',
+          'text-muted': '#A1A1AA',
+          purple: {
             DEFAULT: '#8B5CF6',
             'light': '#A78BFA',
             'dark': '#7C3AED',
           },
-          'green': '#22C55E',
-          'yellow': '#EAB308',
-          'red': '#EF4444',
+          green: '#10B981',
+          yellow: '#F59E0B',
+          red: '#EF4444',
         },
       },
       fontFamily: {

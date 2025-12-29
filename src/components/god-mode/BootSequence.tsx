@@ -36,7 +36,7 @@ export function BootSequence({ onComplete }: BootSequenceProps) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-black flex flex-col items-center justify-center text-white overflow-hidden">
+    <div className="fixed inset-0 z-50 bg-gm-bg flex flex-col items-center justify-center text-gm-text overflow-hidden">
       <AnimatePresence>
         {step >= 1 && (
           <motion.div
@@ -46,8 +46,8 @@ export function BootSequence({ onComplete }: BootSequenceProps) {
             className="relative"
           >
             {/* Logo Circle */}
-            <div className={`w-32 h-32 rounded-full border-2 border-white/20 flex items-center justify-center ${step >= 2 ? 'animate-pulse-slow' : ''}`}>
-              <div className="w-24 h-24 rounded-full bg-white/10 flex items-center justify-center backdrop-blur-sm">
+            <div className={`w-32 h-32 rounded-full border-2 border-gm-border flex items-center justify-center ${step >= 2 ? 'animate-pulse-slow' : ''}`}>
+              <div className="w-24 h-24 rounded-full bg-gm-surface flex items-center justify-center backdrop-blur-sm">
                 <span className="text-4xl font-bold tracking-tighter">A</span>
               </div>
             </div>
@@ -59,13 +59,13 @@ export function BootSequence({ onComplete }: BootSequenceProps) {
                   initial={{ opacity: 0, scale: 1 }}
                   animate={{ opacity: 0, scale: 2 }}
                   transition={{ duration: 2, repeat: Infinity, ease: "easeOut" }}
-                  className="absolute inset-0 rounded-full border border-white/10"
+                  className="absolute inset-0 rounded-full border border-gm-purple/20"
                 />
                 <motion.div 
                   initial={{ opacity: 0, scale: 1 }}
                   animate={{ opacity: 0, scale: 2.5 }}
                   transition={{ duration: 2, delay: 0.5, repeat: Infinity, ease: "easeOut" }}
-                  className="absolute inset-0 rounded-full border border-white/5"
+                  className="absolute inset-0 rounded-full border border-gm-purple/10"
                 />
               </>
             )}
@@ -81,13 +81,13 @@ export function BootSequence({ onComplete }: BootSequenceProps) {
             transition={{ duration: 1 }}
             className="mt-12 text-center"
           >
-            <h1 className="text-2xl font-mono font-light tracking-[0.2em] text-white/80">
+            <h1 className="text-2xl font-mono font-light tracking-[0.2em] text-gm-text/80">
               INITIALIZING GOD MODE
             </h1>
             <div className="mt-4 flex gap-1 justify-center">
-              <span className="w-1 h-1 bg-white/50 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-              <span className="w-1 h-1 bg-white/50 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-              <span className="w-1 h-1 bg-white/50 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+              <span className="w-1 h-1 bg-gm-purple/50 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+              <span className="w-1 h-1 bg-gm-purple/50 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+              <span className="w-1 h-1 bg-gm-purple/50 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
             </div>
           </motion.div>
         )}
@@ -99,7 +99,7 @@ export function BootSequence({ onComplete }: BootSequenceProps) {
         animate={{ opacity: step >= 1 ? 0.5 : 0 }}
         whileHover={{ opacity: 1 }}
         onClick={handleSkip}
-        className="absolute bottom-8 text-xs font-mono tracking-widest uppercase text-white/40 hover:text-white transition-colors"
+        className="absolute bottom-8 text-xs font-mono tracking-widest uppercase text-gm-muted hover:text-gm-text transition-colors"
       >
         [ Skip Sequence ]
       </motion.button>

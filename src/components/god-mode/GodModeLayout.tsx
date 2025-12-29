@@ -17,7 +17,7 @@ export function GodModeLayout() {
     <>
       {isBooting && <BootSequence onComplete={handleBootComplete} />}
       
-      <div className="h-screen w-screen bg-armada-bg text-armada-text flex flex-col overflow-hidden font-sans">
+      <div className="h-screen w-screen bg-gm-bg text-gm-text flex flex-col overflow-hidden font-sans">
         {/* Top: Pulse Bar */}
         <PulseBar />
 
