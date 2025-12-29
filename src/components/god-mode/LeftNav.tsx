@@ -1,78 +1,54 @@
 import { NavLink } from 'react-router-dom';
-import { clsx } from 'clsx';
-import { twMerge } from 'tailwind-merge';
+import { cn } from '@/lib/utils';
+import { LayoutGrid, ScrollText, Swords } from 'lucide-react';
 
-// Icons (using SVG directly to avoid lucide dependency if not installed, or install lucide-react)
-// Using simple SVG icons for now to ensure zero external deps issues
-const Icons = {
-  Architecture: () => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <rect width="18" height="18" x="3" y="3" rx="2" />
-      <path d="M3 9h18" />
-      <path d="M9 21V9" />
-    </svg>
-  ),
-  Constitution: () => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M12 22h6a2 2 0 0 0 2-2V7l-5-5H6a2 2 0 0 0-2 2v10" />
-      <path d="M14 2v4a2 2 0 0 0 2 2h4" />
-      <path d="M10 22v-6.5" />
-      <path d="M6 22v-6.5" />
-      <path d="M18 22v-6.5" />
-    </svg>
-  ),
-  Battlefield: () => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="m2 22 1-1h3l9-9" />
-      <path d="M3 21v-3l9-9" />
-      <path d="m15 6 3.4-3.4a2.1 2.1 0 1 1 3 3L18 9l.9.9" />
-      <path d="m2 22 5-5" />
-      <path d="m20 3-3 3" />
-    </svg>
-  )
-};
-
-function cn(...inputs: (string | undefined | null | false)[]) {
-  return twMerge(clsx(inputs));
-}
+const navItems = [
+  { 
+    id: 'architecture', 
+    label: 'Architecture', 
+    icon: LayoutGrid, 
+    path: '/god-mode/architecture' 
+  },
+  { 
+    id: 'constitution', 
+    label: 'Constitution', 
+    icon: ScrollText, 
+    path: '/god-mode/constitution' 
+  },
+  { 
+    id: 'battlefield', 
+    label: 'Battlefield', 
+    icon: Swords, 
+    path: '/god-mode/battlefield' 
+  },
+];
 
 export function LeftNav() {
-  const navItems = [
-    { name: 'Architecture', path: '/god-mode/architecture', icon: Icons.Architecture },
-    { name: 'Constitution', path: '/god-mode/constitution', icon: Icons.Constitution },
-    { name: 'Battlefield', path: '/god-mode/battlefield', icon: Icons.Battlefield },
-  ];
-
   return (
-    <nav className="w-[60px] h-full bg-gm-surface border-r border-gm-border flex flex-col items-center py-4 gap-6 z-20">
-      {navItems.map((item) => (
-        <NavLink
-          key={item.name}
-          to={item.path}
-          className={({ isActive }) => cn(
-            "w-10 h-10 flex items-center justify-center rounded-lg transition-all duration-200 group relative",
-            isActive 
-              ? "bg-gm-purple/10 text-gm-purple shadow-[0_0_10px_rgba(139,92,246,0.3)]" 
-              : "text-gm-secondary hover:text-gm-text hover:bg-gm-elevated"
-          )}
-        >
-          {({ isActive }) => (
-            <>
-              <item.icon />
-              
-              {/* Tooltip */}
-              <div className="absolute left-14 px-2 py-1 bg-gm-surface border border-gm-border rounded text-xs font-mono text-gm-text opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-50 shadow-lg">
-                {item.name}
-              </div>
+    <nav className="w-16 border-r border-[var(--gm-slate)] flex flex-col items-center py-6 bg-[var(--gm-surface)] z-20">
+      <div className="mb-8">
+        <div className="w-8 h-8 bg-[var(--gm-snow)] rounded-full flex items-center justify-center">
+          <span className="text-[var(--gm-onyx)] font-bold text-xs">A</span>
+        </div>
+      </div>
 
-              {/* Active Indicator */}
-              {isActive && (
-                <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-gm-purple rounded-r-full" />
-              )}
-            </>
-          )}
-        </NavLink>
-      ))}
+      <div className="flex flex-col gap-4 w-full px-2">
+        {navItems.map((item) => (
+          <NavLink
+            key={item.id}
+            to={item.path}
+            className={({ isActive }) => cn(
+              "w-10 h-10 flex items-center justify-center rounded-lg transition-all duration-200",
+              isActive 
+                ? "bg-[var(--gm-slate)] text-[var(--gm-snow)] shadow-[0_0_10px_rgba(255,255,255,0.1)]" 
+                : "text-[var(--gm-silver)] hover:text-[var(--gm-snow)] hover:bg-[var(--gm-slate)]/50"
+            )}
+            title={item.label}
+          >
+            <item.icon className="w-5 h-5" />
+          </NavLink>
+        ))}
+      </div>
     </nav>
   );
 }
