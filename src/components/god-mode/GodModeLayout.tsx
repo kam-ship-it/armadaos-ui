@@ -1,8 +1,9 @@
-import { ReactNode } from 'react';
+import { ReactNode, useState, useEffect } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import { LeftNav } from './LeftNav';
 import { PulseBar } from './PulseBar';
-import { NexusPanel } from './NexusPanel';
+import { NexusChat } from './nexus/NexusChat';
+import { Onboarding } from './onboarding/Onboarding';
 
 interface GodModeLayoutProps {
   children?: ReactNode;
@@ -10,11 +11,28 @@ interface GodModeLayoutProps {
 
 export function GodModeLayout({ children }: GodModeLayoutProps) {
   const location = useLocation();
+  const [showOnboarding, setShowOnboarding] = useState(true);
+  
   const activeLens = location.pathname.includes('constitution') ? 'constitution' : 
                      location.pathname.includes('battlefield') ? 'battlefield' : 'architecture';
 
+  // Check local storage for onboarding status
+  useEffect(() => {
+    const hasOnboarded = localStorage.getItem('gm_onboarding_complete');
+    if (hasOnboarded) {
+      setShowOnboarding(false);
+    }
+  }, []);
+
+  const handleOnboardingComplete = () => {
+    localStorage.setItem('gm_onboarding_complete', 'true');
+    setShowOnboarding(false);
+  };
+
   return (
     <div className="flex h-screen w-full bg-[var(--gm-onyx)] text-[var(--gm-snow)] overflow-hidden font-sans">
+      {showOnboarding && <Onboarding onComplete={handleOnboardingComplete} />}
+
       {/* LEFT NAVIGATION */}
       <LeftNav activeLens={activeLens} />
 
@@ -32,7 +50,9 @@ export function GodModeLayout({ children }: GodModeLayoutProps) {
       </div>
 
       {/* RIGHT PANEL (NEXUS) */}
-      <NexusPanel />
+      <div className="w-80 shrink-0 border-l border-[var(--gm-graphite)] bg-[var(--gm-onyx)]">
+        <NexusChat />
+      </div>
     </div>
   );
 }
