@@ -3,6 +3,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { GodModeLayout } from './components/god-mode/GodModeLayout';
 import { ArchitectureLens } from './components/god-mode/ArchitectureLens';
 import { ConstitutionLens } from './components/god-mode/ConstitutionLens';
+import { BattlefieldLens } from './components/god-mode/BattlefieldLens';
 
 const queryClient = new QueryClient();
 
@@ -10,12 +11,7 @@ const queryClient = new QueryClient();
 
 // ConstitutionLens imported from component
 
-const BattlefieldLens = () => (
-  <div className="p-8 border border-gm-border rounded-lg bg-gm-surface">
-    <h1 className="text-2xl font-mono mb-4 text-gm-text">Battlefield Lens</h1>
-    <p className="text-gm-secondary">Active operations tracker coming in BATCH-GM-04.</p>
-  </div>
-);
+// BattlefieldLens imported from component
 
 function App() {
   return (
