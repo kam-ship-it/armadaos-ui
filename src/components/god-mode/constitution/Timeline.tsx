@@ -44,7 +44,28 @@ export function Timeline() {
             onClick={handleEventClick} 
           />
         ))}
-               {isLoading && (\n          <>\n            <EventSkeleton />\n            <EventSkeleton />\n            <EventSkeleton />\n          </>\n        )}\n        \n        <div className="p-4 text-center">\n          <button \n            onClick={() => {\n              setIsLoading(true);\n              setTimeout(() => setIsLoading(false), 1500);\n            }}\n            disabled={isLoading}\n            className="text-xs text-[var(--gm-violet)] hover:text-[var(--gm-violet-light)] font-mono uppercase tracking-wider disabled:opacity-50"\n          >\n            {isLoading ? '[Loading...]' : '[Load More Events]'}\n          </button>\n        </div>   </div>
+        
+        {isLoading && (
+          <>
+            <EventSkeleton />
+            <EventSkeleton />
+            <EventSkeleton />
+          </>
+        )}
+        
+        <div className="p-4 text-center">
+          <button 
+            onClick={() => {
+              setIsLoading(true);
+              setTimeout(() => setIsLoading(false), 1500);
+            }}
+            disabled={isLoading}
+            className="text-xs text-[var(--gm-violet)] hover:text-[var(--gm-violet-light)] font-mono uppercase tracking-wider disabled:opacity-50"
+          >
+            {isLoading ? '[Loading...]' : '[Load More Events]'}
+          </button>
+        </div>
+      </div>
     </div>
   );
 }

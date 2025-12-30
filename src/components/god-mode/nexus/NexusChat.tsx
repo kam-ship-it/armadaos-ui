@@ -14,7 +14,7 @@ export function NexusChat() {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
-  }, [messages]);
+  }, [messages, isTyping]);
 
   return (
     <div className="flex flex-col h-full bg-[var(--gm-onyx)] border-l border-[var(--gm-graphite)]">
@@ -31,7 +31,16 @@ export function NexusChat() {
       <div 
         ref={scrollRef}
         className="flex-1 overflow-y-auto p-4 space-y-4 custom-scrollbar"
-      >\n        {messages.map(msg => (\n          <NexusMessage key={msg.id} message={msg} />\n        ))}\n        <AnimatePresence>\n          {isTyping && <TypingIndicator />}\n        </AnimatePresence>\n      </div>    {/* Input Area */}
+      >
+        {messages.map(msg => (
+          <NexusMessage key={msg.id} message={msg} />
+        ))}
+        <AnimatePresence>
+          {isTyping && <TypingIndicator />}
+        </AnimatePresence>
+      </div>
+
+      {/* Input Area */}
       <div className="p-4 border-t border-[var(--gm-graphite)] shrink-0">
         <NexusInput onSend={sendMessage} disabled={isTyping} />
         <div className="mt-2 text-[10px] text-center text-[var(--gm-graphite-light)]">

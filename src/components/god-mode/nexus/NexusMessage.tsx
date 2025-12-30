@@ -33,6 +33,10 @@ export function NexusMessage({ message }: NexusMessageProps) {
         "p-3 rounded-lg text-sm leading-relaxed border",
         isAssistant 
           ? "bg-[var(--gm-onyx)]/50 border-[var(--gm-graphite)] text-[var(--gm-snow)]" 
-          : "bg-[var(--gm-violet)]/10 border-[var(--gm-violet)]/20 text-[var(--gm-sno      )}>\n        <StreamingText text={message.content} isStreaming={message.isStreaming} />\n      </div> </motion.div>
+          : "bg-[var(--gm-violet)]/10 border-[var(--gm-violet)]/20 text-[var(--gm-snow)]"
+      )}>
+        <StreamingText text={message.content} isStreaming={message.isStreaming} />
+      </div>
+    </motion.div>
   );
 }
