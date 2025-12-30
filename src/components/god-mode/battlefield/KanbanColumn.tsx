@@ -1,3 +1,4 @@
+import { useDroppable } from '@dnd-kit/core';
 import { Batch } from './mockData';
 import { BatchCard } from './BatchCard';
 import { cn } from '@/lib/utils';
@@ -17,8 +18,20 @@ const statusColors = {
 };
 
 export function KanbanColumn({ title, status, batches }: KanbanColumnProps) {
+  const { setNodeRef, isOver } = useDroppable({
+    id: status,
+  });
+
   return (
-    <div className="flex flex-col h-full min-w-[280px] w-[280px] bg-[var(--gm-onyx)]/50 rounded-lg border border-[var(--gm-graphite)]/50">
+    <div 
+      ref={setNodeRef}
+      className={cn(
+        "flex flex-col h-full min-w-[280px] w-[280px] bg-[var(--gm-onyx)]/50 rounded-lg border transition-all",
+        isOver 
+          ? "border-[var(--gm-violet)] bg-[var(--gm-violet)]/10 shadow-lg shadow-[var(--gm-violet)]/20" 
+          : "border-[var(--gm-graphite)]/50"
+      )}
+    >
       <div className={cn("p-3 border-b border-[var(--gm-graphite)] flex justify-between items-center border-l-4", statusColors[status])}>
         <h3 className="text-xs font-bold text-[var(--gm-snow)] uppercase tracking-wider">
           {title}
@@ -35,7 +48,9 @@ export function KanbanColumn({ title, status, batches }: KanbanColumnProps) {
         
         {batches.length === 0 && (
           <div className="h-24 flex items-center justify-center border-2 border-dashed border-[var(--gm-graphite)] rounded-lg">
-            <span className="text-[10px] text-[var(--gm-graphite-light)] uppercase">Empty</span>
+            <span className="text-[10px] text-[var(--gm-graphite-light)] uppercase">
+              {isOver ? 'Drop here' : 'Empty'}
+            </span>
           </div>
         )}
       </div>

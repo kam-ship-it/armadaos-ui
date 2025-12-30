@@ -1,3 +1,4 @@
+import { useDraggable } from '@dnd-kit/core';
 import { Batch } from './mockData';
 import { cn } from '@/lib/utils';
 import { motion } from 'framer-motion';
@@ -14,14 +15,27 @@ const priorityColors = {
 };
 
 export function BatchCard({ batch }: BatchCardProps) {
+  const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
+    id: batch.id,
+  });
+
+  const style = transform ? {
+    transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
+  } : undefined;
+
   return (
     <motion.div
+      ref={setNodeRef}
+      style={style}
+      {...attributes}
+      {...listeners}
       layoutId={batch.id}
       initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
+      animate={{ opacity: isDragging ? 0.5 : 1, y: 0 }}
       whileHover={{ scale: 1.02, borderColor: 'var(--gm-violet)' }}
       className={cn(
-        "p-4 rounded-lg border border-[var(--gm-graphite)] bg-[var(--gm-surface)] cursor-pointer group relative overflow-hidden",
+        "p-4 rounded-lg border bg-[var(--gm-surface)] cursor-grab active:cursor-grabbing group relative overflow-hidden touch-none",
+        isDragging ? "border-[var(--gm-violet)] shadow-lg shadow-[var(--gm-violet)]/30" : "border-[var(--gm-graphite)]",
         batch.status === 'in-progress' && "animate-pulse-subtle"
       )}
     >
