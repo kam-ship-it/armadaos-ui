@@ -12,10 +12,21 @@ export function TierCard({ tier, onClick }: TierCardProps) {
   const totalCount = tier.components.length;
   const isAllHealthy = healthyCount === totalCount;
 
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      onClick(tier.id);
+    }
+  };
+
   return (
     <Card 
-      className="bg-[var(--gm-graphite)] border-[var(--gm-silver)]/20 hover:border-[var(--gm-violet)]/50 transition-all cursor-pointer group"
+      className="bg-[var(--gm-graphite)] border-[var(--gm-silver)]/20 hover:border-[var(--gm-violet)]/50 transition-all cursor-pointer group focus:outline-none focus:ring-2 focus:ring-[var(--gm-violet)] focus:ring-offset-2 focus:ring-offset-[var(--gm-onyx)]"
       onClick={() => onClick(tier.id)}
+      onKeyDown={handleKeyDown}
+      tabIndex={0}
+      role="button"
+      aria-label={`${tier.name} tier, ${healthyCount} of ${totalCount} components healthy`}
     >
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <CardTitle className="text-sm font-medium text-[var(--gm-snow)] group-hover:text-[var(--gm-violet)] transition-colors">

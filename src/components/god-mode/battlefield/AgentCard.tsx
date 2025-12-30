@@ -14,12 +14,25 @@ const statusColors = {
 };
 
 export function AgentCard({ agent }: AgentCardProps) {
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      // Could trigger agent details modal in the future
+    }
+  };
+
   return (
-    <div className={cn(
-      "p-3 rounded-lg border transition-all duration-300 hover:scale-105 cursor-pointer",
-      statusColors[agent.status],
-      agent.status === 'working' && "shadow-[0_0_15px_rgba(34,197,94,0.1)]"
-    )}>
+    <div 
+      className={cn(
+        "p-3 rounded-lg border transition-all duration-300 hover:scale-105 cursor-pointer focus:outline-none focus:ring-2 focus:ring-[var(--gm-violet)] focus:ring-offset-2 focus:ring-offset-[var(--gm-onyx)]",
+        statusColors[agent.status],
+        agent.status === 'working' && "shadow-[0_0_15px_rgba(34,197,94,0.1)]"
+      )}
+      tabIndex={0}
+      role="button"
+      aria-label={`Agent ${agent.name}, status ${agent.status}, health ${agent.health}%${agent.currentTask ? `, working on ${agent.currentTask}` : ''}`}
+      onKeyDown={handleKeyDown}
+    >
       <div className="flex justify-between items-start mb-2">
         <div className="flex items-center gap-2">
           <Cpu className="w-4 h-4" />

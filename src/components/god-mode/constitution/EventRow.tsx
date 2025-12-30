@@ -27,10 +27,21 @@ export function EventRow({ event, onClick }: EventRowProps) {
   const Icon = typeIcons[event.type];
   const colorClass = typeColors[event.type];
 
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      onClick(event);
+    }
+  };
+
   return (
     <div 
       onClick={() => onClick(event)}
-      className="flex items-start gap-4 p-4 border-b border-[var(--gm-graphite)] hover:bg-[var(--gm-onyx-light)] cursor-pointer transition-colors group"
+      onKeyDown={handleKeyDown}
+      tabIndex={0}
+      role="button"
+      aria-label={`${event.type} event: ${event.description}, component ${event.component}${event.agent ? `, agent ${event.agent}` : ''}`}
+      className="flex items-start gap-4 p-4 border-b border-[var(--gm-graphite)] hover:bg-[var(--gm-onyx-light)] cursor-pointer transition-colors group focus:outline-none focus:ring-2 focus:ring-[var(--gm-violet)] focus:ring-inset"
     >
       <div className="flex-shrink-0 mt-1">
         <Icon className={cn("w-5 h-5", colorClass)} />

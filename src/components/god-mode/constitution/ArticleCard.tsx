@@ -6,8 +6,21 @@ interface ArticleCardProps {
 }
 
 export function ArticleCard({ article }: ArticleCardProps) {
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      // Could trigger article details or Nexus query in the future
+    }
+  };
+
   return (
-    <div className="p-6 bg-[var(--gm-graphite)] rounded-lg border border-[var(--gm-graphite)] hover:border-[var(--gm-violet)] transition-colors group">
+    <div 
+      className="p-6 bg-[var(--gm-graphite)] rounded-lg border border-[var(--gm-graphite)] hover:border-[var(--gm-violet)] transition-colors group cursor-pointer focus:outline-none focus:ring-2 focus:ring-[var(--gm-violet)] focus:ring-offset-2 focus:ring-offset-[var(--gm-onyx)]"
+      tabIndex={0}
+      role="article"
+      aria-label={`Article ${article.title}: ${article.content.slice(0, 100)}`}
+      onKeyDown={handleKeyDown}
+    >
       <div className="flex items-center gap-3 mb-4">
         <BookOpen className="w-5 h-5 text-[var(--gm-violet)]" />
         <h3 className="text-sm font-bold text-[var(--gm-snow)] uppercase tracking-wider">
