@@ -3,12 +3,13 @@ import { DndContext, DragEndEvent, DragOverlay, DragStartEvent, closestCorners, 
 import { mockBatches, Batch } from './mockData';
 import { KanbanColumn } from './KanbanColumn';
 import { BatchCard } from './BatchCard';
-import { ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 export function BatchTracker() {
   const [batches, setBatches] = useState<Batch[]>(mockBatches);
   const [activeId, setActiveId] = useState<string | null>(null);
-  const [showScrollHint, setShowScrollHint] = useState(true);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(true);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const sensors = useSensors(
@@ -27,15 +28,15 @@ export function BatchTracker() {
     { id: 'complete', title: 'Complete' },
   ] as const;
 
-  // Check if content is scrollable and hide hint after scroll
+  // Check scroll position and update button visibility
   useEffect(() => {
     const container = scrollRef.current;
     if (!container) return;
 
     const checkScroll = () => {
-      const isScrollable = container.scrollWidth > container.clientWidth;
-      const isScrolled = container.scrollLeft > 10;
-      setShowScrollHint(isScrollable && !isScrolled);
+      const { scrollLeft, scrollWidth, clientWidth } = container;
+      setCanScrollLeft(scrollLeft > 10);
+      setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 10);
     };
 
     checkScroll();
@@ -47,6 +48,18 @@ export function BatchTracker() {
       window.removeEventListener('resize', checkScroll);
     };
   }, []);
+
+  const scrollLeft = () => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollBy({ left: -300, behavior: 'smooth' });
+    }
+  };
+
+  const scrollRight = () => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollBy({ left: 300, behavior: 'smooth' });
+    }
+  };
 
   const handleDragStart = (event: DragStartEvent) => {
     setActiveId(event.active.id as string);
@@ -110,14 +123,26 @@ export function BatchTracker() {
             ))}
           </div>
 
-          {/* Scroll Hint */}
-          {showScrollHint && (
-            <div className="absolute right-0 top-0 bottom-4 w-20 bg-gradient-to-l from-[var(--gm-onyx)] to-transparent pointer-events-none flex items-center justify-end pr-2">
-              <div className="flex items-center gap-1 text-[var(--gm-violet)] animate-pulse">
-                <span className="text-xs font-mono">Scroll</span>
-                <ChevronRight className="w-4 h-4" />
-              </div>
-            </div>
+          {/* Left Scroll Button */}
+          {canScrollLeft && (
+            <button
+              onClick={scrollLeft}
+              className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-[var(--gm-onyx)]/90 hover:bg-[var(--gm-violet)] text-[var(--gm-violet)] hover:text-[var(--gm-snow)] border border-[var(--gm-violet)]/30 rounded-full p-2 transition-all shadow-lg"
+              aria-label="Scroll left"
+            >
+              <ChevronLeft className="w-5 h-5" />
+            </button>
+          )}
+
+          {/* Right Scroll Button */}
+          {canScrollRight && (
+            <button
+              onClick={scrollRight}
+              className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-[var(--gm-onyx)]/90 hover:bg-[var(--gm-violet)] text-[var(--gm-violet)] hover:text-[var(--gm-snow)] border border-[var(--gm-violet)]/30 rounded-full p-2 transition-all shadow-lg animate-pulse"
+              aria-label="Scroll right"
+            >
+              <ChevronRight className="w-5 h-5" />
+            </button>
           )}
         </div>
       </div>
