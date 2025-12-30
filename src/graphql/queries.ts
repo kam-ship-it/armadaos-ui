@@ -153,3 +153,51 @@ export const GET_VALUES = gql`
     }
   }
 `;
+
+export const GET_COMPONENTS = gql`
+  query GetComponents {
+    components {
+      id
+      name
+      tier
+      status
+      health
+      description
+      dependencies
+      metrics {
+        uptime
+        latency
+        error_rate
+      }
+    }
+  }
+`;
+
+export const GET_EVENTS = gql`
+  query GetEvents($cursor: String) {
+    events(cursor: $cursor) {
+      id
+      type
+      title
+      description
+      timestamp
+      component
+      agent
+      metadata
+    }
+    next_cursor
+  }
+`;
+
+export const GET_ARTICLES = gql`
+  query GetArticles {
+    articles {
+      id
+      title
+      content
+      category
+      last_updated
+      author
+    }
+  }
+`;
