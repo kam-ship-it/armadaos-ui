@@ -2,6 +2,8 @@ import { useRef, useEffect } from 'react';
 import { useNexus } from '@/hooks/useNexus';
 import { NexusMessage } from './NexusMessage';
 import { NexusInput } from './NexusInput';
+import { TypingIndicator } from './TypingIndicator';
+import { AnimatePresence } from 'framer-motion';
 
 export function NexusChat() {
   const { messages, isTyping, sendMessage } = useNexus();
@@ -29,13 +31,7 @@ export function NexusChat() {
       <div 
         ref={scrollRef}
         className="flex-1 overflow-y-auto p-4 space-y-4 custom-scrollbar"
-      >
-        {messages.map(msg => (
-          <NexusMessage key={msg.id} message={msg} />
-        ))}
-      </div>
-
-      {/* Input Area */}
+      >\n        {messages.map(msg => (\n          <NexusMessage key={msg.id} message={msg} />\n        ))}\n        <AnimatePresence>\n          {isTyping && <TypingIndicator />}\n        </AnimatePresence>\n      </div>    {/* Input Area */}
       <div className="p-4 border-t border-[var(--gm-graphite)] shrink-0">
         <NexusInput onSend={sendMessage} disabled={isTyping} />
         <div className="mt-2 text-[10px] text-center text-[var(--gm-graphite-light)]">

@@ -19,10 +19,18 @@ export function TierCard({ tier, onClick }: TierCardProps) {
     }
   };
 
+  const handleClick = () => {
+    // Add click feedback animation
+    const card = document.activeElement as HTMLElement;
+    card?.classList.add('animate-click-feedback');
+    setTimeout(() => card?.classList.remove('animate-click-feedback'), 200);
+    onClick(tier.id);
+  };
+
   return (
     <Card 
-      className="bg-[var(--gm-graphite)] border-[var(--gm-silver)]/20 hover:border-[var(--gm-violet)]/50 transition-all cursor-pointer group focus:outline-none focus:ring-2 focus:ring-[var(--gm-violet)] focus:ring-offset-2 focus:ring-offset-[var(--gm-onyx)]"
-      onClick={() => onClick(tier.id)}
+      className="bg-[var(--gm-graphite)] border-[var(--gm-silver)]/20 hover:border-[var(--gm-violet)]/50 hover:shadow-lg hover:shadow-[var(--gm-violet)]/20 transition-all cursor-pointer group focus:outline-none focus:ring-2 focus:ring-[var(--gm-violet)] focus:ring-offset-2 focus:ring-offset-[var(--gm-onyx)]"
+      onClick={handleClick}
       onKeyDown={handleKeyDown}
       tabIndex={0}
       role="button"

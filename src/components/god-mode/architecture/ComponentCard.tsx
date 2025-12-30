@@ -18,7 +18,7 @@ export function ComponentCard({ component, onClick }: ComponentCardProps) {
 
   return (
     <Card 
-      className="bg-[var(--gm-graphite)] border-[var(--gm-silver)]/20 hover:border-[var(--gm-violet)]/50 transition-all cursor-pointer group focus:outline-none focus:ring-2 focus:ring-[var(--gm-violet)] focus:ring-offset-2 focus:ring-offset-[var(--gm-onyx)]"
+      className="bg-[var(--gm-graphite)] border-[var(--gm-silver)]/20 hover:border-[var(--gm-violet)]/50 hover:shadow-lg hover:shadow-[var(--gm-violet)]/20 transition-all cursor-pointer group focus:outline-none focus:ring-2 focus:ring-[var(--gm-violet)] focus:ring-offset-2 focus:ring-offset-[var(--gm-onyx)]"
       onClick={() => onClick(component)}
       onKeyDown={handleKeyDown}
       tabIndex={0}
