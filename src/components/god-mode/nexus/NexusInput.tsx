@@ -52,6 +52,7 @@ export function NexusInput({ onSend, disabled }: NexusInputProps) {
           type="submit"
           disabled={!input.trim() || disabled}
           className="p-2 mr-1 text-[var(--gm-silver)] hover:text-[var(--gm-snow)] disabled:opacity-30 transition-colors"
+          aria-label="Send message to Nexus"
         >
           <Send className="w-4 h-4" />
         </button>
