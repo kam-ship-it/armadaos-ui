@@ -1,4 +1,8 @@
-import { Article } from './mockData';
+interface Article {
+  id: string;
+  title: string;
+  content: string;
+}
 import { BookOpen, ArrowRight } from 'lucide-react';
 
 interface ArticleCardProps {

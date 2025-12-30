@@ -1,5 +1,14 @@
-import { Event } from './mockData';
-import { CheckCircle, XCircle, AlertTriangle, Info, ShieldAlert } from 'lucide-react';
+interface Event {
+  id: string;
+  type: 'success' | 'failure' | 'warning' | 'info';
+  timestamp: string;
+  title: string;
+  description?: string;
+  agent?: string;
+  component: string;
+  metadata?: Record<string, unknown>;
+}
+import { CheckCircle, XCircle, AlertTriangle, Info } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { motion } from 'framer-motion';
 
@@ -13,7 +22,6 @@ const typeIcons = {
   failure: XCircle,
   warning: AlertTriangle,
   info: Info,
-  violation: ShieldAlert
 };
 
 const typeColors = {
@@ -21,7 +29,6 @@ const typeColors = {
   failure: 'text-red-500',
   warning: 'text-amber-500',
   info: 'text-blue-500',
-  violation: 'text-red-700'
 };
 
 export function EventRow({ event, onClick }: EventRowProps) {
