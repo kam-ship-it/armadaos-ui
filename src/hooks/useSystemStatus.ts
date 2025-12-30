@@ -96,3 +96,20 @@ export const useSystemMetricsLive = () => {
     liveMetrics: data?.systemMetricsUpdated,
   };
 };
+
+// Combined hook for PulseBar
+export const useSystemStatus = () => {
+  const { health, loading: healthLoading } = useSystemHealth();
+  const { metrics, loading: metricsLoading } = useSystemMetrics();
+
+  return {
+    status: {
+      status: health?.status || 'optimal',
+      metrics: {
+        cpu: metrics?.cpu || 12,
+        network: metrics?.network?.requestsPerSecond || 45,
+      },
+    },
+    loading: healthLoading || metricsLoading,
+  };
+};
