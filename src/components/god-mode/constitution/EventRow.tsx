@@ -73,9 +73,9 @@ export function EventRow({ event, onClick }: EventRowProps) {
           {event.description}
         </p>
         
-        {event.details && (
+        {event.metadata && (
           <div className="mt-2 text-xs font-mono text-[var(--gm-silver)] opacity-0 group-hover:opacity-100 transition-opacity">
-            {JSON.stringify(event.details)}
+            {JSON.stringify(event.metadata)}
           </div>
         )}
       </div>
