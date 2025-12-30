@@ -37,13 +37,13 @@ export function GodModeLayout({ children }: GodModeLayoutProps) {
       <LeftNav activeLens={activeLens} />
 
       {/* MAIN CONTENT AREA */}
-      <div className="flex-1 flex flex-col min-w-0">
+      <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
         {/* TOP BAR */}
         <PulseBar />
 
         {/* SCROLLABLE CONTENT */}
-        <main className="flex-1 overflow-y-auto p-6 relative">
-          <div className="max-w-7xl mx-auto w-full h-full">
+        <main className="flex-1 overflow-y-auto p-6">
+          <div className="w-full h-full">
             {children || <Outlet />}
           </div>
         </main>
