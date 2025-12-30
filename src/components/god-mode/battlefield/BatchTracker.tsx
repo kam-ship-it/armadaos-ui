@@ -1,12 +1,13 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { DndContext, DragEndEvent, DragOverlay, DragStartEvent, closestCorners, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
-import { mockBatches, Batch } from './mockData';
+import { useBatches, useUpdateBatchStatus } from '@/hooks/useBattlefield';
 import { KanbanColumn } from './KanbanColumn';
 import { BatchCard } from './BatchCard';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 export function BatchTracker() {
-  const [batches, setBatches] = useState<Batch[]>(mockBatches);
+  const { batches, loading, error } = useBatches();
+  const { updateBatchStatus } = useUpdateBatchStatus();
   const [activeId, setActiveId] = useState<string | null>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
@@ -67,93 +68,118 @@ export function BatchTracker() {
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
-    
-    if (!over) {
-      setActiveId(null);
-      return;
-    }
+    setActiveId(null);
+
+    if (!over) return;
 
     const batchId = active.id as string;
-    const newStatus = over.id as Batch['status'];
+    const newStatus = over.id as string;
 
-    // Update batch status
-    setBatches(prev => 
-      prev.map(batch => 
-        batch.id === batchId 
-          ? { ...batch, status: newStatus }
-          : batch
-      )
-    );
-
-    setActiveId(null);
+    // Update batch status via GraphQL mutation
+    updateBatchStatus(batchId, newStatus);
   };
 
-  const activeBatch = batches.find(b => b.id === activeId);
+  const activeBatch = activeId ? batches.find(b => b.id === activeId) : null;
 
-  return (
-    <DndContext
-      sensors={sensors}
-      collisionDetection={closestCorners}
-      onDragStart={handleDragStart}
-      onDragEnd={handleDragEnd}
-    >
-      <div className="h-full flex flex-col">
-        <div className="mb-4 flex items-center justify-between">
-          <h2 className="text-sm font-bold text-[var(--gm-snow)] uppercase tracking-wider flex items-center gap-2">
-            <span className="w-2 h-2 bg-[var(--gm-violet)] rounded-full animate-pulse" />
+  // Error state
+  if (error) {
+    return (
+      <div className="flex flex-col h-full bg-[var(--gm-onyx)] border border-[var(--gm-graphite)] rounded-lg p-6">
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-sm font-bold text-[var(--gm-snow)] uppercase tracking-wider">
             Batch Tracker
           </h2>
-          <div className="text-xs font-mono text-[var(--gm-silver)]">
-            Active Batches: {batches.filter(b => b.status !== 'complete').length}
+        </div>
+        <div className="flex-1 flex items-center justify-center">
+          <div className="text-center">
+            <p className="text-red-400 font-mono mb-2">Failed to load batches</p>
+            <p className="text-[var(--gm-silver)] text-sm">{error.message}</p>
           </div>
         </div>
+      </div>
+    );
+  }
 
-        <div className="flex-1 relative">
-          <div 
-            ref={scrollRef}
-            className="h-full flex gap-4 overflow-x-auto pb-4 custom-scrollbar scroll-smooth"
-          >
-            {columns.map(col => (
+  // Loading state
+  if (loading) {
+    return (
+      <div className="flex flex-col h-full bg-[var(--gm-onyx)] border border-[var(--gm-graphite)] rounded-lg p-6">
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-sm font-bold text-[var(--gm-snow)] uppercase tracking-wider">
+            Batch Tracker
+          </h2>
+          <div className="text-[var(--gm-silver)] font-mono text-sm">Loading...</div>
+        </div>
+        <div className="flex-1 flex gap-4 overflow-hidden">
+          {columns.map(col => (
+            <div key={col.id} className="flex-1 min-w-[280px] h-full bg-[var(--gm-obsidian)] border border-[var(--gm-silver)]/20 rounded-lg animate-pulse" />
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="flex flex-col h-full bg-[var(--gm-onyx)] border border-[var(--gm-graphite)] rounded-lg relative">
+      {/* Header */}
+      <div className="flex items-center justify-between p-6 border-b border-[var(--gm-graphite)]">
+        <h2 className="text-sm font-bold text-[var(--gm-snow)] uppercase tracking-wider">
+          Batch Tracker
+        </h2>
+        <div className="text-[var(--gm-silver)] font-mono text-sm">
+          Active Batches: {batches.filter(b => b.status !== 'complete').length}
+        </div>
+      </div>
+
+      {/* Scroll Buttons */}
+      {canScrollLeft && (
+        <button
+          onClick={scrollLeft}
+          className="absolute left-2 top-1/2 -translate-y-1/2 z-10 p-2 rounded-full bg-[var(--gm-violet)]/20 hover:bg-[var(--gm-violet)]/40 border border-[var(--gm-violet)]/50 text-[var(--gm-violet)] transition-all shadow-lg"
+          aria-label="Scroll left"
+        >
+          <ChevronLeft className="h-5 w-5" />
+        </button>
+      )}
+
+      {canScrollRight && (
+        <button
+          onClick={scrollRight}
+          className="absolute right-2 top-1/2 -translate-y-1/2 z-10 p-2 rounded-full bg-[var(--gm-violet)]/20 hover:bg-[var(--gm-violet)]/40 border border-[var(--gm-violet)]/50 text-[var(--gm-violet)] transition-all shadow-lg animate-pulse"
+          aria-label="Scroll right"
+        >
+          <ChevronRight className="h-5 w-5" />
+        </button>
+      )}
+
+      {/* Kanban Board */}
+      <div
+        ref={scrollRef}
+        className="flex-1 overflow-x-auto overflow-y-hidden custom-scrollbar p-6 pt-4"
+        style={{ scrollBehavior: 'smooth' }}
+      >
+        <DndContext
+          sensors={sensors}
+          collisionDetection={closestCorners}
+          onDragStart={handleDragStart}
+          onDragEnd={handleDragEnd}
+        >
+          <div className="flex gap-4 h-full min-w-max">
+            {columns.map((column) => (
               <KanbanColumn
-                key={col.id}
-                title={col.title}
-                status={col.id}
-                batches={batches.filter(b => b.status === col.id)}
+                key={column.id}
+                id={column.id}
+                title={column.title}
+                batches={batches.filter(b => b.status === column.id)}
               />
             ))}
           </div>
 
-          {/* Left Scroll Button */}
-          {canScrollLeft && (
-            <button
-              onClick={scrollLeft}
-              className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-[var(--gm-onyx)]/90 hover:bg-[var(--gm-violet)] text-[var(--gm-violet)] hover:text-[var(--gm-snow)] border border-[var(--gm-violet)]/30 rounded-full p-2 transition-all shadow-lg"
-              aria-label="Scroll left"
-            >
-              <ChevronLeft className="w-5 h-5" />
-            </button>
-          )}
-
-          {/* Right Scroll Button */}
-          {canScrollRight && (
-            <button
-              onClick={scrollRight}
-              className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-[var(--gm-onyx)]/90 hover:bg-[var(--gm-violet)] text-[var(--gm-violet)] hover:text-[var(--gm-snow)] border border-[var(--gm-violet)]/30 rounded-full p-2 transition-all shadow-lg animate-pulse"
-              aria-label="Scroll right"
-            >
-              <ChevronRight className="w-5 h-5" />
-            </button>
-          )}
-        </div>
+          <DragOverlay>
+            {activeBatch && <BatchCard batch={activeBatch} isDragging />}
+          </DragOverlay>
+        </DndContext>
       </div>
-
-      <DragOverlay>
-        {activeBatch ? (
-          <div className="opacity-90 rotate-2 scale-105">
-            <BatchCard batch={activeBatch} />
-          </div>
-        ) : null}
-      </DragOverlay>
-    </DndContext>
+    </div>
   );
 }

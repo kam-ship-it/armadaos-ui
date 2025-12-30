@@ -1,15 +1,15 @@
 import { useDroppable } from '@dnd-kit/core';
-import { Batch } from './mockData';
+import { Batch } from '@/hooks/useBattlefield';
 import { BatchCard } from './BatchCard';
 import { cn } from '@/lib/utils';
 
 interface KanbanColumnProps {
+  id: string;
   title: string;
-  status: Batch['status'];
   batches: Batch[];
 }
 
-const statusColors = {
+const statusColors: Record<string, string> = {
   proposed: 'border-l-[var(--gm-silver)]',
   approved: 'border-l-blue-500',
   'in-progress': 'border-l-amber-500',
@@ -17,9 +17,9 @@ const statusColors = {
   complete: 'border-l-green-500',
 };
 
-export function KanbanColumn({ title, status, batches }: KanbanColumnProps) {
+export function KanbanColumn({ id, title, batches }: KanbanColumnProps) {
   const { setNodeRef, isOver } = useDroppable({
-    id: status,
+    id,
   });
 
   return (
@@ -32,7 +32,7 @@ export function KanbanColumn({ title, status, batches }: KanbanColumnProps) {
           : "border-[var(--gm-graphite)]/50"
       )}
     >
-      <div className={cn("p-3 border-b border-[var(--gm-graphite)] flex justify-between items-center border-l-4", statusColors[status])}>
+      <div className={cn("p-3 border-b border-[var(--gm-graphite)] flex justify-between items-center border-l-4", statusColors[id] || 'border-l-[var(--gm-silver)]')}>
         <h3 className="text-xs font-bold text-[var(--gm-snow)] uppercase tracking-wider">
           {title}
         </h3>

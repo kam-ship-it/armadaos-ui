@@ -1,11 +1,12 @@
 import { useDraggable } from '@dnd-kit/core';
-import { Batch } from './mockData';
+import { Batch } from '@/hooks/useBattlefield';
 import { cn } from '@/lib/utils';
 import { motion } from 'framer-motion';
 import { Activity, User } from 'lucide-react';
 
 interface BatchCardProps {
   batch: Batch;
+  isDragging?: boolean;
 }
 
 const priorityColors = {
@@ -49,7 +50,7 @@ export function BatchCard({ batch }: BatchCardProps) {
         <span className="font-mono text-[10px] text-[var(--gm-silver)] uppercase tracking-wider">
           {batch.id}
         </span>
-        <span className={cn("text-[10px] font-bold px-1.5 py-0.5 rounded border", priorityColors[batch.priority])}>
+        <span className={cn("text-[10px] font-bold px-1.5 py-0.5 rounded border", batch.priority ? priorityColors[batch.priority] : 'text-[var(--gm-silver)]')}>
           {batch.priority}
         </span>
       </div>
@@ -61,11 +62,11 @@ export function BatchCard({ batch }: BatchCardProps) {
       <div className="flex items-center justify-between text-xs text-[var(--gm-silver)]">
         <div className="flex items-center gap-1.5">
           <User className="w-3 h-3" />
-          <span>{batch.agent}</span>
+          <span>{typeof batch.agent === 'string' ? batch.agent : batch.agent?.name}</span>
         </div>
         <div className="flex items-center gap-1.5">
           <Activity className="w-3 h-3" />
-          <span>{batch.progress}%</span>
+          <span>{batch.progress ?? 0}%</span>
         </div>
       </div>
     </motion.div>

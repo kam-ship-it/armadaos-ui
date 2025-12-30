@@ -1,5 +1,12 @@
 import { useEffect } from 'react';
-import { Threat } from './mockData';
+interface Threat {
+  id: string;
+  type: 'security' | 'performance' | 'drift' | 'compliance';
+  severity: 'low' | 'medium' | 'high' | 'critical';
+  summary: string;
+  timestamp: string;
+  source: string;
+}
 import { cn } from '@/lib/utils';
 import { AlertTriangle, ShieldAlert, Activity, Lock } from 'lucide-react';
 import { playSound } from '@/lib/sounds';

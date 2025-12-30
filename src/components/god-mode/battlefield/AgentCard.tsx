@@ -1,4 +1,12 @@
-import { Agent } from './mockData';
+interface Agent {
+  id: string;
+  name: string;
+  version: string;
+  status: 'idle' | 'working' | 'error' | 'offline';
+  currentTask?: string;
+  health: number;
+  arcConsumption: number;
+}
 import { cn } from '@/lib/utils';
 import { Cpu, Activity, Zap } from 'lucide-react';
 
