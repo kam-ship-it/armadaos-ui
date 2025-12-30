@@ -1,7 +1,10 @@
-import { mockAgents } from './mockData';
+import { mockAgents, mockBatches } from './mockData';
 import { AgentCard } from './AgentCard';
 
 export function AgentArmy() {
+  // Check if any batch is in verifying status
+  const hasVerifyingBatch = mockBatches.some(b => b.status === 'verifying');
+
   return (
     <div className="h-full flex flex-col">
       <div className="mb-4 flex items-center justify-between">
@@ -16,7 +19,12 @@ export function AgentArmy() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 overflow-y-auto custom-scrollbar pr-2">
         {mockAgents.map(agent => (
-          <AgentCard key={agent.id} agent={agent} />
+          <div 
+            key={agent.id}
+            className={agent.name === 'Shadow' && hasVerifyingBatch ? 'ring-2 ring-[var(--gm-violet)] rounded-lg animate-pulse-active' : ''}
+          >
+            <AgentCard agent={agent} />
+          </div>
         ))}
       </div>
     </div>

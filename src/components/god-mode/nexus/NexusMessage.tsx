@@ -2,6 +2,7 @@ import { Message } from '@/hooks/useNexus';
 import { cn } from '@/lib/utils';
 import { Bot, User } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { StreamingText } from './StreamingText';
 
 interface NexusMessageProps {
   message: Message;
@@ -32,13 +33,6 @@ export function NexusMessage({ message }: NexusMessageProps) {
         "p-3 rounded-lg text-sm leading-relaxed border",
         isAssistant 
           ? "bg-[var(--gm-onyx)]/50 border-[var(--gm-graphite)] text-[var(--gm-snow)]" 
-          : "bg-[var(--gm-violet)]/10 border-[var(--gm-violet)]/20 text-[var(--gm-snow)]"
-      )}>
-        {message.content}
-        {message.isStreaming && (
-          <span className="inline-block w-1.5 h-4 ml-1 align-middle bg-[var(--gm-violet)] animate-pulse" />
-        )}
-      </div>
-    </motion.div>
+          : "bg-[var(--gm-violet)]/10 border-[var(--gm-violet)]/20 text-[var(--gm-sno      )}>\n        <StreamingText text={message.content} isStreaming={message.isStreaming} />\n      </div> </motion.div>
   );
 }

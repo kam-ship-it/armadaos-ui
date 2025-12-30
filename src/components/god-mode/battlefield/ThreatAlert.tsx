@@ -1,6 +1,8 @@
+import { useEffect } from 'react';
 import { Threat } from './mockData';
 import { cn } from '@/lib/utils';
 import { AlertTriangle, ShieldAlert, Activity, Lock } from 'lucide-react';
+import { playSound } from '@/lib/sounds';
 
 interface ThreatAlertProps {
   threat: Threat;
@@ -22,6 +24,13 @@ const severityColors = {
 
 export function ThreatAlert({ threat }: ThreatAlertProps) {
   const Icon = typeIcons[threat.type];
+
+  useEffect(() => {
+    // Play sound for high and critical threats
+    if (threat.severity === 'high' || threat.severity === 'critical') {
+      playSound('threatAlert', 0.2);
+    }
+  }, [threat.severity]);
 
   return (
     <div className={cn(

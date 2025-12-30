@@ -1,6 +1,7 @@
 import { Event } from './mockData';
 import { CheckCircle, XCircle, AlertTriangle, Info, ShieldAlert } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { motion } from 'framer-motion';
 
 interface EventRowProps {
   event: Event;
@@ -35,7 +36,10 @@ export function EventRow({ event, onClick }: EventRowProps) {
   };
 
   return (
-    <div 
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3, ease: 'easeOut' }} 
       onClick={() => onClick(event)}
       onKeyDown={handleKeyDown}
       tabIndex={0}
@@ -75,6 +79,6 @@ export function EventRow({ event, onClick }: EventRowProps) {
           </div>
         )}
       </div>
-    </div>
+    </motion.div>
   );
 }

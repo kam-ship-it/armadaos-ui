@@ -31,9 +31,9 @@ export function ComponentCard({ component, onClick }: ComponentCardProps) {
         </CardTitle>
         <div className={cn(
           "h-2 w-2 rounded-full",
-          component.status === 'healthy' && "bg-[var(--gm-emerald)] shadow-[0_0_8px_var(--gm-emerald)]",
-          component.status === 'degraded' && "bg-[var(--gm-amber)] shadow-[0_0_8px_var(--gm-amber)]",
-          component.status === 'unhealthy' && "bg-[var(--gm-rose)] shadow-[0_0_8px_var(--gm-rose)]"
+          component.status === 'healthy' && "bg-[var(--gm-emerald)] shadow-[0_0_8px_var(--gm-emerald)] animate-pulse-health",
+          component.status === 'degraded' && "bg-[var(--gm-amber)] shadow-[0_0_8px_var(--gm-amber)] animate-pulse-health",
+          component.status === 'unhealthy' && "bg-[var(--gm-rose)] shadow-[0_0_8px_var(--gm-rose)] animate-pulse-health"
         )} />
       </CardHeader>
       <CardContent>

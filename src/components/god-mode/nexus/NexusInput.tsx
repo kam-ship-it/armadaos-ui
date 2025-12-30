@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { Send, Sparkles } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { playSound } from '@/lib/sounds';
 
 interface NexusInputProps {
   onSend: (message: string) => void;
@@ -14,6 +15,7 @@ export function NexusInput({ onSend, disabled }: NexusInputProps) {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!input.trim() || disabled) return;
+    playSound('messageSend', 0.2);
     onSend(input);
     setInput("");
   };
@@ -26,8 +28,9 @@ export function NexusInput({ onSend, disabled }: NexusInputProps) {
   return (
     <form onSubmit={handleSubmit} className="relative group">
       <div className={cn(
-        "absolute -inset-0.5 bg-gradient-to-r from-[var(--gm-violet)] to-blue-500 rounded-lg opacity-0 transition duration-500 group-focus-within:opacity-30 blur",
-        disabled && "hidden"
+        "absolute -inset-0.5 bg-gradient-to-r from-[var(--gm-violet)] to-blue-500 rounded-lg opacity-0 transition duration-500 blur",
+        disabled && "hidden",
+        !disabled && "group-focus-within:opacity-30 group-focus-within:animate-input-glow"
       )} />
       
       <div className="relative flex items-center bg-[var(--gm-onyx)] border border-[var(--gm-graphite)] rounded-lg overflow-hidden transition-colors group-focus-within:border-[var(--gm-violet)]/50">

@@ -36,7 +36,7 @@ export function BatchCard({ batch }: BatchCardProps) {
       className={cn(
         "p-4 rounded-lg border bg-[var(--gm-surface)] cursor-grab active:cursor-grabbing group relative overflow-hidden touch-none",
         isDragging ? "border-[var(--gm-violet)] shadow-lg shadow-[var(--gm-violet)]/30" : "border-[var(--gm-graphite)]",
-        batch.status === 'in-progress' && "animate-pulse-subtle"
+        batch.status === 'in-progress' && "animate-pulse-active"
       )}
     >
       {/* Progress Bar Background */}

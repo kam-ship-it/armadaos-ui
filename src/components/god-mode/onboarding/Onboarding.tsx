@@ -3,6 +3,7 @@ import { AnimatePresence } from 'framer-motion';
 import { OnboardingStep } from './OnboardingStep';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, Check } from 'lucide-react';
+import { playSound } from '@/lib/sounds';
 
 interface OnboardingProps {
   onComplete: () => void;
@@ -41,6 +42,8 @@ export function Onboarding({ onComplete }: OnboardingProps) {
     if (step < steps.length - 1) {
       setStep(step + 1);
     } else {
+      // Play sound when initializing God Mode
+      playSound('initialize', 0.3);
       onComplete();
     }
   };
