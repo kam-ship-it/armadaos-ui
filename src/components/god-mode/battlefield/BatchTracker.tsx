@@ -1,12 +1,15 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { DndContext, DragEndEvent, DragOverlay, DragStartEvent, closestCorners, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { mockBatches, Batch } from './mockData';
 import { KanbanColumn } from './KanbanColumn';
 import { BatchCard } from './BatchCard';
+import { ChevronRight } from 'lucide-react';
 
 export function BatchTracker() {
   const [batches, setBatches] = useState<Batch[]>(mockBatches);
   const [activeId, setActiveId] = useState<string | null>(null);
+  const [showScrollHint, setShowScrollHint] = useState(true);
+  const scrollRef = useRef<HTMLDivElement>(null);
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -23,6 +26,27 @@ export function BatchTracker() {
     { id: 'verifying', title: 'Verifying' },
     { id: 'complete', title: 'Complete' },
   ] as const;
+
+  // Check if content is scrollable and hide hint after scroll
+  useEffect(() => {
+    const container = scrollRef.current;
+    if (!container) return;
+
+    const checkScroll = () => {
+      const isScrollable = container.scrollWidth > container.clientWidth;
+      const isScrolled = container.scrollLeft > 10;
+      setShowScrollHint(isScrollable && !isScrolled);
+    };
+
+    checkScroll();
+    container.addEventListener('scroll', checkScroll);
+    window.addEventListener('resize', checkScroll);
+
+    return () => {
+      container.removeEventListener('scroll', checkScroll);
+      window.removeEventListener('resize', checkScroll);
+    };
+  }, []);
 
   const handleDragStart = (event: DragStartEvent) => {
     setActiveId(event.active.id as string);
@@ -71,15 +95,30 @@ export function BatchTracker() {
           </div>
         </div>
 
-        <div className="flex-1 flex gap-4 overflow-x-auto pb-4 custom-scrollbar">
-          {columns.map(col => (
-            <KanbanColumn
-              key={col.id}
-              title={col.title}
-              status={col.id}
-              batches={batches.filter(b => b.status === col.id)}
-            />
-          ))}
+        <div className="flex-1 relative">
+          <div 
+            ref={scrollRef}
+            className="h-full flex gap-4 overflow-x-auto pb-4 custom-scrollbar scroll-smooth"
+          >
+            {columns.map(col => (
+              <KanbanColumn
+                key={col.id}
+                title={col.title}
+                status={col.id}
+                batches={batches.filter(b => b.status === col.id)}
+              />
+            ))}
+          </div>
+
+          {/* Scroll Hint */}
+          {showScrollHint && (
+            <div className="absolute right-0 top-0 bottom-4 w-20 bg-gradient-to-l from-[var(--gm-onyx)] to-transparent pointer-events-none flex items-center justify-end pr-2">
+              <div className="flex items-center gap-1 text-[var(--gm-violet)] animate-pulse">
+                <span className="text-xs font-mono">Scroll</span>
+                <ChevronRight className="w-4 h-4" />
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
