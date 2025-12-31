@@ -38,7 +38,7 @@ export const DesktopShell: React.FC<DesktopShellProps> = ({ mode: _mode = 'stand
   }, [toggleNexus, openWindow]);
 
   return (
-    <div className="relative w-full h-screen overflow-hidden bg-slate-950">
+    <div className="relative w-full h-screen overflow-hidden">
       {/* Session Manager (invisible, handles restore/save) */}
       <SessionManager />
 
@@ -107,15 +107,7 @@ export const DesktopShell: React.FC<DesktopShellProps> = ({ mode: _mode = 'stand
       </div>
 
       {/* Desktop Canvas */}
-      <div
-        className="absolute inset-0 pt-12"
-        style={{
-          background:
-            activeSpace?.background.type === 'color'
-              ? activeSpace.background.value
-              : '#0f172a',
-        }}
-      >
+      <div className="absolute inset-0 pt-12">
         {/* Window Manager */}
         <WindowManager />
 
@@ -129,18 +121,7 @@ export const DesktopShell: React.FC<DesktopShellProps> = ({ mode: _mode = 'stand
         </div>
       </div>
 
-      {/* Dock (placeholder) */}
-      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-50">
-        <div className="flex items-center gap-2 px-4 py-2 bg-slate-900/95 backdrop-blur-sm border border-slate-800 rounded-2xl shadow-2xl">
-          <button
-            onClick={() => openWindow('browser')}
-            className="p-3 hover:bg-slate-800 rounded-xl transition-colors"
-            title="Browser"
-          >
-            <Monitor className="w-5 h-5 text-slate-400" />
-          </button>
-        </div>
-      </div>
+      {/* Dock is rendered by Shell component */}
     </div>
   );
 };
