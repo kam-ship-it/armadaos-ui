@@ -3,7 +3,7 @@ import { Bot } from 'lucide-react';
 
 export function NexusPanel() {
   return (
-    <div className="w-80 border-l border-[var(--gm-slate)] bg-[var(--gm-surface)] flex flex-col hidden xl:flex">
+    <div className="w-80 border-l border-[var(--gm-slate)] bg-[var(--gm-surface)] flex flex-col hidden xl:flex shadow-[0_0_20px_rgba(139,92,246,0.2)]">
       <div className="h-14 border-b border-[var(--gm-slate)] flex items-center px-4 gap-2">
         <Bot className="w-4 h-4 text-[var(--gm-violet)]" />
         <span className="text-sm font-bold text-[var(--gm-snow)]">NEXUS INTELLIGENCE</span>

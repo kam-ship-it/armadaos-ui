@@ -1,0 +1,74 @@
+// Minimal Window Component for BATCH-DESKTOP-01
+// Full window management will be in BATCH-DESKTOP-02
+
+import React from 'react';
+import { Rnd } from 'react-rnd';
+import { X } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+
+interface WindowProps {
+  app: string;
+  title?: string;
+  children: React.ReactNode;
+  defaultWidth?: number;
+  defaultHeight?: number;
+  defaultX?: number;
+  defaultY?: number;
+}
+
+export const Window: React.FC<WindowProps> = ({
+  app: _app,
+  title = 'Window',
+  children,
+  defaultWidth = 1400,
+  defaultHeight = 900,
+  defaultX = 50,
+  defaultY = 50,
+}) => {
+  const navigate = useNavigate();
+
+  const handleClose = () => {
+    // Navigate back to desktop when closing God Mode window
+    navigate('/desktop');
+  };
+
+  return (
+    <Rnd
+      default={{
+        x: defaultX,
+        y: defaultY,
+        width: defaultWidth,
+        height: defaultHeight,
+      }}
+      minWidth={800}
+      minHeight={600}
+      bounds="parent"
+      dragHandleClassName="window-drag-handle"
+      style={{
+        zIndex: 100,
+      }}
+    >
+      <div className="w-full h-full flex flex-col bg-[#1A1A1D] rounded-lg shadow-2xl border border-[#374151] overflow-hidden">
+        {/* Title Bar */}
+        <div className="window-drag-handle flex items-center justify-between h-10 px-4 bg-[#2A2A2D] border-b border-[#374151] cursor-move">
+          <div className="flex items-center gap-2">
+            <div className="w-3 h-3 rounded-full bg-[#8B5CF6]" />
+            <span className="text-sm font-medium text-[#FFFFFF]">{title}</span>
+          </div>
+          <button
+            onClick={handleClose}
+            className="p-1 hover:bg-[#3A3A3D] rounded transition-colors"
+            title="Close"
+          >
+            <X className="w-4 h-4 text-[#D1D5DB]" />
+          </button>
+        </div>
+
+        {/* Content */}
+        <div className="flex-1 overflow-auto">
+          {children}
+        </div>
+      </div>
+    </Rnd>
+  );
+};

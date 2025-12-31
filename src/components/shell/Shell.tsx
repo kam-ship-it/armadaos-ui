@@ -10,16 +10,16 @@ interface ShellProps {
  * Shell - The root container for the ArmadaOS Desktop Environment
  * 
  * Provides:
- * - Full-screen background (#0A0A0B - ArmadaOS onyx)
+ * - Full-screen background (#1A1A1D - Warm Charcoal)
  * - Geometric wallpaper overlay
  * - Dock at bottom-center
  * - Container for windows and widgets
  */
 export const Shell: React.FC<ShellProps> = ({ children }) => {
   return (
-    <div className="fixed top-0 left-0 w-screen h-screen overflow-hidden bg-[#0A0A0B]">
+    <div className="fixed top-0 left-0 w-screen h-screen overflow-hidden bg-[#1A1A1D]">
       {/* Background layer */}
-      <div className="absolute top-0 left-0 w-full h-full bg-[#0A0A0B] z-0" />
+      <div className="absolute top-0 left-0 w-full h-full bg-[#1A1A1D] z-0" />
       
       {/* Wallpaper layer */}
       <Wallpaper />
