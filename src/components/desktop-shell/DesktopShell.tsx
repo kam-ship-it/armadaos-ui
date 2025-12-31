@@ -11,7 +11,7 @@ interface DesktopShellProps {
   mode?: 'standalone' | 'god-mode-embedded';
 }
 
-export const DesktopShell: React.FC<DesktopShellProps> = ({ mode = 'standalone' }) => {
+export const DesktopShell: React.FC<DesktopShellProps> = ({ mode: _mode = 'standalone' }) => {
   const { spaces, activeSpaceId, switchSpace, createSpace, openWindow, toggleNexus } =
     useDesktopStore();
 
