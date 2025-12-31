@@ -4,6 +4,7 @@ import { ArchitectureLens } from '@/components/god-mode/ArchitectureLens';
 import { ConstitutionLens } from '@/components/god-mode/lenses/ConstitutionLens';
 import { BattlefieldLens } from '@/components/god-mode/lenses/BattlefieldLens';
 import { DesktopShell } from '@/components/desktop-shell/DesktopShell';
+import { Shell } from '@/components/shell/Shell';
 
 function App() {
   return (
@@ -11,7 +12,11 @@ function App() {
       <div className="dark">
         <Routes>
           <Route path="/" element={<Navigate to="/god-mode/architecture" replace />} />
-          <Route path="/desktop" element={<DesktopShell mode="standalone" />} />
+          <Route path="/desktop" element={
+            <Shell>
+              <DesktopShell mode="standalone" />
+            </Shell>
+          } />
           <Route path="/god-mode/*" element={
             <GodModeLayout>
               <Routes>
