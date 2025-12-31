@@ -47,7 +47,14 @@ export const DesktopShell: React.FC<DesktopShellProps> = ({ mode: _mode = 'stand
         <div className="flex items-center justify-between h-full px-4">
           {/* Left: Logo */}
           <div className="flex items-center gap-3">
-            <Monitor className="w-5 h-5 text-[#8B5CF6]" />
+            <img 
+              src="/assets/triprism_logo.png" 
+              alt="ArmadaOS" 
+              className="h-8 animate-[glow-pulse_1.5s_ease-in-out_infinite]"
+              style={{
+                filter: 'drop-shadow(0 0 8px rgba(139, 92, 246, 0.4))'
+              }}
+            />
             <span className="text-sm font-semibold text-[#E8E8E8]">ArmadaOS</span>
           </div>
 

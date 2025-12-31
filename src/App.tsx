@@ -5,28 +5,32 @@ import { ConstitutionLens } from '@/components/god-mode/lenses/ConstitutionLens'
 import { BattlefieldLens } from '@/components/god-mode/lenses/BattlefieldLens';
 import { DesktopShell } from '@/components/desktop-shell/DesktopShell';
 import { Shell } from '@/components/shell/Shell';
+import { Window } from '@/components/shell/Window';
 
 function App() {
   return (
     <BrowserRouter>
       <div className="dark">
-        <Routes>
-          <Route path="/" element={<Navigate to="/god-mode/architecture" replace />} />
-          <Route path="/desktop" element={
-            <Shell>
+        {/* Shell is now GLOBAL - visible on ALL routes */}
+        <Shell>
+          <Routes>
+            <Route path="/" element={<Navigate to="/desktop" replace />} />
+            <Route path="/desktop" element={
               <DesktopShell mode="standalone" />
-            </Shell>
-          } />
+            } />
           <Route path="/god-mode/*" element={
-            <GodModeLayout>
-              <Routes>
-                <Route path="architecture" element={<ArchitectureLens />} />
-                <Route path="constitution" element={<ConstitutionLens />} />
-                <Route path="battlefield" element={<BattlefieldLens />} />
-              </Routes>
-            </GodModeLayout>
+            <Window app="god-mode" title="God Mode" defaultWidth={1400} defaultHeight={900}>
+              <GodModeLayout>
+                <Routes>
+                  <Route path="architecture" element={<ArchitectureLens />} />
+                  <Route path="constitution" element={<ConstitutionLens />} />
+                  <Route path="battlefield" element={<BattlefieldLens />} />
+                </Routes>
+              </GodModeLayout>
+            </Window>
           } />
-        </Routes>
+          </Routes>
+        </Shell>
       </div>
     </BrowserRouter>
   );

@@ -37,8 +37,8 @@ export const Tab: React.FC<TabProps> = ({ windowId, tab, isActive }) => {
         cursor-pointer transition-colors min-w-[120px] max-w-[200px]
         ${
           isActive
-            ? 'bg-slate-900 text-slate-200'
-            : 'bg-slate-800/50 text-slate-400 hover:bg-slate-800'
+            ? 'bg-[#8B5CF6] text-white shadow-[0_0_10px_rgba(139,92,246,0.3)]'
+            : 'bg-[#1A1A1D] text-[#D1D5DB] border border-[#8B5CF6] hover:bg-[#2A2A2D]'
         }
       `}
     >
@@ -49,7 +49,7 @@ export const Tab: React.FC<TabProps> = ({ windowId, tab, isActive }) => {
         ) : tab.favicon ? (
           <img src={tab.favicon} alt="" className="w-4 h-4" />
         ) : (
-          <div className="w-4 h-4 bg-slate-700 rounded" />
+          <div className="w-4 h-4 bg-[#2A2A2D] rounded" />
         )}
       </div>
 
@@ -59,7 +59,7 @@ export const Tab: React.FC<TabProps> = ({ windowId, tab, isActive }) => {
       {/* Close Button */}
       <button
         onClick={handleClose}
-        className="flex-shrink-0 p-0.5 hover:bg-slate-700 rounded transition-colors opacity-0 group-hover:opacity-100"
+        className="flex-shrink-0 p-0.5 hover:bg-[#3A3A3D] rounded transition-colors opacity-0 group-hover:opacity-100"
         title="Close Tab"
       >
         <X className="w-3 h-3" />

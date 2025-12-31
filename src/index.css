@@ -93,5 +93,16 @@
   }
   body {
     @apply bg-background text-foreground;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+}
+
+/* CMO Brand Compliance: Tri-Prism Logo Glow Pulse Animation */
+@keyframes glow-pulse {
+  0%, 100% { 
+    filter: drop-shadow(0 0 8px rgba(139, 92, 246, 0.4)); 
+  }
+  50% { 
+    filter: drop-shadow(0 0 16px rgba(139, 92, 246, 0.6)); 
   }
 }
