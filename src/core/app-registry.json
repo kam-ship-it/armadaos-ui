@@ -1,0 +1,39 @@
+{
+  "apps": [
+    {
+      "id": "god-mode",
+      "name": "God Mode",
+      "icon": "shield",
+      "route": "/god-mode",
+      "description": "System command center and agent dashboard"
+    },
+    {
+      "id": "the-store",
+      "name": "The Store",
+      "icon": "shopping-cart",
+      "route": "/store",
+      "description": "Application marketplace"
+    },
+    {
+      "id": "boardroom",
+      "name": "Boardroom",
+      "icon": "users",
+      "route": "/boardroom",
+      "description": "Team collaboration space"
+    },
+    {
+      "id": "settings",
+      "name": "Settings",
+      "icon": "settings",
+      "route": "/settings",
+      "description": "System preferences and configuration"
+    },
+    {
+      "id": "browser",
+      "name": "Browser",
+      "icon": "globe",
+      "route": "/desktop",
+      "description": "Web browser and automation"
+    }
+  ]
+}
