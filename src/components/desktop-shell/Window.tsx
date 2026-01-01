@@ -71,18 +71,20 @@ export const Window: React.FC<WindowProps> = ({ window }) => {
       enableResizing={!window.isMaximized}
     >
       <div
-        className={`
-          flex flex-col h-full
-          bg-slate-900 border border-slate-700 rounded-lg overflow-hidden
-          shadow-2xl
-          ${window.isFocused ? 'ring-2 ring-blue-500/50' : ''}
-        `}
+        className="flex flex-col h-full overflow-hidden"
+        style={{
+          background: 'rgba(28, 28, 31, 0.7)',
+          backdropFilter: 'blur(12px)',
+          border: 'none',
+          borderRadius: '8px',
+          boxShadow: '0 8px 32px rgba(0, 0, 0, 0.4)'
+        }}
         onClick={() => !window.isFocused && focusWindow(window.id)}
       >
         {/* Title Bar */}
-        <div className="window-drag-handle flex items-center justify-between px-4 py-2 bg-slate-800 border-b border-slate-700 cursor-move">
+        <div className="window-drag-handle flex items-center justify-between px-4 py-2 cursor-move" style={{ background: 'rgba(18, 18, 20, 0.5)', borderBottom: 'none' }}>
           <div className="flex items-center gap-2 flex-1 min-w-0">
-            <span className="text-sm font-medium text-slate-200 truncate">
+            <span className="text-sm font-medium truncate" style={{ color: '#F5F5F7' }}>
               {window.title}
             </span>
           </div>
@@ -97,7 +99,7 @@ export const Window: React.FC<WindowProps> = ({ window }) => {
               className="p-1.5 hover:bg-slate-700 rounded transition-colors"
               title="Minimize"
             >
-              <Minus className="w-4 h-4 text-slate-400" />
+              <Minus className="w-4 h-4" style={{ color: '#F5F5F7' }} />
             </button>
             <button
               onClick={(e) => {
@@ -108,9 +110,9 @@ export const Window: React.FC<WindowProps> = ({ window }) => {
               title={window.isMaximized ? 'Restore' : 'Maximize'}
             >
               {window.isMaximized ? (
-                <Minimize2 className="w-4 h-4 text-slate-400" />
+                <Minimize2 className="w-4 h-4" style={{ color: '#F5F5F7' }} />
               ) : (
-                <Maximize2 className="w-4 h-4 text-slate-400" />
+                <Maximize2 className="w-4 h-4" style={{ color: '#F5F5F7' }} />
               )}
             </button>
             <button
@@ -121,7 +123,7 @@ export const Window: React.FC<WindowProps> = ({ window }) => {
               className="p-1.5 hover:bg-red-600 rounded transition-colors"
               title="Close"
             >
-              <X className="w-4 h-4 text-slate-400" />
+              <X className="w-4 h-4" style={{ color: '#F5F5F7' }} />
             </button>
           </div>
         </div>
@@ -132,9 +134,9 @@ export const Window: React.FC<WindowProps> = ({ window }) => {
         )}
 
         {/* Content Area */}
-        <div className="flex-1 overflow-auto bg-slate-950">
+        <div className="flex-1 overflow-auto" style={{ background: '#121214' }}>
           <div className="p-4">
-            <div className="text-slate-400 text-sm">
+            <div className="text-sm" style={{ color: '#F5F5F7' }}>
               <p>Window: {window.appId}</p>
               <p>ID: {window.id}</p>
               <p>Tabs: {window.tabs.length}</p>
