@@ -48,9 +48,16 @@ export const Window: React.FC<WindowProps> = ({
         zIndex: 100,
       }}
     >
-      <div className="w-full h-full flex flex-col bg-[#1A1A1D] rounded-lg shadow-2xl border border-[#374151] overflow-hidden">
+      <div className="w-full h-full flex flex-col rounded-lg overflow-hidden" style={{
+        background: 'rgba(18, 18, 20, 0.7)',
+        backdropFilter: 'blur(12px)',
+        boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)'
+      }}>
         {/* Title Bar */}
-        <div className="window-drag-handle flex items-center justify-between h-10 px-4 bg-[#2A2A2D] border-b border-[#374151] cursor-move">
+        <div className="window-drag-handle flex items-center justify-between h-10 px-4 cursor-move" style={{
+          background: 'rgba(18, 18, 20, 0.5)',
+          borderBottom: 'none'
+        }}>
           <div className="flex items-center gap-2">
             <div className="w-3 h-3 rounded-full bg-[#8B5CF6]" />
             <span className="text-sm font-medium text-[#FFFFFF]">{title}</span>

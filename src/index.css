@@ -106,3 +106,21 @@
     filter: drop-shadow(0 0 16px rgba(139, 92, 246, 0.6)); 
   }
 }
+
+/* Design System V3.0: Living Border Focus Indicator (CMO-APPROVED) */
+/* Replaces deprecated purple focus ring */
+*:focus {
+  outline: none;
+}
+
+.dark *:focus-visible {
+  border: 1px solid rgba(255, 255, 255, 0.8) !important; /* White border "comes alive" */
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.3) !important; /* Subtle white glow */
+  transition: all 150ms ease-out;
+}
+
+*:focus-visible {
+  border: 1px solid rgba(18, 18, 20, 0.8) !important; /* Dark border for light mode */
+  box-shadow: 0 0 8px rgba(18, 18, 20, 0.3) !important;
+  transition: all 150ms ease-out;
+}

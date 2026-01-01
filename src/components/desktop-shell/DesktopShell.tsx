@@ -48,7 +48,7 @@ export const DesktopShell: React.FC<DesktopShellProps> = ({ mode: _mode = 'stand
           {/* Left: Logo */}
           <div className="flex items-center gap-3">
             <img 
-              src="/assets/triprism_logo.png" 
+              src="/assets/triprism_final_v9.png" 
               alt="ArmadaOS" 
               className="h-8 animate-[glow-pulse_1.5s_ease-in-out_infinite]"
               style={{
