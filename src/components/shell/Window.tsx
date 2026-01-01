@@ -46,14 +46,21 @@ export const Window: React.FC<WindowProps> = ({
       dragHandleClassName="window-drag-handle"
       style={{
         zIndex: 100,
-      }}
-    >
-      <div className="w-full h-full flex flex-col rounded-lg overflow-hidden" style={{
-        background: 'rgba(28, 28, 31, 0.7)',
-        backdropFilter: 'blur(12px)',
         border: 'none',
-        boxShadow: '0 8px 32px rgba(0, 0, 0, 0.4)'
-      }}>
+        outline: 'none',
+      }}
+      className="window-no-border"
+    >
+      <div 
+        className="w-full h-full flex flex-col rounded-lg overflow-hidden window-no-border" 
+        style={{
+          background: 'rgba(28, 28, 31, 0.7)',
+          backdropFilter: 'blur(12px)',
+          border: 'none',
+          outline: 'none',
+          boxShadow: '0 8px 32px rgba(0, 0, 0, 0.4)'
+        }}
+      >
         {/* Title Bar */}
         <div className="window-drag-handle flex items-center justify-between h-10 px-4 cursor-move" style={{
           background: 'rgba(18, 18, 20, 0.5)',

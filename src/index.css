@@ -133,3 +133,12 @@ a:focus-visible {
   box-shadow: 0 0 8px rgba(18, 18, 20, 0.3) !important;
   transition: all 150ms ease-out;
 }
+
+
+/* CRITICAL: Force no borders on windows */
+.window-no-border,
+.window-no-border *:focus,
+.window-no-border *:focus-visible {
+  border: none !important;
+  outline: none !important;
+}
