@@ -39,7 +39,7 @@ export const Dock: React.FC = () => {
   
   return (
     <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-[1000]">
-      <div className="flex items-center gap-3 px-5 py-3 backdrop-blur-xl rounded-3xl" style={{ background: 'rgba(28, 28, 31, 0.8)', border: 'none', boxShadow: '0 8px 32px rgba(0, 0, 0, 0.4)' }}>
+      <div className="flex items-center gap-3 px-5 py-3 backdrop-blur-xl rounded-3xl" style={{ background: 'rgba(18, 18, 20, 0.7)', border: 'none', boxShadow: '0 8px 24px rgba(0, 0, 0, 0.3)' }}>
         {appRegistry.apps.map((app) => {
           const Icon = iconMap[app.icon] || Shield;
           const isRunning = isAppRunning(app.id);

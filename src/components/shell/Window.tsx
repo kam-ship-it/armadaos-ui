@@ -49,7 +49,7 @@ export const Window: React.FC<WindowProps> = ({
       }}
     >
       <div className="w-full h-full flex flex-col rounded-lg overflow-hidden" style={{
-        background: 'rgba(28, 28, 31, 0.8)',
+        background: 'rgba(28, 28, 31, 0.7)',
         backdropFilter: 'blur(12px)',
         border: 'none',
         boxShadow: '0 8px 32px rgba(0, 0, 0, 0.4)'

@@ -43,7 +43,7 @@ export const DesktopShell: React.FC<DesktopShellProps> = ({ mode: _mode = 'stand
       <SessionManager />
 
       {/* Top Bar */}
-      <div className="absolute top-0 left-0 right-0 h-12 backdrop-blur-sm z-50" style={{ backgroundColor: 'rgba(18, 18, 20, 0.95)', borderBottom: '1px solid #1C1C1F' }}>
+      <div className="absolute top-0 left-0 right-0 h-12 backdrop-blur-sm z-50" style={{ backgroundColor: 'rgba(18, 18, 20, 0.7)', backdropFilter: 'blur(12px)', border: 'none', boxShadow: '0 4px 12px rgba(0, 0, 0, 0.2)' }}>
         <div className="flex items-center justify-between h-full px-4">
           {/* Left: Logo */}
           <div className="flex items-center gap-3">
@@ -70,7 +70,7 @@ export const DesktopShell: React.FC<DesktopShellProps> = ({ mode: _mode = 'stand
                   className="px-2 py-1 rounded text-xs transition-colors"
                   style={{
                     backgroundColor: space.id === activeSpaceId ? '#8B5CF6' : '#121214',
-                    color: space.id === activeSpaceId ? '#FFFFFF' : '#A8A8A8'
+                    color: space.id === activeSpaceId ? '#F5F5F7' : '#A8A8A8'
                   }}
                   onMouseEnter={(e) => {
                     if (space.id !== activeSpaceId) e.currentTarget.style.backgroundColor = '#1A1A1C';
