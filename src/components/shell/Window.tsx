@@ -49,9 +49,10 @@ export const Window: React.FC<WindowProps> = ({
       }}
     >
       <div className="w-full h-full flex flex-col rounded-lg overflow-hidden" style={{
-        background: 'rgba(18, 18, 20, 0.7)',
+        background: 'rgba(28, 28, 31, 0.8)',
         backdropFilter: 'blur(12px)',
-        boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)'
+        border: 'none',
+        boxShadow: '0 8px 32px rgba(0, 0, 0, 0.4)'
       }}>
         {/* Title Bar */}
         <div className="window-drag-handle flex items-center justify-between h-10 px-4 cursor-move" style={{
@@ -60,14 +61,14 @@ export const Window: React.FC<WindowProps> = ({
         }}>
           <div className="flex items-center gap-2">
             <div className="w-3 h-3 rounded-full bg-[#8B5CF6]" />
-            <span className="text-sm font-medium text-[#FFFFFF]">{title}</span>
+            <span className="text-sm font-medium" style={{ color: '#F5F5F7' }}>{title}</span>
           </div>
           <button
             onClick={handleClose}
             className="p-1 hover:bg-[#3A3A3D] rounded transition-colors"
             title="Close"
           >
-            <X className="w-4 h-4 text-[#D1D5DB]" />
+            <X className="w-4 h-4" style={{ color: '#F5F5F7' }} />
           </button>
         </div>
 

@@ -48,14 +48,10 @@ export const DesktopShell: React.FC<DesktopShellProps> = ({ mode: _mode = 'stand
           {/* Left: Logo */}
           <div className="flex items-center gap-3">
             <img 
-              src="/assets/triprism_final_v9.png" 
+              src="/assets/LOCKUP_OFFICIAL_DARK.png" 
               alt="ArmadaOS" 
-              className="h-8 animate-[glow-pulse_1.5s_ease-in-out_infinite]"
-              style={{
-                filter: 'drop-shadow(0 0 8px rgba(139, 92, 246, 0.4))'
-              }}
+              className="h-8"
             />
-            <span className="text-sm font-semibold text-[#E8E8E8]">ArmadaOS</span>
           </div>
 
           {/* Center: Space Indicator */}

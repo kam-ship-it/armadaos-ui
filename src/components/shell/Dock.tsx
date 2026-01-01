@@ -39,7 +39,7 @@ export const Dock: React.FC = () => {
   
   return (
     <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-[1000]">
-      <div className="flex items-center gap-3 px-5 py-3 bg-[rgba(20,25,35,0.8)] backdrop-blur-xl rounded-3xl shadow-[0_8px_32px_rgba(0,0,0,0.4)]">
+      <div className="flex items-center gap-3 px-5 py-3 backdrop-blur-xl rounded-3xl" style={{ background: 'rgba(28, 28, 31, 0.8)', border: 'none', boxShadow: '0 8px 32px rgba(0, 0, 0, 0.4)' }}>
         {appRegistry.apps.map((app) => {
           const Icon = iconMap[app.icon] || Shield;
           const isRunning = isAppRunning(app.id);
@@ -53,9 +53,9 @@ export const Dock: React.FC = () => {
               onClick={() => handleAppClick(app.route)}
             >
               <div className="w-12 h-12 flex items-center justify-center bg-white/5 rounded-xl transition-colors hover:bg-white/10">
-                <Icon className="text-white" size={28} />
+                <Icon style={{ color: '#F5F5F7' }} size={28} />
               </div>
-              <span className="text-[11px] text-white font-medium whitespace-nowrap">
+              <span className="text-[11px] font-medium whitespace-nowrap" style={{ color: '#F5F5F7' }}>
                 {app.name}
               </span>
               {isRunning && (
