@@ -48,9 +48,9 @@ export const DesktopShell: React.FC<DesktopShellProps> = ({ mode: _mode = 'stand
           {/* Left: Logo */}
           <div className="flex items-center gap-3">
             <img 
-              src="/assets/armadaos-logo-2d-white-32.png" 
+              src="/assets/LOCKUP_OFFICIAL_DARK.png" 
               alt="ArmadaOS" 
-              className="h-8 w-8"
+              className="h-8"
             />
           </div>
 
