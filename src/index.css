@@ -113,14 +113,23 @@
   outline: none;
 }
 
-.dark *:focus-visible {
-  border: 1px solid rgba(255, 255, 255, 0.8) !important; /* White border "comes alive" */
-  box-shadow: 0 0 8px rgba(255, 255, 255, 0.3) !important; /* Subtle white glow */
+/* Living Border only for interactive elements, NOT windows/containers */
+.dark button:focus-visible,
+.dark input:focus-visible,
+.dark select:focus-visible,
+.dark textarea:focus-visible,
+.dark a:focus-visible {
+  border: 2px solid rgba(245, 245, 247, 0.8) !important; /* Platinum border "comes alive" */
+  box-shadow: 0 0 8px rgba(245, 245, 247, 0.3) !important; /* Subtle white glow */
   transition: all 150ms ease-out;
 }
 
-*:focus-visible {
-  border: 1px solid rgba(18, 18, 20, 0.8) !important; /* Dark border for light mode */
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+a:focus-visible {
+  border: 2px solid rgba(18, 18, 20, 0.8) !important; /* Dark border for light mode */
   box-shadow: 0 0 8px rgba(18, 18, 20, 0.3) !important;
   transition: all 150ms ease-out;
 }
