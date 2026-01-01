@@ -52,12 +52,13 @@ export const Window: React.FC<WindowProps> = ({
       className="window-no-border"
     >
       <div 
-        className="w-full h-full flex flex-col rounded-lg overflow-hidden window-no-border" 
+        className="w-full h-full flex flex-col overflow-hidden window-no-border" 
         style={{
           background: 'rgba(28, 28, 31, 0.7)',
           backdropFilter: 'blur(12px)',
           border: 'none',
           outline: 'none',
+          borderRadius: '8px',
           boxShadow: '0 8px 32px rgba(0, 0, 0, 0.4)'
         }}
       >

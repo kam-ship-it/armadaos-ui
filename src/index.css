@@ -137,8 +137,14 @@ a:focus-visible {
 
 /* CRITICAL: Force no borders on windows */
 .window-no-border,
+.window-no-border *,
 .window-no-border *:focus,
-.window-no-border *:focus-visible {
+.window-no-border *:focus-visible,
+.window-no-border *:hover,
+.react-draggable,
+.react-draggable *,
+.react-draggable *:focus,
+.react-draggable *:focus-visible {
   border: none !important;
   outline: none !important;
 }
