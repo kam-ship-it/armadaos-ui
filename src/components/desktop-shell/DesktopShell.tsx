@@ -38,7 +38,7 @@ export const DesktopShell: React.FC<DesktopShellProps> = ({ mode: _mode = 'stand
   }, [toggleNexus, openWindow]);
 
   return (
-    <div className="relative w-full h-screen overflow-hidden">
+    <div className="relative w-full h-screen">
       {/* Session Manager (invisible, handles restore/save) */}
       <SessionManager />
 
