@@ -43,7 +43,7 @@ export const DesktopShell: React.FC<DesktopShellProps> = ({ mode: _mode = 'stand
       <SessionManager />
 
       {/* Top Bar */}
-      <div className="absolute top-0 left-0 right-0 h-12 bg-[#121214]/95 backdrop-blur-sm border-b border-[#1C1C1F] z-50">
+      <div className="absolute top-0 left-0 right-0 h-12 backdrop-blur-sm z-50" style={{ backgroundColor: 'rgba(18, 18, 20, 0.95)', borderBottom: '1px solid #1C1C1F' }}>
         <div className="flex items-center justify-between h-full px-4">
           {/* Left: Logo */}
           <div className="flex items-center gap-3">
@@ -60,7 +60,7 @@ export const DesktopShell: React.FC<DesktopShellProps> = ({ mode: _mode = 'stand
 
           {/* Center: Space Indicator */}
           <div className="flex items-center gap-2">
-            <div className="flex items-center gap-2 px-3 py-1.5 bg-[#121214] rounded-lg">
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg" style={{ backgroundColor: '#121214' }}>
               <span className="text-lg">{activeSpace?.icon}</span>
               <span className="text-sm font-medium text-[#E8E8E8]">{activeSpace?.name}</span>
             </div>
@@ -71,14 +71,17 @@ export const DesktopShell: React.FC<DesktopShellProps> = ({ mode: _mode = 'stand
                 <button
                   key={space.id}
                   onClick={() => switchSpace(space.id)}
-                  className={`
-                    px-2 py-1 rounded text-xs transition-colors
-                    ${
-                      space.id === activeSpaceId
-                        ? 'bg-[#8B5CF6] text-white'
-                        : 'bg-[#121214] text-[#A8A8A8] hover:bg-[#1A1A1C]'
-                    }
-                  `}
+                  className="px-2 py-1 rounded text-xs transition-colors"
+                  style={{
+                    backgroundColor: space.id === activeSpaceId ? '#8B5CF6' : '#121214',
+                    color: space.id === activeSpaceId ? '#FFFFFF' : '#A8A8A8'
+                  }}
+                  onMouseEnter={(e) => {
+                    if (space.id !== activeSpaceId) e.currentTarget.style.backgroundColor = '#1A1A1C';
+                  }}
+                  onMouseLeave={(e) => {
+                    if (space.id !== activeSpaceId) e.currentTarget.style.backgroundColor = '#121214';
+                  }}
                   title={space.name}
                 >
                   {space.icon}
@@ -86,7 +89,10 @@ export const DesktopShell: React.FC<DesktopShellProps> = ({ mode: _mode = 'stand
               ))}
               <button
                 onClick={() => createSpace('New Space', 'blank')}
-                className="px-2 py-1 rounded text-xs bg-[#121214] text-[#A8A8A8] hover:bg-[#1A1A1C] transition-colors"
+                className="px-2 py-1 rounded text-xs transition-colors"
+                style={{ backgroundColor: '#121214', color: '#A8A8A8' }}
+                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#1A1A1C'}
+                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#121214'}
                 title="New Space"
               >
                 <Plus className="w-3 h-3" />
@@ -98,13 +104,19 @@ export const DesktopShell: React.FC<DesktopShellProps> = ({ mode: _mode = 'stand
           <div className="flex items-center gap-2">
             <button
               onClick={() => openWindow('browser')}
-              className="px-3 py-1.5 bg-[#8B5CF6] hover:bg-[#7C3AED] text-white text-sm rounded-lg transition-colors"
+              className="px-3 py-1.5 text-white text-sm rounded-lg transition-colors"
+              style={{ backgroundColor: '#8B5CF6' }}
+              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#7C3AED'}
+              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#8B5CF6'}
             >
               New Window
             </button>
             <button
               onClick={toggleNexus}
-              className="px-3 py-1.5 bg-[#121214] hover:bg-[#1A1A1C] text-[#E8E8E8] text-sm rounded-lg transition-colors"
+              className="px-3 py-1.5 text-sm rounded-lg transition-colors"
+              style={{ backgroundColor: '#121214', color: '#E8E8E8' }}
+              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#1A1A1C'}
+              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#121214'}
               title="⌘K"
             >
               ⌘K
