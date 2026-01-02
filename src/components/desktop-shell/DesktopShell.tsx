@@ -8,6 +8,7 @@ import { SessionManager } from './SessionManager';
 import { TopBar } from './TopBar';
 import { Dock } from './Dock';
 import { Monitor } from 'lucide-react';
+import { Window } from './Window';
 
 interface DesktopShellProps {
   mode?: 'standalone' | 'god-mode-embedded';
@@ -53,6 +54,21 @@ export const DesktopShell: React.FC<DesktopShellProps> = ({ mode: _mode = 'stand
       <div className="absolute inset-0" style={{ paddingTop: '48px' }}>
         {/* Window Manager */}
         <WindowManager />
+
+        {/* Sample Window for BATCH-102 */}
+        <Window window={{
+          id: 'sample-window-1',
+          title: 'Sample Window',
+          appId: 'sample-app',
+          size: { width: 800, height: 600 },
+          position: { x: 200, y: 100 },
+          isMaximized: false,
+          isMinimized: false,
+          isFocused: true,
+          zIndex: 100,
+          tabs: [],
+          activeTabId: null,
+        }} />
 
         {/* Empty State */}
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
