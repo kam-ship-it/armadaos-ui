@@ -166,3 +166,13 @@ body.ultra-contrast .window-title {
 body.ultra-contrast .window-body {
   color: #FFFFFF;
 }
+
+/* [FIX] Maximized windows always show controls for accessibility */
+.window-frame[data-maximized="true"] .window-control {
+  opacity: 1.0 !important;
+}
+
+.window-frame[data-maximized="true"] .window-titlebar {
+  cursor: default;
+  -webkit-app-region: no-drag;
+}
