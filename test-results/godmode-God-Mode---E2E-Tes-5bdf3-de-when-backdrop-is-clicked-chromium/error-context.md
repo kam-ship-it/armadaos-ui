@@ -1,0 +1,43 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e4]:
+  - generic [ref=e5]:
+    - generic [ref=e7]: ArmadaOS
+    - generic [ref=e8]:
+      - generic [ref=e9]: 1:34 AM
+      - button "Notifications" [ref=e10] [cursor=pointer]:
+        - img [ref=e11]
+      - button "User Profile" [ref=e14] [cursor=pointer]
+  - generic [ref=e16]:
+    - generic [ref=e19]:
+      - generic [ref=e20]:
+        - generic [ref=e21]:
+          - button "Close" [ref=e22] [cursor=pointer]
+          - button "Minimize" [ref=e23] [cursor=pointer]
+          - button "Maximize" [ref=e24] [cursor=pointer]
+        - generic [ref=e25]: Sample Window
+      - generic [ref=e27]:
+        - paragraph [ref=e28]: "Window: sample-app"
+        - paragraph [ref=e29]: "ID: sample-window-1"
+        - paragraph [ref=e30]: "Size: 800 × 600"
+        - paragraph [ref=e31]: "Position: (200, 100)"
+        - paragraph [ref=e32]: "Focused: Yes"
+        - paragraph [ref=e33]: "Maximized: No"
+    - generic:
+      - generic:
+        - img
+        - paragraph: Press ⌘N to open a new window
+        - paragraph: Press ⌘K to open God Mode
+  - navigation "Application Dock" [ref=e42]:
+    - button "God Mode" [ref=e43] [cursor=pointer]:
+      - img [ref=e45]
+    - button "The Store" [ref=e48] [cursor=pointer]:
+      - img [ref=e50]
+    - button "Boardroom" [ref=e55] [cursor=pointer]:
+      - img [ref=e57]
+    - button "Settings" [ref=e63] [cursor=pointer]:
+      - img [ref=e65]
+    - button "Browser" [ref=e69] [cursor=pointer]:
+      - img [ref=e71]
+```

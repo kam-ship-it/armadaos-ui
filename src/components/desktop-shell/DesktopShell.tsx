@@ -23,13 +23,13 @@ export const DesktopShell: React.FC<DesktopShellProps> = ({ mode: _mode = 'stand
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       // ⌘K or Ctrl+K - Open God Mode
-      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
         e.preventDefault();
         setIsGodModeVisible(true);
       }
 
       // ⌘N or Ctrl+N - New Window
-      if ((e.metaKey || e.ctrlKey) && e.key === 'n') {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'n') {
         e.preventDefault();
         openWindow('browser');
       }
