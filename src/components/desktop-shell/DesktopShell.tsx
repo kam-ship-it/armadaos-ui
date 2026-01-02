@@ -66,6 +66,7 @@ export const DesktopShell: React.FC<DesktopShellProps> = ({ mode: _mode = 'stand
           isMinimized: false,
           isFocused: true,
           zIndex: 100,
+          spaceId: 'default',
           tabs: [],
           activeTabId: null,
         }} />

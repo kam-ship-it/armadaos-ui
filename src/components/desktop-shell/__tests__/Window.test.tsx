@@ -49,6 +49,7 @@ describe('Window - Gold Standard Tests', () => {
     zIndex: 10,
     tabs: [],
     activeTabId: null,
+    spaceId: 'default',
   };
 
   // W-01: Component Structure
