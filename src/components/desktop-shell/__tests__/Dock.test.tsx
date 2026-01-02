@@ -25,12 +25,12 @@ describe('Dock', () => {
     expect(dock).toHaveAttribute('aria-label', 'Application Dock');
   });
 
-  // D-01: Hidden by default
-  it('is hidden by default', () => {
+  // D-01: Visible by default (per spec 3.5.2)
+  it('is visible by default', () => {
     render(<Dock />);
     
     const dock = document.getElementById('dock');
-    expect(dock).toHaveAttribute('data-visible', 'false');
+    expect(dock).toHaveAttribute('data-visible', 'true');
   });
 
   // D-02: Dock Icons
@@ -150,16 +150,16 @@ describe('Dock', () => {
     
     const dock = document.getElementById('dock');
     
-    // Initially hidden
-    expect(dock).toHaveAttribute('data-visible', 'false');
-    
-    // Press ⌘D to show
-    fireEvent.keyDown(document, { key: 'd', metaKey: true });
+    // Initially visible (per spec 3.5.2)
     expect(dock).toHaveAttribute('data-visible', 'true');
     
-    // Press ⌘D again to hide
+    // Press ⌘D to hide
     fireEvent.keyDown(document, { key: 'd', metaKey: true });
     expect(dock).toHaveAttribute('data-visible', 'false');
+    
+    // Press ⌘D again to show
+    fireEvent.keyDown(document, { key: 'd', metaKey: true });
+    expect(dock).toHaveAttribute('data-visible', 'true');
   });
 
   // D-06: Tooltip - Appears after hover (simplified test)
