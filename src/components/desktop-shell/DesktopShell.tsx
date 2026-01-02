@@ -16,7 +16,7 @@ interface DesktopShellProps {
 }
 
 export const DesktopShell: React.FC<DesktopShellProps> = ({ mode: _mode = 'standalone' }) => {
-  const { openWindow, toggleNexus } = useDesktopStore();
+  const { openWindow } = useDesktopStore();
   const [isGodModeVisible, setIsGodModeVisible] = useState(false);
 
   // Global keyboard shortcuts
@@ -37,7 +37,7 @@ export const DesktopShell: React.FC<DesktopShellProps> = ({ mode: _mode = 'stand
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [toggleNexus, openWindow]);
+  }, [openWindow]);
 
   return (
     <div className="relative w-full h-screen">
@@ -78,7 +78,7 @@ export const DesktopShell: React.FC<DesktopShellProps> = ({ mode: _mode = 'stand
           <div className="text-center text-[#6E6E6E]">
             <Monitor className="w-16 h-16 mx-auto mb-4 opacity-20" />
             <p className="text-sm">Press ⌘N to open a new window</p>
-            <p className="text-xs mt-2">Press ⌘K to open Nexus</p>
+            <p className="text-xs mt-2">Press ⌘K to open God Mode</p>
           </div>
         </div>
       </div>
