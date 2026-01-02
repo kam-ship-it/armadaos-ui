@@ -1,0 +1,168 @@
+/* BATCH-102: Window Component - Gold Standard */
+
+/* [EXACT] Window Frame */
+.window-frame {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-width: 320px;
+  min-height: 240px;
+  background: rgba(28, 28, 31, 0.7);
+  backdrop-filter: blur(12px) saturate(180%);
+  border-radius: 12px;
+  box-shadow: 0px 16px 48px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform 200ms cubic-bezier(0.4, 0, 0.2, 1),
+              opacity 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
+}
+
+/* [EXACT] Window Title Bar */
+.window-titlebar {
+  height: 32px;
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  cursor: move;
+  user-select: none;
+  -webkit-app-region: drag;
+  flex-shrink: 0;
+}
+
+/* [EXACT] Window Controls Container */
+.window-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0;
+  flex-shrink: 0;
+}
+
+/* [EXACT] Individual Control Buttons */
+.window-control {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 150ms ease-out, box-shadow 150ms ease-out;
+  padding: 0;
+}
+
+.window-control-close {
+  background-color: #FF5F57;
+}
+
+.window-control-minimize {
+  background-color: #FFBD2E;
+}
+
+.window-control-maximize {
+  background-color: #28C940;
+}
+
+/* [EXACT] Control Symbols */
+.control-symbol {
+  transition: opacity 150ms ease-out;
+  pointer-events: none;
+}
+
+/* [EXACT] FOCUSED WINDOW STATES */
+.window-frame[data-focused="true"] .window-control {
+  opacity: 0.4;
+}
+
+.window-frame[data-focused="true"] .window-titlebar:hover .window-control {
+  opacity: 1.0;
+}
+
+.window-frame[data-focused="true"] .window-control:hover {
+  box-shadow: 0 0 0 2px #F5F5F7, 0 0 8px rgba(245, 245, 247, 0.5);
+}
+
+/* [EXACT] NON-FOCUSED WINDOW STATES */
+.window-frame[data-focused="false"] .window-control {
+  opacity: 0;
+}
+
+.window-frame[data-focused="false"] .window-titlebar:hover .window-control {
+  opacity: 1.0;
+}
+
+.window-frame[data-focused="false"] .window-control:hover {
+  box-shadow: 0 0 0 2px #F5F5F7, 0 0 8px rgba(245, 245, 247, 0.5);
+}
+
+/* [EXACT] Window Title */
+.window-title {
+  flex-grow: 1;
+  text-align: center;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 24px;
+  color: #F5F5F7;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: calc(100% - 120px);
+}
+
+/* [EXACT] Titlebar Spacer (for centering) */
+.window-titlebar-spacer {
+  width: 52px;
+  flex-shrink: 0;
+}
+
+/* [EXACT] Window Body */
+.window-body {
+  flex-grow: 1;
+  padding: 16px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  color: #F5F5F7;
+}
+
+/* [EXACT] Custom Scrollbar Styling */
+.window-body::-webkit-scrollbar {
+  width: 8px;
+}
+
+.window-body::-webkit-scrollbar-track {
+  background: rgba(245, 245, 247, 0.05);
+  border-radius: 4px;
+}
+
+.window-body::-webkit-scrollbar-thumb {
+  background: rgba(245, 245, 247, 0.2);
+  border-radius: 4px;
+}
+
+.window-body::-webkit-scrollbar-thumb:hover {
+  background: rgba(245, 245, 247, 0.3);
+}
+
+/* [EXACT] Maximized State */
+.window-frame[data-maximized="true"] {
+  border-radius: 0;
+}
+
+/* [EXACT] Ultra-Contrast Mode Override */
+body.ultra-contrast .window-frame {
+  background: #000000;
+  backdrop-filter: none;
+  border: 2px solid #FFFFFF;
+}
+
+body.ultra-contrast .window-title {
+  color: #FFFFFF;
+}
+
+body.ultra-contrast .window-body {
+  color: #FFFFFF;
+}
