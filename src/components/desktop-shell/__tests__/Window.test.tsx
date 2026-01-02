@@ -6,15 +6,23 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { Window } from '../Window';
 
 // Mock useDesktopStore
+const mockFocusWindow = vi.fn();
+const mockCloseWindow = vi.fn();
+const mockMinimizeWindow = vi.fn();
+const mockMaximizeWindow = vi.fn();
+const mockRestoreWindow = vi.fn();
+const mockMoveWindow = vi.fn();
+const mockResizeWindow = vi.fn();
+
 vi.mock('../../../stores/desktopStore', () => ({
   useDesktopStore: () => ({
-    focusWindow: vi.fn(),
-    closeWindow: vi.fn(),
-    minimizeWindow: vi.fn(),
-    maximizeWindow: vi.fn(),
-    restoreWindow: vi.fn(),
-    moveWindow: vi.fn(),
-    resizeWindow: vi.fn(),
+    focusWindow: mockFocusWindow,
+    closeWindow: mockCloseWindow,
+    minimizeWindow: mockMinimizeWindow,
+    maximizeWindow: mockMaximizeWindow,
+    restoreWindow: mockRestoreWindow,
+    moveWindow: mockMoveWindow,
+    resizeWindow: mockResizeWindow,
   }),
 }));
 
@@ -72,47 +80,47 @@ describe('Window - Gold Standard Tests', () => {
 
   // W-04: Close Button Click Handler
   it('calls closeWindow when close button is clicked', () => {
-    const mockStore = require('../../../stores/desktopStore').useDesktopStore();
+    mockCloseWindow.mockClear();
     render(<Window window={mockWindow} />);
     
     const closeButton = screen.getByTestId('window-control-close');
     fireEvent.click(closeButton);
     
-    expect(mockStore.closeWindow).toHaveBeenCalledWith('test-window-1');
+    expect(mockCloseWindow).toHaveBeenCalledWith('test-window-1');
   });
 
   // W-05: Minimize Button Click Handler
   it('calls minimizeWindow when minimize button is clicked', () => {
-    const mockStore = require('../../../stores/desktopStore').useDesktopStore();
+    mockCloseWindow.mockClear();
     render(<Window window={mockWindow} />);
     
     const minimizeButton = screen.getByTestId('window-control-minimize');
     fireEvent.click(minimizeButton);
     
-    expect(mockStore.minimizeWindow).toHaveBeenCalledWith('test-window-1');
+    expect(mockMinimizeWindow).toHaveBeenCalledWith('test-window-1');
   });
 
   // W-06: Maximize Button Click Handler
   it('calls maximizeWindow when maximize button is clicked', () => {
-    const mockStore = require('../../../stores/desktopStore').useDesktopStore();
+    mockCloseWindow.mockClear();
     render(<Window window={mockWindow} />);
     
     const maximizeButton = screen.getByTestId('window-control-maximize');
     fireEvent.click(maximizeButton);
     
-    expect(mockStore.maximizeWindow).toHaveBeenCalledWith('test-window-1');
+    expect(mockMaximizeWindow).toHaveBeenCalledWith('test-window-1');
   });
 
   // W-07: Restore Button (when maximized)
   it('calls restoreWindow when maximize button is clicked on maximized window', () => {
-    const mockStore = require('../../../stores/desktopStore').useDesktopStore();
+    mockCloseWindow.mockClear();
     const maximizedWindow = { ...mockWindow, isMaximized: true };
     render(<Window window={maximizedWindow} />);
     
     const maximizeButton = screen.getByTestId('window-control-maximize');
     fireEvent.click(maximizeButton);
     
-    expect(mockStore.restoreWindow).toHaveBeenCalledWith('test-window-1');
+    expect(mockRestoreWindow).toHaveBeenCalledWith('test-window-1');
   });
 
   // W-08: Focused State Attribute
@@ -200,25 +208,25 @@ describe('Window - Gold Standard Tests', () => {
 
   // W-18: Focus Window on Click
   it('calls focusWindow when non-focused window frame is clicked', () => {
-    const mockStore = require('../../../stores/desktopStore').useDesktopStore();
+    mockCloseWindow.mockClear();
     const nonFocusedWindow = { ...mockWindow, isFocused: false };
     render(<Window window={nonFocusedWindow} />);
     
     const frame = screen.getByTestId('window-frame');
     fireEvent.click(frame);
     
-    expect(mockStore.focusWindow).toHaveBeenCalledWith('test-window-1');
+    expect(mockFocusWindow).toHaveBeenCalledWith('test-window-1');
   });
 
   // W-19: No Focus Call When Already Focused
   it('does not call focusWindow when already focused window is clicked', () => {
-    const mockStore = require('../../../stores/desktopStore').useDesktopStore();
+    mockCloseWindow.mockClear();
     render(<Window window={mockWindow} />);
     
     const frame = screen.getByTestId('window-frame');
     fireEvent.click(frame);
     
-    expect(mockStore.focusWindow).not.toHaveBeenCalled();
+    expect(mockFocusWindow).not.toHaveBeenCalled();
   });
 
   // W-20: Control Symbols Exist
@@ -292,17 +300,17 @@ describe('Window - Gold Standard Tests', () => {
 
   // W-25: Window ID Consistency
   it('uses window ID consistently across all operations', () => {
-    const mockStore = require('../../../stores/desktopStore').useDesktopStore();
+    mockCloseWindow.mockClear();
     render(<Window window={mockWindow} />);
     
     // Test all operations use the same window ID
     fireEvent.click(screen.getByTestId('window-control-close'));
-    expect(mockStore.closeWindow).toHaveBeenCalledWith('test-window-1');
+    expect(mockCloseWindow).toHaveBeenCalledWith('test-window-1');
     
     fireEvent.click(screen.getByTestId('window-control-minimize'));
-    expect(mockStore.minimizeWindow).toHaveBeenCalledWith('test-window-1');
+    expect(mockMinimizeWindow).toHaveBeenCalledWith('test-window-1');
     
     fireEvent.click(screen.getByTestId('window-control-maximize'));
-    expect(mockStore.maximizeWindow).toHaveBeenCalledWith('test-window-1');
+    expect(mockMaximizeWindow).toHaveBeenCalledWith('test-window-1');
   });
 });
