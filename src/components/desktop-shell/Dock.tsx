@@ -22,7 +22,7 @@ export const Dock: React.FC<DockProps> = ({
   apps: customApps,
   onAppLaunch 
 }) => {
-  const [isVisible, setIsVisible] = useState(false);
+  const [isVisible, setIsVisible] = useState(true); // Visible by default per spec Section 3.5.2
   const [hoveredApp, setHoveredApp] = useState<string | null>(null);
   const [tooltipDelay, setTooltipDelay] = useState<NodeJS.Timeout | null>(null);
   const hideTimeoutRef = useRef<NodeJS.Timeout | null>(null);
