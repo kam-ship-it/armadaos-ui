@@ -6,14 +6,14 @@ import { useDesktopStore } from '../../stores/desktopStore';
 import { WindowManager } from './WindowManager';
 import { SessionManager } from './SessionManager';
 import { TopBar } from './TopBar';
-import { Monitor, Plus } from 'lucide-react';
+import { Monitor } from 'lucide-react';
 
 interface DesktopShellProps {
   mode?: 'standalone' | 'god-mode-embedded';
 }
 
 export const DesktopShell: React.FC<DesktopShellProps> = ({ mode: _mode = 'standalone' }) => {
-  const { spaces, activeSpaceId, switchSpace, createSpace, openWindow, toggleNexus } =
+  const { spaces, activeSpaceId, openWindow, toggleNexus } =
     useDesktopStore();
 
   const activeSpace = spaces.find((s) => s.id === activeSpaceId);
