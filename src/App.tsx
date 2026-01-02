@@ -11,26 +11,29 @@ function App() {
   return (
     <BrowserRouter>
       <div className="dark">
-        {/* Shell is now GLOBAL - visible on ALL routes */}
-        <Shell>
-          <Routes>
-            <Route path="/" element={<Navigate to="/desktop" replace />} />
-            <Route path="/desktop" element={
-              <DesktopShell mode="standalone" />
-            } />
-          <Route path="/god-mode/*" element={
-            <Window app="god-mode" title="God Mode" defaultWidth={1400} defaultHeight={900}>
-              <GodModeLayout>
-                <Routes>
-                  <Route path="architecture" element={<ArchitectureLens />} />
-                  <Route path="constitution" element={<ConstitutionLens />} />
-                  <Route path="battlefield" element={<BattlefieldLens />} />
-                </Routes>
-              </GodModeLayout>
-            </Window>
+        <Routes>
+          <Route path="/" element={<Navigate to="/desktop" replace />} />
+          
+          {/* ✅ NEW: /desktop uses DesktopShell standalone (no old Shell wrapper) */}
+          <Route path="/desktop" element={
+            <DesktopShell mode="standalone" />
           } />
-          </Routes>
-        </Shell>
+          
+          {/* ✅ OLD: Other routes still use old Shell */}
+          <Route path="/god-mode/*" element={
+            <Shell>
+              <Window app="god-mode" title="God Mode" defaultWidth={1400} defaultHeight={900}>
+                <GodModeLayout>
+                  <Routes>
+                    <Route path="architecture" element={<ArchitectureLens />} />
+                    <Route path="constitution" element={<ConstitutionLens />} />
+                    <Route path="battlefield" element={<BattlefieldLens />} />
+                  </Routes>
+                </GodModeLayout>
+              </Window>
+            </Shell>
+          } />
+        </Routes>
       </div>
     </BrowserRouter>
   );
