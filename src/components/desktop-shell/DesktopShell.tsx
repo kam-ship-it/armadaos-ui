@@ -6,6 +6,7 @@ import { useDesktopStore } from '../../stores/desktopStore';
 import { WindowManager } from './WindowManager';
 import { SessionManager } from './SessionManager';
 import { TopBar } from './TopBar';
+import { Dock } from './Dock';
 import { Monitor } from 'lucide-react';
 
 interface DesktopShellProps {
@@ -66,7 +67,16 @@ export const DesktopShell: React.FC<DesktopShellProps> = ({ mode: _mode = 'stand
         </div>
       </div>
 
-      {/* Dock is rendered by Shell component */}
+      {/* BATCH-101: Dock */}
+      <Dock
+        onAppLaunch={(appId) => {
+          console.log('App launched:', appId);
+          // TODO: Implement app launch logic
+          if (appId === 'browser') {
+            openWindow('browser');
+          }
+        }}
+      />
     </div>
   );
 };
