@@ -1,0 +1,36 @@
+/* BATCH-105: Ultra-Contrast Toggle Styles - GOLD STANDARD */
+
+.ultra-contrast-toggle {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(245, 245, 247, 0.1);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  color: #F5F5F7;
+  transition: background-color 200ms cubic-bezier(0.4, 0, 0.2, 1),
+              transform 200ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.ultra-contrast-toggle:hover {
+  background: rgba(245, 245, 247, 0.2);
+  transform: scale(1.05);
+}
+
+.ultra-contrast-toggle:active {
+  transform: scale(0.95);
+}
+
+/* Ultra-Contrast Mode Override */
+body.ultra-contrast .ultra-contrast-toggle {
+  background: #FFFFFF;
+  color: #000000;
+  border: 2px solid #000000;
+}
+
+body.ultra-contrast .ultra-contrast-toggle:hover {
+  background: #CCCCCC;
+}
