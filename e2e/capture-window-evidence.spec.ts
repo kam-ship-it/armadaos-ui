@@ -2,6 +2,8 @@
 // Captures all 8 required screenshots automatically
 
 import { test } from '@playwright/test';
+import * as fs from 'fs';
+import * as path from 'path';
 
 const DEPLOYED_URL = 'https://armadaos-ui.vercel.app/desktop';
 
@@ -10,8 +12,6 @@ test('Capture all 8 Window evidence screenshots', async ({ page }) => {
   await page.waitForTimeout(3000); // Wait for full page load
   
   // Create evidence directory (will be created if doesn't exist)
-  const fs = require('fs');
-  const path = require('path');
   const evidenceDir = path.join(process.cwd(), 'evidence', 'batch-102');
   if (!fs.existsSync(evidenceDir)) {
     fs.mkdirSync(evidenceDir, { recursive: true });
