@@ -1,0 +1,149 @@
+/* BATCH-100: TOP BAR CSS
+ * 100% Gold Standard Implementation
+ * Specification: ArmadaOSDesktopShell_Ultra-LuxurySpecificationV2.md Section 3.4.2
+ * ALL VALUES ARE [EXACT] - DO NOT MODIFY
+ */
+
+#top-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 48px;
+  z-index: 10000;
+  background: rgba(18, 18, 20, 0.5);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border-bottom: 1px solid rgba(245, 245, 247, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 16px;
+}
+
+.top-bar-left,
+.top-bar-center,
+.top-bar-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.top-bar-left {
+  flex: 1;
+  justify-content: flex-start;
+}
+
+.top-bar-center {
+  flex: 1;
+  justify-content: center;
+}
+
+.top-bar-right {
+  flex: 1;
+  justify-content: flex-end;
+}
+
+#top-bar-app-name {
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 24px;
+  color: #F5F5F7;
+  font-family: 'Inter', sans-serif;
+}
+
+#top-bar-time {
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+  color: #F5F5F7;
+  user-select: none;
+  font-family: 'Inter', sans-serif;
+}
+
+#top-bar-notifications,
+#top-bar-profile {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 8px;
+  transition: background-color 150ms ease-out;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#top-bar-notifications:hover,
+#top-bar-profile:hover {
+  background-color: rgba(245, 245, 247, 0.1);
+}
+
+#top-bar-notifications:focus-visible,
+#top-bar-profile:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px #8B5CF6;
+}
+
+#top-bar-notifications svg {
+  width: 20px;
+  height: 20px;
+  color: #F5F5F7;
+}
+
+.notification-badge {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 4px;
+  height: 4px;
+  background-color: #8B5CF6;
+  border-radius: 50%;
+  opacity: 0;
+  transition: opacity 200ms ease-out;
+  pointer-events: none;
+}
+
+.notification-badge[data-visible="true"] {
+  opacity: 1;
+}
+
+#top-bar-profile img {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1px solid rgba(245, 245, 247, 0.2);
+  display: block;
+}
+
+.profile-placeholder {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1px solid rgba(245, 245, 247, 0.2);
+  background: rgba(245, 245, 247, 0.1);
+}
+
+/* Ultra-Contrast Mode Override */
+body.ultra-contrast #top-bar {
+  background: #000000;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border-bottom: 1px solid #FFFFFF;
+}
+
+body.ultra-contrast #top-bar-app-name,
+body.ultra-contrast #top-bar-time,
+body.ultra-contrast #top-bar-notifications svg {
+  color: #FFFFFF;
+}
+
+body.ultra-contrast #top-bar-profile img {
+  border-color: #FFFFFF;
+}
+
+body.ultra-contrast .profile-placeholder {
+  border-color: #FFFFFF;
+  background: rgba(255, 255, 255, 0.2);
+}

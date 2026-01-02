@@ -5,6 +5,7 @@ import React, { useEffect } from 'react';
 import { useDesktopStore } from '../../stores/desktopStore';
 import { WindowManager } from './WindowManager';
 import { SessionManager } from './SessionManager';
+import { TopBar } from './TopBar';
 import { Monitor, Plus } from 'lucide-react';
 
 interface DesktopShellProps {
@@ -42,87 +43,16 @@ export const DesktopShell: React.FC<DesktopShellProps> = ({ mode: _mode = 'stand
       {/* Session Manager (invisible, handles restore/save) */}
       <SessionManager />
 
-      {/* Top Bar */}
-      <div className="absolute top-0 left-0 right-0 h-12 backdrop-blur-sm z-50" style={{ backgroundColor: 'rgba(18, 18, 20, 0.7)', backdropFilter: 'blur(12px)', border: 'none', boxShadow: '0 4px 12px rgba(0, 0, 0, 0.2)' }}>
-        <div className="flex items-center justify-between h-full px-4">
-          {/* Left: Logo */}
-          <div className="flex items-center gap-3">
-            <img 
-              src="/assets/armadaos-logo-2d-white-32.png" 
-              alt="ArmadaOS" 
-              className="h-8 w-8"
-            />
-          </div>
-
-          {/* Center: Space Indicator */}
-          <div className="flex items-center gap-2">
-            <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg" style={{ backgroundColor: '#121214' }}>
-              <span className="text-lg">{activeSpace?.icon}</span>
-              <span className="text-sm font-medium text-[#E8E8E8]">{activeSpace?.name}</span>
-            </div>
-
-            {/* Space Switcher (simple for now) */}
-            <div className="flex items-center gap-1">
-              {spaces.map((space) => (
-                <button
-                  key={space.id}
-                  onClick={() => switchSpace(space.id)}
-                  className="px-2 py-1 rounded text-xs transition-colors"
-                  style={{
-                    backgroundColor: space.id === activeSpaceId ? '#8B5CF6' : '#121214',
-                    color: space.id === activeSpaceId ? '#F5F5F7' : '#A8A8A8'
-                  }}
-                  onMouseEnter={(e) => {
-                    if (space.id !== activeSpaceId) e.currentTarget.style.backgroundColor = '#1A1A1C';
-                  }}
-                  onMouseLeave={(e) => {
-                    if (space.id !== activeSpaceId) e.currentTarget.style.backgroundColor = '#121214';
-                  }}
-                  title={space.name}
-                >
-                  {space.icon}
-                </button>
-              ))}
-              <button
-                onClick={() => createSpace('New Space', 'blank')}
-                className="px-2 py-1 rounded text-xs transition-colors"
-                style={{ backgroundColor: '#121214', color: '#A8A8A8' }}
-                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#1A1A1C'}
-                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#121214'}
-                title="New Space"
-              >
-                <Plus className="w-3 h-3" />
-              </button>
-            </div>
-          </div>
-
-          {/* Right: Actions */}
-          <div className="flex items-center gap-2">
-            <button
-              onClick={() => openWindow('browser')}
-              className="px-3 py-1.5 text-white text-sm rounded-lg transition-colors"
-              style={{ backgroundColor: '#8B5CF6' }}
-              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#7C3AED'}
-              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#8B5CF6'}
-            >
-              New Window
-            </button>
-            <button
-              onClick={toggleNexus}
-              className="px-3 py-1.5 text-sm rounded-lg transition-colors"
-              style={{ backgroundColor: '#121214', color: '#E8E8E8' }}
-              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#1A1A1C'}
-              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#121214'}
-              title="⌘K"
-            >
-              ⌘K
-            </button>
-          </div>
-        </div>
-      </div>
+      {/* BATCH-100: Top Bar */}
+      <TopBar
+        appName={activeSpace?.name || 'Dashboard'}
+        hasUnreadNotifications={false}
+        onNotificationsClick={() => console.log('Notifications clicked')}
+        onProfileClick={() => console.log('Profile clicked')}
+      />
 
       {/* Desktop Canvas */}
-      <div className="absolute inset-0 pt-12">
+      <div className="absolute inset-0" style={{ paddingTop: '48px' }}>
         {/* Window Manager */}
         <WindowManager />
 
