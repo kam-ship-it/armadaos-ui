@@ -10,7 +10,9 @@ test.describe('God Mode - E2E Tests', () => {
 
   // GM-E2E-01: God Mode Opens with ⌘K
   test('opens God Mode with Command+K', async ({ page }) => {
-    await page.keyboard.press('Meta+K');
+    await page.keyboard.down('Meta');
+    await page.keyboard.press('KeyK');
+    await page.keyboard.up('Meta');
     
     const overlay = page.locator('[data-testid="god-mode-overlay"]');
     await expect(overlay).toBeVisible();
@@ -19,7 +21,9 @@ test.describe('God Mode - E2E Tests', () => {
 
   // GM-E2E-02: God Mode Closes with Escape
   test('closes God Mode with Escape key', async ({ page }) => {
-    await page.keyboard.press('Meta+K');
+    await page.keyboard.down('Meta');
+    await page.keyboard.press('KeyK');
+    await page.keyboard.up('Meta');
     await page.waitForTimeout(300);
     
     await page.keyboard.press('Escape');
@@ -30,7 +34,9 @@ test.describe('God Mode - E2E Tests', () => {
 
   // GM-E2E-03: God Mode Closes with Backdrop Click
   test('closes God Mode when backdrop is clicked', async ({ page }) => {
-    await page.keyboard.press('Meta+K');
+    await page.keyboard.down('Meta');
+    await page.keyboard.press('KeyK');
+    await page.keyboard.up('Meta');
     await page.waitForTimeout(300);
     
     const backdrop = page.locator('[data-testid="god-mode-backdrop"]');
@@ -42,7 +48,9 @@ test.describe('God Mode - E2E Tests', () => {
 
   // GM-E2E-04: Search Input Focused
   test('focuses search input when opened', async ({ page }) => {
-    await page.keyboard.press('Meta+K');
+    await page.keyboard.down('Meta');
+    await page.keyboard.press('KeyK');
+    await page.keyboard.up('Meta');
     await page.waitForTimeout(300);
     
     const searchInput = page.locator('[data-testid="god-mode-search"]');
@@ -51,7 +59,9 @@ test.describe('God Mode - E2E Tests', () => {
 
   // GM-E2E-05: Commands Render
   test('renders default commands', async ({ page }) => {
-    await page.keyboard.press('Meta+K');
+    await page.keyboard.down('Meta');
+    await page.keyboard.press('KeyK');
+    await page.keyboard.up('Meta');
     await page.waitForTimeout(300);
     
     await expect(page.locator('[data-testid="god-mode-result-new-window"]')).toBeVisible();
@@ -62,7 +72,9 @@ test.describe('God Mode - E2E Tests', () => {
 
   // GM-E2E-06: Search Filtering Works
   test('filters commands based on search query', async ({ page }) => {
-    await page.keyboard.press('Meta+K');
+    await page.keyboard.down('Meta');
+    await page.keyboard.press('KeyK');
+    await page.keyboard.up('Meta');
     await page.waitForTimeout(300);
     
     const searchInput = page.locator('[data-testid="god-mode-search"]');
@@ -75,7 +87,9 @@ test.describe('God Mode - E2E Tests', () => {
 
   // GM-E2E-07: Arrow Navigation Works
   test('navigates commands with arrow keys', async ({ page }) => {
-    await page.keyboard.press('Meta+K');
+    await page.keyboard.down('Meta');
+    await page.keyboard.press('KeyK');
+    await page.keyboard.up('Meta');
     await page.waitForTimeout(300);
     
     const firstItem = page.locator('[data-testid="god-mode-result-new-window"]');
@@ -91,7 +105,9 @@ test.describe('God Mode - E2E Tests', () => {
 
   // GM-E2E-08: Visual Styling Correct
   test('has correct visual styling', async ({ page }) => {
-    await page.keyboard.press('Meta+K');
+    await page.keyboard.down('Meta');
+    await page.keyboard.press('KeyK');
+    await page.keyboard.up('Meta');
     await page.waitForTimeout(300);
     
     const modal = page.locator('[data-testid="god-mode-modal"]');
