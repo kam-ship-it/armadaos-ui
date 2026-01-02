@@ -1,6 +1,5 @@
 // BATCH-104: Wallpaper Tests - GOLD STANDARD
 
-import React from 'react';
 import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { Wallpaper } from '../Wallpaper';

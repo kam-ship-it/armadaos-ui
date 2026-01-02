@@ -1,7 +1,6 @@
 // BATCH-105: Ultra-Contrast Toggle Tests - GOLD STANDARD
 
-import React from 'react';
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { UltraContrastToggle } from '../UltraContrastToggle';
 

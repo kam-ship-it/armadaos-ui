@@ -1,7 +1,7 @@
 // Desktop Shell V2 - Main Container
 // BATCH-DESKTOP-00: Foundation Layer
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDesktopStore } from '../../stores/desktopStore';
 import { WindowManager } from './WindowManager';
 import { SessionManager } from './SessionManager';
@@ -9,6 +9,7 @@ import { TopBar } from './TopBar';
 import { Dock } from './Dock';
 import { Monitor } from 'lucide-react';
 import { Window } from './Window';
+import { GodMode } from './GodMode';
 
 interface DesktopShellProps {
   mode?: 'standalone' | 'god-mode-embedded';
@@ -16,14 +17,15 @@ interface DesktopShellProps {
 
 export const DesktopShell: React.FC<DesktopShellProps> = ({ mode: _mode = 'standalone' }) => {
   const { openWindow, toggleNexus } = useDesktopStore();
+  const [isGodModeVisible, setIsGodModeVisible] = useState(false);
 
   // Global keyboard shortcuts
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      // ⌘K or Ctrl+K - Open Nexus Bar
+      // ⌘K or Ctrl+K - Open God Mode
       if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
         e.preventDefault();
-        toggleNexus();
+        setIsGodModeVisible(true);
       }
 
       // ⌘N or Ctrl+N - New Window
@@ -90,6 +92,12 @@ export const DesktopShell: React.FC<DesktopShellProps> = ({ mode: _mode = 'stand
             openWindow('browser');
           }
         }}
+      />
+
+      {/* BATCH-103: God Mode */}
+      <GodMode 
+        isVisible={isGodModeVisible} 
+        onClose={() => setIsGodModeVisible(false)} 
       />
     </div>
   );
