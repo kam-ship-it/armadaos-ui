@@ -14,10 +14,7 @@ interface DesktopShellProps {
 }
 
 export const DesktopShell: React.FC<DesktopShellProps> = ({ mode: _mode = 'standalone' }) => {
-  const { spaces, activeSpaceId, openWindow, toggleNexus } =
-    useDesktopStore();
-
-  const activeSpace = spaces.find((s) => s.id === activeSpaceId);
+  const { openWindow, toggleNexus } = useDesktopStore();
 
   // Global keyboard shortcuts
   useEffect(() => {
@@ -46,7 +43,7 @@ export const DesktopShell: React.FC<DesktopShellProps> = ({ mode: _mode = 'stand
 
       {/* BATCH-100: Top Bar */}
       <TopBar
-        appName={activeSpace?.name || 'Dashboard'}
+        appName="ArmadaOS"
         hasUnreadNotifications={false}
         onNotificationsClick={() => console.log('Notifications clicked')}
         onProfileClick={() => console.log('Profile clicked')}

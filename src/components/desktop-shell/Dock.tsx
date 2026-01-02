@@ -33,35 +33,35 @@ export const Dock: React.FC<DockProps> = ({
     {
       id: 'god-mode',
       label: 'God Mode',
-      icon: <Shield size={32} color="#8B5CF6" />, // Violet - brand color for power features
+      icon: <Shield size={32} />,
       isRunning: false,
       onClick: () => handleAppClick('god-mode')
     },
     {
       id: 'the-store',
       label: 'The Store',
-      icon: <ShoppingCart size={32} color="#10B981" />, // Emerald - commerce/growth
+      icon: <ShoppingCart size={32} />,
       isRunning: false,
       onClick: () => handleAppClick('the-store')
     },
     {
       id: 'boardroom',
       label: 'Boardroom',
-      icon: <Users size={32} color="#3B82F6" />, // Blue - collaboration
+      icon: <Users size={32} />,
       isRunning: false,
       onClick: () => handleAppClick('boardroom')
     },
     {
       id: 'settings',
       label: 'Settings',
-      icon: <Settings size={32} color="#6B7280" />, // Gray - utility
+      icon: <Settings size={32} />,
       isRunning: false,
       onClick: () => handleAppClick('settings')
     },
     {
       id: 'browser',
       label: 'Browser',
-      icon: <Globe size={32} color="#3B82F6" />, // Blue - navigation/web
+      icon: <Globe size={32} />,
       isRunning: true, // Browser is running by default
       onClick: () => handleAppClick('browser')
     }
