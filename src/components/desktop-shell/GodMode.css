@@ -1,0 +1,146 @@
+/* BATCH-103: God Mode Styles - GOLD STANDARD */
+/* All [EXACT] values from Section 3.6.2 */
+
+.god-mode-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 100000;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 20vh;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 200ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.god-mode-overlay[data-visible="true"] {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.god-mode-backdrop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(4px);
+}
+
+.god-mode-modal {
+  position: relative;
+  width: 700px;
+  height: 400px;
+  background: rgba(18, 18, 20, 0.6);
+  backdrop-filter: blur(24px) saturate(180%);
+  border-radius: 16px;
+  border: 1px solid rgba(245, 245, 247, 0.2);
+  box-shadow: 0 0 0 2px #8B5CF6, 0 0 12px rgba(139, 92, 246, 0.5);
+  overflow: hidden;
+  transform: scale(0.95);
+  transition: transform 200ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.god-mode-overlay[data-visible="true"] .god-mode-modal {
+  transform: scale(1.0);
+}
+
+.god-mode-search-container {
+  display: flex;
+  align-items: center;
+  padding: 16px;
+  border-bottom: 1px solid rgba(245, 245, 247, 0.1);
+  gap: 12px;
+}
+
+.god-mode-search-icon {
+  width: 24px;
+  height: 24px;
+  color: rgba(245, 245, 247, 0.5);
+  flex-shrink: 0;
+}
+
+#god-mode-search {
+  flex-grow: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 32px;
+  color: #FFFFFF;
+  font-family: "Inter", sans-serif;
+}
+
+#god-mode-search::placeholder {
+  color: rgba(245, 245, 247, 0.3);
+}
+
+.god-mode-results {
+  height: calc(400px - 64px); /* Modal height - search container */
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.god-mode-result-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 16px;
+  height: 48px;
+  cursor: pointer;
+  border-left: 2px solid transparent;
+  transition: background-color 150ms ease-out, 
+              border-color 150ms ease-out;
+}
+
+.god-mode-result-item:hover,
+.god-mode-result-item[data-selected="true"] {
+  background-color: rgba(245, 245, 247, 0.1);
+  border-left-color: #8B5CF6;
+}
+
+.god-mode-result-icon {
+  width: 24px;
+  height: 24px;
+  color: #F5F5F7;
+  font-size: 20px;
+  text-align: center;
+}
+
+.god-mode-result-label {
+  flex-grow: 1;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 24px;
+  color: #F5F5F7;
+}
+
+.god-mode-result-shortcut {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  color: rgba(245, 245, 247, 0.5);
+}
+
+.god-mode-no-results {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: rgba(245, 245, 247, 0.5);
+  font-size: 18px;
+}
+
+/* Ultra-Contrast Mode Override */
+body.ultra-contrast .god-mode-modal {
+  background: #000000;
+  backdrop-filter: none;
+  border: 2px solid #FFFFFF;
+  box-shadow: none;
+}
