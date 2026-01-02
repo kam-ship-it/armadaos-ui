@@ -1,19 +1,22 @@
 import React from 'react';
 import { Wallpaper } from './Wallpaper';
-import { Dock } from './Dock';
 
 interface ShellProps {
   children?: React.ReactNode;
 }
 
 /**
- * Shell - The root container for the ArmadaOS Desktop Environment
+ * Shell - LEGACY root container for the ArmadaOS Desktop Environment
+ * 
+ * NOTE: This is the OLD Shell component, used only for legacy routes (e.g., /god-mode).
+ * The NEW DesktopShell component (src/components/desktop-shell/) is used for /desktop route.
  * 
  * Provides:
  * - Full-screen background (#121214 - Tungsten)
  * - Geometric wallpaper overlay
- * - Dock at bottom-center
  * - Container for windows and widgets
+ * 
+ * REMOVED: Old Dock component (now handled by DesktopShell for /desktop route)
  */
 export const Shell: React.FC<ShellProps> = ({ children }) => {
   return (
@@ -29,8 +32,7 @@ export const Shell: React.FC<ShellProps> = ({ children }) => {
         {children}
       </div>
       
-      {/* Dock layer */}
-      <Dock />
+      {/* NOTE: Dock removed - DesktopShell now handles Dock for /desktop route */}
     </div>
   );
 };

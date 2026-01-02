@@ -2,7 +2,7 @@
 // Target: 80%+ coverage, 6 tests
 
 import { describe, test, expect, vi, beforeEach, afterEach } from 'vitest';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { TopBar } from '../TopBar';
 
 describe('TopBar', () => {
